@@ -71,6 +71,14 @@ def admin_required(view):
         return view(*args, **kwargs)
     return wrapped_view
 
+@bp.route('/user_center')
+@login_required
+def user_center():
+    user_id = session['user_id']
+    users = load_users()
+    user = next((u for u in users if u['id'] == user_id), None)
+    return render_template('404.html')
+
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -98,6 +106,7 @@ def register():
         new_user = {
             "id": max([u['id'] for u in users], default=0) + 1,
             "username": username,
+            "password": password,
             "avatar": "https://via.placeholder.com/40",
             "role": role,
             "posts": 0,
@@ -135,7 +144,7 @@ def login():
         # 查找用户
         user = next((u for u in filtered_users if u['username'] == username), None)
 
-        if user:
+        if user and user['password'] == password:
             # 登录成功，保存用户信息到会话
             session['user_id'] = user['id']
             session['username'] = user['username']

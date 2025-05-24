@@ -27,6 +27,12 @@ def create_app(config_class=Config):
     from views.auth import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
 
+    from views.inv import bp as inv_bp
+    app.register_blueprint(inv_bp, url_prefix='/inv')
+
+    from views.ass import bp as ass_bp
+    app.register_blueprint(ass_bp, url_prefix='/ass')
+
     # 配置日志
     import logging
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')

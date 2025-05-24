@@ -2,6 +2,7 @@
     {
         "id": 1,
         "username": "admin",
+        "password": "admin",
         "avatar": "https://via.placeholder.com/40",
         "role": "user",
         "posts": 5,
@@ -12,6 +13,7 @@
     {
         "id": 2,
         "username": "user1",
+        "password": "admin",
         "avatar": "https://via.placeholder.com/40",
         "role": "user",
         "posts": 4,
@@ -22,6 +24,7 @@
     {
         "id": 3,
         "username": "user2",
+        "password": "admin",
         "avatar": "https://via.placeholder.com/40",
         "role": "user",
         "posts": 1,
@@ -32,6 +35,7 @@
     {
         "id": 4,
         "username": "admin1",
+        "password": "admin",
         "avatar": "https://via.placeholder.com/40",
         "role": "admin",
         "posts": 0,
@@ -42,6 +46,7 @@
     {
         "id": 5,
         "username": "22377218",
+        "password": "eT}mR66kyGM6S",
         "avatar": "https://via.placeholder.com/40",
         "role": "user",
         "posts": 0,
