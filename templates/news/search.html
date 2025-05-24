@@ -1,0 +1,208 @@
+{% extends 'base.html' %} {% block title %}搜索结果: {{ keyword }} -
+豆粕期货价格预测系统{% endblock %} {% block head %}
+<style>
+  .news-card {
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+  }
+  .news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  .news-img {
+    height: 200px;
+    object-fit: cover;
+  }
+  .news-tag {
+    font-size: 0.8rem;
+  }
+  .news-date {
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+  .news-source {
+    font-style: italic;
+    color: #6c757d;
+  }
+  .highlight {
+    background-color: #fff3cd;
+    padding: 0 3px;
+    border-radius: 3px;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2><i class="bi bi-search"></i> 搜索结果: "{{ keyword }}"</h2>
+      <p class="lead">找到 {{ count }} 条相关新闻</p>
+    </div>
+    <div class="col-md-4 text-end">
+      <form action="{{ url_for('news.search') }}" method="get">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            name="keyword"
+            value="{{ keyword }}"
+            placeholder="搜索新闻..."
+            aria-label="搜索新闻"
+          />
+          <button class="btn btn-primary" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 搜索结果列表 -->
+  <div class="row">
+    <div class="col-md-8">
+      {% if news_list %} {% for news in news_list %}
+      <div class="card news-card">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img
+              src="{{ news.image }}"
+              class="img-fluid news-img"
+              alt="{{ news.title }}"
+            />
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <span
+                class="badge bg-{{ 'primary' if news.category == 'market' else 'success' if news.category == 'industry' else 'warning' if news.category == 'policy' else 'info' if news.category == 'international' else 'secondary' }} news-tag"
+                >{{ news.category_name }}</span
+              >
+              <h5 class="card-title mt-2">
+                {{ news.title | replace(keyword, '<span class="highlight"
+                  >' + keyword + '</span
+                >') | safe }}
+              </h5>
+              <p class="card-text">
+                {{ news.content[:150] | replace(keyword, '<span
+                  class="highlight"
+                  >' + keyword + '</span
+                >') | safe }}...
+              </p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="news-date"
+                    ><i class="bi bi-calendar3"></i> {{ news.date }}</span
+                  >
+                  <span class="news-source ms-3"
+                    ><i class="bi bi-building"></i> {{ news.source }}</span
+                  >
+                </div>
+                <a
+                  href="{{ url_for('news.detail', news_id=news.id) }}"
+                  class="btn btn-sm btn-outline-primary"
+                  >阅读全文</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %} {% else %}
+      <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i> 没有找到与 "{{ keyword }}"
+        相关的新闻，请尝试其他关键词。
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-4">
+      <!-- 搜索技巧 -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-lightbulb"></i> 搜索技巧</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2">
+              <i class="bi bi-check-circle text-success me-2"></i>
+              使用简短、具体的关键词
+            </li>
+            <li class="mb-2">
+              <i class="bi bi-check-circle text-success me-2"></i>
+              尝试不同的词语组合
+            </li>
+            <li class="mb-2">
+              <i class="bi bi-check-circle text-success me-2"></i>
+              使用行业专业术语
+            </li>
+            <li>
+              <i class="bi bi-check-circle text-success me-2"></i>
+              搜索特定时间段的新闻
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 热门搜索 -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-fire"></i> 热门搜索</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex flex-wrap gap-2">
+            <a
+              href="{{ url_for('news.search', keyword='豆粕') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >豆粕</a
+            >
+            <a
+              href="{{ url_for('news.search', keyword='大豆进口') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >大豆进口</a
+            >
+            <a
+              href="{{ url_for('news.search', keyword='期货价格') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >期货价格</a
+            >
+            <a
+              href="{{ url_for('news.search', keyword='饲料需求') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >饲料需求</a
+            >
+            <a
+              href="{{ url_for('news.search', keyword='政策') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >政策</a
+            >
+            <a
+              href="{{ url_for('news.search', keyword='市场分析') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >市场分析</a
+            >
+            <a
+              href="{{ url_for('news.search', keyword='交易策略') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >交易策略</a
+            >
+            <a
+              href="{{ url_for('news.search', keyword='预测') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >预测</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- 返回新闻首页 -->
+      <div class="d-grid">
+        <a href="{{ url_for('news.index') }}" class="btn btn-outline-primary">
+          <i class="bi bi-arrow-left"></i> 返回新闻首页
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  // 这里可以添加搜索页面特定的JavaScript代码
+</script>
+{% endblock %}

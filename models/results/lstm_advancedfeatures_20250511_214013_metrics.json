@@ -1,0 +1,30 @@
+{
+    "model_key": "LSTM_AdvancedFeatures",
+    "timestamp": "20250511_214013",
+    "data_file": "/root/model_train/models/model_data/date1.csv",
+    "target_column": "close",
+    "look_back": 30,
+    "test_samples": 241,
+    "metrics": {
+        "mse": 5355.8242833878985,
+        "rmse": 73.1834973432392,
+        "mae": 58.55578663932832,
+        "r2": 0.9221537309155974,
+        "mape": 1.9252017687354597,
+        "accuracy": 97.0954356846473
+    },
+    "prediction_stats": {
+        "min": 2675.7880859375,
+        "max": 3716.3671875,
+        "mean": 3035.40673828125,
+        "std": 278.1332092285156,
+        "median": 2927.412841796875
+    },
+    "actual_stats": {
+        "min": 2567.0,
+        "max": 3622.0,
+        "mean": 3043.7344398340247,
+        "std": 262.29756473392985,
+        "median": 2995.0
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "model_key": "CNN_AdvancedFeatures",
+    "timestamp": "20250511_214729",
+    "data_file": "/root/model_train/models/model_data/date1.csv",
+    "target_column": "close",
+    "look_back": 30,
+    "test_samples": 241,
+    "metrics": {
+        "mse": 12004.753590139117,
+        "rmse": 109.56620642396595,
+        "mae": 91.24334033000518,
+        "r2": 0.8255123340830048,
+        "mape": 2.94646789432925,
+        "accuracy": 85.47717842323651
+    },
+    "prediction_stats": {
+        "min": 2594.486328125,
+        "max": 3551.681640625,
+        "mean": 2959.693359375,
+        "std": 238.4303741455078,
+        "median": 2895.262939453125
+    },
+    "actual_stats": {
+        "min": 2567.0,
+        "max": 3622.0,
+        "mean": 3043.7344398340247,
+        "std": 262.29756473392985,
+        "median": 2995.0
+    }
+}

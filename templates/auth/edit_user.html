@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}编辑用户 - 豆粕期货预测系统{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2><i class="bi bi-pencil"></i> 编辑用户</h2>
+        <a href="{{ url_for('auth.manage_users') }}" class="btn btn-secondary">
+          <i class="bi bi-arrow-left"></i> 返回用户管理
+        </a>
+      </div>
+      <hr />
+    </div>
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="关闭"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          {% if user %}
+          <form method="post" action="{{ url_for('auth.edit_user', user_id=user.id) }}">
+            <div class="mb-3">
+              <label for="username" class="form-label">用户名</label>
+              <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="role" class="form-label">用户角色</label>
+              <select class="form-select" id="role" name="role">
+                <option value="user" {% if user.role == 'user' %}selected{% endif %}>普通用户</option>
+                <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>管理员</option>
+              </select>
+              <div class="form-text">
+                管理员可以访问系统的所有功能，包括用户管理、模型评估等。
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <p class="form-label">用户统计信息</p>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="card text-center mb-2">
+                    <div class="card-body py-2">
+                      <h5>{{ user.id }}</h5>
+                      <small class="text-muted">用户ID</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="card text-center mb-2">
+                    <div class="card-body py-2">
+                      <h5>{{ user.posts }}</h5>
+                      <small class="text-muted">发帖数</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="card text-center mb-2">
+                    <div class="card-body py-2">
+                      <h5>{{ user.replies }}</h5>
+                      <small class="text-muted">回复数</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="card text-center mb-2">
+                    <div class="card-body py-2">
+                      <h5>{{ user.join_date }}</h5>
+                      <small class="text-muted">注册日期</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save"></i> 保存修改
+              </button>
+              <a href="{{ url_for('auth.manage_users') }}" class="btn btn-outline-secondary">取消</a>
+            </div>
+          </form>
+          {% else %}
+          <div class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> 未找到指定用户
+          </div>
+          <div class="d-grid">
+            <a href="{{ url_for('auth.manage_users') }}" class="btn btn-primary">返回用户列表</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 在页面加载完成后处理闪现消息的自动消失
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert) {
+      setTimeout(function() {
+        const closeButton = alert.querySelector('.btn-close');
+        if (closeButton) {
+          closeButton.click();
+        }
+      }, 5000); // 5秒后自动关闭
+    });
+  });
+</script>
+{% endblock %} 

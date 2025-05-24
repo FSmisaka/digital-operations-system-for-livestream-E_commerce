@@ -1,0 +1,52 @@
+[
+    {
+        "id": 1,
+        "username": "admin",
+        "avatar": "https://via.placeholder.com/40",
+        "role": "user",
+        "posts": 5,
+        "replies": 15,
+        "join_date": "2023-01-01",
+        "last_active": "2025-05-11"
+    },
+    {
+        "id": 2,
+        "username": "user1",
+        "avatar": "https://via.placeholder.com/40",
+        "role": "user",
+        "posts": 4,
+        "replies": 8,
+        "join_date": "2023-01-15",
+        "last_active": "2025-05-24"
+    },
+    {
+        "id": 3,
+        "username": "user2",
+        "avatar": "https://via.placeholder.com/40",
+        "role": "user",
+        "posts": 1,
+        "replies": 2,
+        "join_date": "2023-02-05",
+        "last_active": "2023-05-01"
+    },
+    {
+        "id": 4,
+        "username": "admin1",
+        "avatar": "https://via.placeholder.com/40",
+        "role": "admin",
+        "posts": 0,
+        "replies": 0,
+        "join_date": "2025-05-11",
+        "last_active": "2025-05-11"
+    },
+    {
+        "id": 5,
+        "username": "22377218",
+        "avatar": "https://via.placeholder.com/40",
+        "role": "user",
+        "posts": 0,
+        "replies": 0,
+        "join_date": "2025-05-22",
+        "last_active": "2025-05-22"
+    }
+]

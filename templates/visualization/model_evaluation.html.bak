@@ -1,0 +1,768 @@
+{% extends 'base.html' %} {% block title %}模型评估对比{% endblock %} {% block
+styles %} {{ super() }}
+<style>
+  .model-card {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: transform 0.3s;
+  }
+  .model-card:hover {
+    transform: translateY(-5px);
+  }
+  .metric-title {
+    font-size: 14px;
+    color: #6c757d;
+  }
+  .metric-value {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .chart-container {
+    height: 300px;
+    margin-bottom: 30px;
+  }
+  .table-metrics th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+  }
+  .table-responsive {
+    margin-bottom: 30px;
+  }
+  .nav-pills .nav-link.active {
+    background-color: #007bff;
+  }
+  .metric-card {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  .model-header {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  .model-timestamp {
+    font-size: 12px;
+    color: #6c757d;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <h2 class="text-center my-4">模型评估对比</h2>
+
+      {% if error %}
+      <div class="alert alert-danger"><strong>错误：</strong> {{ error }}</div>
+      {% endif %} {% if comparison_data.model_names|length > 0 %}
+      <!-- 主要指标卡片 -->
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card model-card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">准确率（Accuracy）</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                {% for i in range(comparison_data.model_names|length) %}
+                <div class="col-md-4 text-center">
+                  <div class="metric-title">
+                    {{ comparison_data.model_names[i] }}
+                  </div>
+                  <div class="metric-value">
+                    {{ "%.2f"|format(comparison_data.metrics.accuracy[i]) }}%
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card model-card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">均方根误差（RMSE）</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                {% for i in range(comparison_data.model_names|length) %}
+                <div class="col-md-4 text-center">
+                  <div class="metric-title">
+                    {{ comparison_data.model_names[i] }}
+                  </div>
+                  <div class="metric-value">
+                    {{ "%.2f"|format(comparison_data.metrics.rmse[i]) }}
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card model-card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">R² 决定系数</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                {% for i in range(comparison_data.model_names|length) %}
+                <div class="col-md-4 text-center">
+                  <div class="metric-title">
+                    {{ comparison_data.model_names[i] }}
+                  </div>
+                  <div class="metric-value">
+                    {{ "%.4f"|format(comparison_data.metrics.r2[i]) }}
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 导航选项卡 -->
+      <ul class="nav nav-pills mb-3 mt-4" id="modelEvalTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="metrics-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#metrics"
+            type="button"
+            role="tab"
+            aria-controls="metrics"
+            aria-selected="true"
+          >
+            性能指标
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="predictions-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#predictions"
+            type="button"
+            role="tab"
+            aria-controls="predictions"
+            aria-selected="false"
+          >
+            预测统计
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="comparison-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#comparison"
+            type="button"
+            role="tab"
+            aria-controls="comparison"
+            aria-selected="false"
+          >
+            预测对比
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="model-details-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#model-details"
+            type="button"
+            role="tab"
+            aria-controls="model-details"
+            aria-selected="false"
+          >
+            模型详情
+          </button>
+        </li>
+      </ul>
+
+      <!-- 选项卡内容 -->
+      <div class="tab-content" id="modelEvalTabsContent">
+        <!-- 性能指标选项卡 -->
+        <div
+          class="tab-pane fade show active"
+          id="metrics"
+          role="tabpanel"
+          aria-labelledby="metrics-tab"
+        >
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">模型性能指标对比</h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table
+                      class="table table-bordered table-striped table-metrics"
+                    >
+                      <thead>
+                        <tr>
+                          <th>指标</th>
+                          {% for model_name in comparison_data.model_names %}
+                          <th>{{ model_name }}</th>
+                          {% endfor %}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>均方误差 (MSE)</td>
+                          {% for mse in comparison_data.metrics.mse %}
+                          <td>{{ "%.2f"|format(mse) }}</td>
+                          {% endfor %}
+                        </tr>
+                        <tr>
+                          <td>均方根误差 (RMSE)</td>
+                          {% for rmse in comparison_data.metrics.rmse %}
+                          <td>{{ "%.2f"|format(rmse) }}</td>
+                          {% endfor %}
+                        </tr>
+                        <tr>
+                          <td>平均绝对误差 (MAE)</td>
+                          {% for mae in comparison_data.metrics.mae %}
+                          <td>{{ "%.2f"|format(mae) }}</td>
+                          {% endfor %}
+                        </tr>
+                        <tr>
+                          <td>决定系数 (R²)</td>
+                          {% for r2 in comparison_data.metrics.r2 %}
+                          <td>{{ "%.4f"|format(r2) }}</td>
+                          {% endfor %}
+                        </tr>
+                        <tr>
+                          <td>平均绝对百分比误差 (MAPE)</td>
+                          {% for mape in comparison_data.metrics.mape %}
+                          <td>{{ "%.2f"|format(mape) }}%</td>
+                          {% endfor %}
+                        </tr>
+                        <tr>
+                          <td>准确率</td>
+                          {% for accuracy in comparison_data.metrics.accuracy %}
+                          <td>{{ "%.2f"|format(accuracy) }}%</td>
+                          {% endfor %}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="chart-container">
+                    <canvas id="metricsChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 预测统计选项卡 -->
+        <div
+          class="tab-pane fade"
+          id="predictions"
+          role="tabpanel"
+          aria-labelledby="predictions-tab"
+        >
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">预测值统计</h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table
+                      class="table table-bordered table-striped table-metrics"
+                    >
+                      <thead>
+                        <tr>
+                          <th>统计量</th>
+                          {% for model_name in comparison_data.model_names %}
+                          <th>{{ model_name }}</th>
+                          {% endfor %}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>最小值</td>
+                          {% for min_val in comparison_data.prediction_stats.min
+                          %}
+                          <td>{{ "%.2f"|format(min_val) }}</td>
+                          {% endfor %}
+                        </tr>
+                        <tr>
+                          <td>最大值</td>
+                          {% for max_val in comparison_data.prediction_stats.max
+                          %}
+                          <td>{{ "%.2f"|format(max_val) }}</td>
+                          {% endfor %}
+                        </tr>
+                        <tr>
+                          <td>平均值</td>
+                          {% for mean_val in
+                          comparison_data.prediction_stats.mean %}
+                          <td>{{ "%.2f"|format(mean_val) }}</td>
+                          {% endfor %}
+                        </tr>
+                        <tr>
+                          <td>标准差</td>
+                          {% for std_val in comparison_data.prediction_stats.std
+                          %}
+                          <td>{{ "%.2f"|format(std_val) }}</td>
+                          {% endfor %}
+                        </tr>
+                        <tr>
+                          <td>中位数</td>
+                          {% for median_val in
+                          comparison_data.prediction_stats.median %}
+                          <td>{{ "%.2f"|format(median_val) }}</td>
+                          {% endfor %}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">实际值统计</h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table
+                      class="table table-bordered table-striped table-metrics"
+                    >
+                      <thead>
+                        <tr>
+                          <th>统计量</th>
+                          {% for model_name in comparison_data.model_names %}
+                          <th>{{ model_name }}</th>
+                          {% endfor %}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>最小值</td>
+                          {% for min_val in comparison_data.actual_stats.min %}
+                          <td>{{ "%.2f"|format(min_val) }}</td>
+                          {% endfor %}
+                        </tr>
+                        <tr>
+                          <td>最大值</td>
+                          {% for max_val in comparison_data.actual_stats.max %}
+                          <td>{{ "%.2f"|format(max_val) }}</td>
+                          {% endfor %}
+                        </tr>
+                        <tr>
+                          <td>平均值</td>
+                          {% for mean_val in comparison_data.actual_stats.mean
+                          %}
+                          <td>{{ "%.2f"|format(mean_val) }}</td>
+                          {% endfor %}
+                        </tr>
+                        <tr>
+                          <td>标准差</td>
+                          {% for std_val in comparison_data.actual_stats.std %}
+                          <td>{{ "%.2f"|format(std_val) }}</td>
+                          {% endfor %}
+                        </tr>
+                        <tr>
+                          <td>中位数</td>
+                          {% for median_val in
+                          comparison_data.actual_stats.median %}
+                          <td>{{ "%.2f"|format(median_val) }}</td>
+                          {% endfor %}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12 mt-4">
+              <div class="chart-container">
+                <canvas id="statsChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 预测对比选项卡 -->
+        <div
+          class="tab-pane fade"
+          id="comparison"
+          role="tabpanel"
+          aria-labelledby="comparison-tab"
+        >
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">模型预测与真实数据对比</h5>
+                </div>
+                <div class="card-body">
+                  <div class="alert alert-info">
+                    <i class="bi bi-info-circle-fill"></i>
+                    下图展示了三种模型在测试集上的预测值与真实数据的对比情况。
+                  </div>
+                  <div class="text-center mb-4">
+                    <img
+                      src="{{ url_for('static', filename='images/model_comparison_20250511_165124.png') }}"
+                      class="img-fluid"
+                      alt="模型预测与真实数据对比图"
+                      style="
+                        max-width: 100%;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                      "
+                    />
+                  </div>
+                  <div class="text-center text-muted">
+                    <small>图表生成时间: 2025-05-11 16:51:24</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 模型详情选项卡 -->
+        <div
+          class="tab-pane fade"
+          id="model-details"
+          role="tabpanel"
+          aria-labelledby="model-details-tab"
+        >
+          <div class="row">
+            {% for model_type, data in models_data.items() %}
+            <div class="col-md-4">
+              <div class="card model-card">
+                <div class="card-header model-header">
+                  <h5 class="card-title mb-1">{{ data.model_key }}</h5>
+                  <div class="model-timestamp">
+                    训练时间: {{ data.timestamp }}
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="mb-3">
+                    <div class="fw-bold">数据文件：</div>
+                    <p>{{ data.data_file }}</p>
+                  </div>
+                  <div class="mb-3">
+                    <div class="fw-bold">目标列：</div>
+                    <p>{{ data.target_column }}</p>
+                  </div>
+                  <div class="mb-3">
+                    <div class="fw-bold">回溯天数：</div>
+                    <p>{{ data.look_back }} 天</p>
+                  </div>
+                  <div class="mb-3">
+                    <div class="fw-bold">测试样本：</div>
+                    <p>{{ data.test_samples }} 条</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="alert alert-info">
+        <h4 class="alert-heading">未找到模型评估数据</h4>
+        <p>
+          系统未能加载任何模型评估数据。请检查模型评估文件是否存在于
+          models/results 目录下，并确保文件格式正确。
+        </p>
+        <hr />
+        <p class="mb-0">
+          模型评估文件应该是JSON格式，文件名应该遵循格式：[model_type]_*_metrics.json，其中model_type可以是mlp、lstm或cnn。
+        </p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %} {% block scripts %} {{ super() }} {% if
+comparison_data.model_names|length > 0 %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 模型名称数据
+    const modelNames = {{ comparison_data.model_names|tojson }};
+
+    // 准备性能指标数据
+    const metricsData = {
+      labels: ['RMSE', 'MAE', 'MAPE(%)', 'R²', 'Accuracy(%)'],
+      datasets: [
+        {% for i in range(comparison_data.model_names|length) %}
+        {
+          label: '{{ comparison_data.model_names[i] }}',
+          backgroundColor: getModelColor({{ i }}, 0.2),
+          borderColor: getModelColor({{ i }}, 1),
+          borderWidth: 2,
+          data: [
+            {{ comparison_data.metrics.rmse[i] }},
+            {{ comparison_data.metrics.mae[i] }},
+            {{ comparison_data.metrics.mape[i] }},
+            {{ comparison_data.metrics.r2[i] * 100 }}, // 将R²值乘以100以便在图表中更好显示
+            {{ comparison_data.metrics.accuracy[i] }}
+          ]
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+      ]
+    };
+
+    // 准备统计数据
+    const statsData = {
+      labels: ['最小值', '最大值', '平均值', '标准差', '中位数'],
+      datasets: [
+        {% for i in range(comparison_data.model_names|length) %}
+        {
+          label: '{{ comparison_data.model_names[i] }} (预测)',
+          backgroundColor: getModelColor({{ i }}, 0.2),
+          borderColor: getModelColor({{ i }}, 1),
+          borderWidth: 2,
+          data: [
+            {{ comparison_data.prediction_stats.min[i] }},
+            {{ comparison_data.prediction_stats.max[i] }},
+            {{ comparison_data.prediction_stats.mean[i] }},
+            {{ comparison_data.prediction_stats.std[i] }},
+            {{ comparison_data.prediction_stats.median[i] }}
+          ]
+        },
+        {
+          label: '{{ comparison_data.model_names[i] }} (实际)',
+          backgroundColor: 'rgba(0, 0, 0, 0)',
+          borderColor: getModelColor({{ i }}, 1),
+          borderWidth: 2,
+          borderDash: [5, 5],
+          data: [
+            {{ comparison_data.actual_stats.min[i] }},
+            {{ comparison_data.actual_stats.max[i] }},
+            {{ comparison_data.actual_stats.mean[i] }},
+            {{ comparison_data.actual_stats.std[i] }},
+            {{ comparison_data.actual_stats.median[i] }}
+          ]
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+      ]
+    };
+
+    // 绘制性能指标图表
+    const metricsCtx = document.getElementById('metricsChart').getContext('2d');
+    new Chart(metricsCtx, {
+      type: 'radar',
+      data: metricsData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        elements: {
+          line: {
+            tension: 0.2
+          }
+        },
+        scales: {
+          r: {
+            angleLines: {
+              display: true
+            },
+            suggestedMin: 0
+          }
+        }
+      }
+    });
+
+    // 绘制统计数据图表
+    const statsCtx = document.getElementById('statsChart').getContext('2d');
+    new Chart(statsCtx, {
+      type: 'bar',
+      data: statsData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: false,
+            grid: {
+              drawBorder: false
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
+        }
+      }
+    });
+
+    // 获取模型颜色
+    function getModelColor(index, alpha) {
+      const colors = [
+        `rgba(255, 99, 132, ${alpha})`,  // 红色
+        `rgba(54, 162, 235, ${alpha})`,  // 蓝色
+        `rgba(255, 206, 86, ${alpha})`,  // 黄色
+        `rgba(75, 192, 192, ${alpha})`,  // 青色
+        `rgba(153, 102, 255, ${alpha})`, // 紫色
+        `rgba(255, 159, 64, ${alpha})`   // 橙色
+      ];
+      return colors[index % colors.length];
+    }
+
+    // 运行评估按钮点击事件
+    document.getElementById('runEvaluationBtn').addEventListener('click', runModelEvaluation);
+
+    // 运行模型评估函数
+    function runModelEvaluation() {
+      // 显示加载遮罩
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      loadingOverlay.classList.remove('d-none');
+      
+      // 显示进度条
+      const progressBar = document.querySelector('#evaluationProgress');
+      const progressBarInner = progressBar.querySelector('.progress-bar');
+      progressBar.classList.remove('d-none');
+      
+      // 禁用按钮
+      const button = document.getElementById('runEvaluationBtn');
+      button.disabled = true;
+      button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 评估中...';
+      
+      // 模拟进度更新
+      let progress = 0;
+      const progressInterval = setInterval(() => {
+        progress += Math.random() * 10;
+        if (progress > 95) progress = 95;
+        progressBarInner.style.width = `${progress}%`;
+        document.getElementById('loadingProgressText').textContent = `${Math.round(progress)}%`;
+      }, 1000);
+      
+      // 调用API
+      fetch('/api/run-model-evaluation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          look_back: 30 // 默认使用30天回溯窗口
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('网络请求失败');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // 清除进度条更新
+        clearInterval(progressInterval);
+        
+        // 更新进度为100%
+        progressBarInner.style.width = '100%';
+        document.getElementById('loadingProgressText').textContent = '100%';
+        
+        // 延迟关闭加载遮罩，让用户看到100%
+        setTimeout(() => {
+          loadingOverlay.classList.add('d-none');
+          progressBar.classList.add('d-none');
+          
+          // 重置按钮状态
+          button.disabled = false;
+          button.innerHTML = '<i class="bi bi-play-circle"></i> 运行模型评估';
+          
+          // 处理成功响应
+          handleEvaluationSuccess(data);
+        }, 1000);
+      })
+      .catch(error => {
+        // 清除进度条更新
+        clearInterval(progressInterval);
+        
+        // 隐藏加载遮罩
+        loadingOverlay.classList.add('d-none');
+        progressBar.classList.add('d-none');
+        
+        // 重置按钮状态
+        button.disabled = false;
+        button.innerHTML = '<i class="bi bi-play-circle"></i> 运行模型评估';
+        
+        // 显示错误
+        alert('评估失败: ' + error.message);
+        console.error('评估出错:', error);
+      });
+    }
+    
+    // 处理评估成功
+    function handleEvaluationSuccess(data) {
+      console.log('评估结果:', data);
+      
+      if (!data.success) {
+        alert('评估过程出错: ' + data.error);
+        return;
+      }
+      
+      // 显示成功消息
+      alert('模型评估完成！');
+      
+      // 绘制预测对比图表
+      createPredictionComparisonChart(data.models_results);
+      
+      // 更新时间戳
+      const now = new Date();
+      const timestamp = now.toLocaleString('zh-CN');
+      document.getElementById('chartTimestamp').textContent = `图表生成时间: ${timestamp}`;
+      
+      // 隐藏静态图片
+      document.getElementById('staticImageContainer').classList.add('d-none');
+      
+      // 跳转到预测对比选项卡
+      document.getElementById('comparison-tab').click();
+      
+      // 刷新页面提示（可选，如果要更新整个页面的统计数据）
+      const refreshNotice = document.createElement('div');
+      refreshNotice.className = 'alert alert-success mt-3';
+      refreshNotice.innerHTML = '<i class="bi bi-check-circle-fill"></i> 评估完成！<a href="javascript:location.reload()" class="alert-link">刷新页面</a>查看完整统计数据。';
+      document.querySelector('#comparison .card-body').appendChild(refreshNotice);
+    }
+    
+    // 创建预测对比图表
+    function createPredictionComparisonChart(modelsResults) {
+      // 获取Canvas上下文
+      const chartCanvas = document.getElementById('predictionComparisonChart');
+      const ctx = chartCanvas.getContext('2d');
+      
+      // 准备图表数据
+      const chartData = {
+        labels: [],
+        datasets: []
+      };
+      
+      // 添加实际数据和各模型的预测数据
+      let actualDataAdded = false;
+      
+      Object.keys(modelsResults).forEach((modelType, index) => {
+        const modelData = modelsResults[modelType];
+        
+        // 检查是否存在有效的图表数据
+
+
+
+
+  });
+</script>
+{% endif %} {% endblock %}

@@ -1,0 +1,178 @@
+[
+  {
+    "id": 1,
+    "topic_id": 2,
+    "user_id": 5,
+    "username": "市场分析师",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "从基本面看，这波上涨主要受以下因素驱动：\n\n1. 国内饲料需求恢复，特别是生猪养殖规模扩大\n2. 豆粕库存处于近五年同期较低水平\n3. 美豆种植进度低于预期，市场担忧供应\n\n短期来看，价格可能继续震荡上行，但需关注美豆种植进度和南美大豆产量情况。",
+    "created_at": "2023-05-02 10:30",
+    "updated_at": "2023-05-02 10:30",
+    "likes": 15
+  },
+  {
+    "id": 2,
+    "topic_id": 2,
+    "user_id": 7,
+    "username": "技术派",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "从技术面看，豆粕期货突破了前期高点，MACD指标金叉，KDJ指标向上发散，短期有望继续上行。但RSI指标已接近超买区域，后市可能面临回调压力。建议逢低做多，关注3480元/吨压力位。",
+    "created_at": "2023-05-02 11:45",
+    "updated_at": "2023-05-02 11:45",
+    "likes": 8
+  },
+  {
+    "id": 3,
+    "topic_id": 2,
+    "user_id": 4,
+    "username": "期货老手",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "我认为这波上涨主要是资金推动，机构大幅增仓做多。从持仓数据看，主力多头持仓增加明显。但需要注意的是，价格上涨过快，短期可能面临回调风险。建议设置合理止损，控制仓位。",
+    "created_at": "2023-05-02 14:20",
+    "updated_at": "2023-05-02 14:20",
+    "likes": 12
+  },
+  {
+    "id": 4,
+    "topic_id": 3,
+    "user_id": 7,
+    "username": "技术派",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "我也尝试过使用深度学习模型预测期货价格，但发现一个问题：模型在历史数据上表现很好，但在实盘中准确率下降明显。你是如何解决这个过拟合问题的？",
+    "created_at": "2023-05-01 15:30",
+    "updated_at": "2023-05-01 15:30",
+    "likes": 5
+  },
+  {
+    "id": 5,
+    "topic_id": 3,
+    "user_id": 3,
+    "username": "AI研究者",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "关于过拟合问题，我采取了以下措施：\n\n1. 增加正则化（L1和L2）\n2. 使用Dropout层\n3. 采用交叉验证\n4. 特征工程中加入更多基本面数据\n\n此外，我发现模型预测的不是具体价格，而是价格变化方向（涨/跌）效果更好。",
+    "created_at": "2023-05-01 16:45",
+    "updated_at": "2023-05-01 16:45",
+    "likes": 10
+  },
+  {
+    "id": 6,
+    "topic_id": 3,
+    "user_id": 2,
+    "username": "交易达人",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "我认为深度学习模型在期货预测中确实有一定价值，但不能完全依赖。我的做法是将模型预测作为参考因素之一，结合传统技术分析和基本面分析，综合判断。\n\n另外，我发现加入市场情绪指标（如期权隐含波动率、资金流向等）可以提高模型准确率。",
+    "created_at": "2023-05-02 09:15",
+    "updated_at": "2023-05-02 09:15",
+    "likes": 8
+  },
+  {
+    "id": 7,
+    "topic_id": 4,
+    "user_id": 2,
+    "username": "交易达人",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "这个策略思路不错，我也是突破交易的忠实粉丝。不过我有一个建议：可以考虑加入波动率过滤器，只在波动率较低时进场，这样可以减少假突破的概率。\n\n另外，你提到的成交量确认非常重要，我通常要求成交量至少是前5日平均成交量的1.5倍才确认突破有效。",
+    "created_at": "2023-05-03 10:30",
+    "updated_at": "2023-05-03 10:30",
+    "likes": 6
+  },
+  {
+    "id": 8,
+    "topic_id": 4,
+    "user_id": 7,
+    "username": "技术派",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "关于止损设置，我有一些补充。除了固定点位止损外，还可以考虑以下方式：\n\n1. 时间止损：如果价格在一定时间内没有向有利方向发展，可以考虑出场\n2. 波动率止损：当市场波动率突然放大时，可以考虑减仓或出场\n3. 技术指标止损：例如MACD死叉或KDJ超买/超卖区域反转\n\n灵活运用这些止损方式，可以更好地控制风险。",
+    "created_at": "2023-05-03 11:45",
+    "updated_at": "2023-05-03 11:45",
+    "likes": 9
+  },
+  {
+    "id": 9,
+    "topic_id": 5,
+    "user_id": 8,
+    "username": "基本面研究",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "我同意你的分析。从供需角度看，虽然进口量增加会增加供应，但需求的增长可能更为重要。根据我的研究，今年养殖业恢复速度超预期，特别是生猪存栏量已经接近历史高位。\n\n此外，还需关注国际大豆价格走势。近期美豆价格有所回落，这可能对国内豆粕价格形成一定压力。但考虑到运输成本上升和人民币汇率因素，进口成本仍然较高。",
+    "created_at": "2023-05-03 13:15",
+    "updated_at": "2023-05-03 13:15",
+    "likes": 4
+  },
+  {
+    "id": 10,
+    "topic_id": 6,
+    "user_id": 4,
+    "username": "期货老手",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "作为一个交易了10多年的老手，给新手几点建议：\n\n1. 基础知识：首先要了解期货基本概念、交易规则、合约规则等，推荐《期货市场教程》\n2. 技术分析：学习K线、均线、MACD等基本指标，推荐《日本蜡烛图技术》\n3. 基本面分析：了解豆粕产业链、供需关系、季节性规律等\n4. 风险控制：这是最重要的！单笔交易风险不超过总资金的2%，总仓位不超过50%\n5. 初始资金：建议至少5万元起步，这样才能承受正常的市场波动\n\n最后，一定要有耐心，交易是一场马拉松，不是短跑。",
+    "created_at": "2023-05-02 20:30",
+    "updated_at": "2023-05-02 20:30",
+    "likes": 15
+  },
+  {
+    "id": 11,
+    "topic_id": 2,
+    "user_id": 2,
+    "username": "交易达人",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "asdf",
+    "created_at": "2025-05-08 10:31",
+    "updated_at": "2025-05-08 10:31",
+    "likes": 0
+  },
+  {
+    "id": 12,
+    "topic_id": 2,
+    "user_id": 2,
+    "username": "交易达人",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "asfd",
+    "created_at": "2025-05-08 10:37",
+    "updated_at": "2025-05-08 10:37",
+    "likes": 0
+  },
+  {
+    "id": 13,
+    "topic_id": 2,
+    "user_id": 2,
+    "username": "交易达人",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "fdsfa",
+    "created_at": "2025-05-09 11:35",
+    "updated_at": "2025-05-09 11:35",
+    "likes": 0
+  },
+  {
+    "id": 14,
+    "topic_id": 3,
+    "user_id": 2,
+    "username": "交易达人",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "asdf",
+    "created_at": "2025-05-09 11:57",
+    "updated_at": "2025-05-09 11:57",
+    "likes": 0
+  },
+  {
+    "id": 15,
+    "topic_id": 4,
+    "user_id": 2,
+    "username": "交易达人",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "asfdsd",
+    "created_at": "2025-05-09 12:03",
+    "updated_at": "2025-05-09 12:03",
+    "likes": 0
+  },
+  {
+    "id": 16,
+    "topic_id": 10,
+    "user_id": 2,
+    "username": "交易达人",
+    "avatar": "https://via.placeholder.com/40",
+    "content": "sdfasdf",
+    "created_at": "2025-05-09 12:11",
+    "updated_at": "2025-05-09 12:11",
+    "likes": 0
+  }
+]

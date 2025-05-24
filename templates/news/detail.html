@@ -1,0 +1,308 @@
+{% extends 'base.html' %} {% block title %}{{ news.title }} -
+豆粕期货价格预测系统{% endblock %} {% block head %}
+<style>
+  .news-meta {
+    margin-bottom: 20px;
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+  .news-content {
+    line-height: 1.8;
+    font-size: 1.1rem;
+  }
+  .news-tag {
+    font-size: 0.8rem;
+  }
+  .related-news-card {
+    transition: all 0.3s ease;
+  }
+  .related-news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .share-buttons {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+  .share-buttons a {
+    display: inline-block;
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+    color: white;
+    transition: all 0.3s ease;
+  }
+  .share-buttons a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  }
+  .share-buttons .btn-weixin {
+    background-color: #7bb32e;
+  }
+  .share-buttons .btn-weibo {
+    background-color: #e6162d;
+  }
+  .share-buttons .btn-qq {
+    background-color: #12b7f5;
+  }
+  .share-buttons .btn-link {
+    background-color: #6c757d;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('main.index') }}">首页</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('news.index') }}">新闻资讯</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            {{ news.title }}
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h1 class="mb-3">
+            {% if news.external_url %}
+            <a
+              href="{{ news.external_url }}"
+              target="_blank"
+              class="text-decoration-none"
+              >{{ news.title }} <i class="bi bi-box-arrow-up-right small"></i
+            ></a>
+            {% else %} {{ news.title }} {% endif %}
+          </h1>
+
+          <div
+            class="news-meta d-flex justify-content-between align-items-center"
+          >
+            <div>
+              <span class="badge bg-primary news-tag me-2">豆粕期货</span>
+              <span><i class="bi bi-calendar3"></i> {{ news.date }}</span>
+              <span class="ms-3"
+                ><i class="bi bi-building"></i> {{ news.source }}</span
+              >
+            </div>
+            <div>
+              <span><i class="bi bi-eye"></i> {{ news.views }} 阅读</span>
+            </div>
+          </div>
+
+          <div class="news-content">
+            <p>{{ news.content }}</p>
+
+            <!-- 这里可以添加更多段落 -->
+            <p>
+              随着全球大豆贸易格局的变化，中国作为全球最大的大豆进口国，其进口政策和市场需求对全球大豆及豆粕价格有着重要影响。分析师指出，未来中国大豆进口量的变化将主要受到以下因素影响：
+            </p>
+
+            <ul>
+              <li>国内养殖业恢复情况及饲料需求</li>
+              <li>国内大豆种植面积及产量变化</li>
+              <li>中美贸易关系发展</li>
+              <li>南美大豆产量及出口政策</li>
+            </ul>
+
+            <p>
+              此外，随着人们对食品安全和环境保护意识的提高，非转基因大豆的需求也在逐步增加，这可能对未来大豆市场格局产生深远影响。
+            </p>
+
+            <blockquote class="blockquote">
+              <p class="mb-0">
+                大豆及豆粕市场正处于供需再平衡阶段，价格波动可能加剧，投资者应密切关注市场动态，把握交易机会。
+              </p>
+              <footer class="blockquote-footer">某期货分析师</footer>
+            </blockquote>
+          </div>
+
+          <!-- 分享按钮 -->
+          <div class="share-buttons">
+            <div class="mb-2">分享到：</div>
+            <a href="#" class="btn-weixin"><i class="bi bi-wechat"></i></a>
+            <a href="#" class="btn-weibo"><i class="bi bi-sina-weibo"></i></a>
+            <a href="#" class="btn-qq"><i class="bi bi-tencent-qq"></i></a>
+            <a href="#" class="btn-link" id="copyLinkBtn"
+              ><i class="bi bi-link-45deg"></i
+            ></a>
+          </div>
+
+          <!-- 上一篇/下一篇 -->
+          <div class="d-flex justify-content-between mt-4 pt-4 border-top">
+            <a href="#" class="btn btn-outline-primary"
+              ><i class="bi bi-arrow-left"></i> 上一篇</a
+            >
+            <a href="#" class="btn btn-outline-primary"
+              >下一篇 <i class="bi bi-arrow-right"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <!-- 相关新闻 -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-link-45deg"></i> 相关新闻</h5>
+        </div>
+        <div class="card-body">
+          {% if related_news %} {% for related in related_news %}
+          <div class="card related-news-card mb-3">
+            <div class="card-body">
+              <h6 class="card-title">
+                <a
+                  href="{{ url_for('news.detail', news_id=related.id) }}"
+                  class="text-decoration-none"
+                  >{{ related.title }}</a
+                >
+              </h6>
+              <div class="small text-muted">
+                <i class="bi bi-calendar3"></i> {{ related.date }} ·
+                <i class="bi bi-eye"></i> {{ related.views }} 阅读
+              </div>
+              <a
+                href="{{ url_for('news.detail', news_id=related.id) }}"
+                class="btn btn-sm btn-outline-primary mt-2"
+                >阅读全文</a
+              >
+            </div>
+          </div>
+          {% endfor %} {% else %}
+          <p class="text-muted">暂无相关新闻</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- 热门标签 -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-tags"></i> 热门标签</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex flex-wrap gap-2">
+            <a href="#" class="badge bg-primary text-decoration-none"
+              >豆粕期货</a
+            >
+            <a href="#" class="badge bg-secondary text-decoration-none"
+              >大豆进口</a
+            >
+            <a href="#" class="badge bg-success text-decoration-none"
+              >饲料需求</a
+            >
+            <a href="#" class="badge bg-danger text-decoration-none"
+              >价格预测</a
+            >
+            <a href="#" class="badge bg-warning text-white text-decoration-none"
+              >政策解读</a
+            >
+            <a href="#" class="badge bg-info text-white text-decoration-none"
+              >市场分析</a
+            >
+            <a href="#" class="badge bg-dark text-decoration-none">交易策略</a>
+            <a href="#" class="badge bg-secondary text-decoration-none"
+              >技术指标</a
+            >
+            <a href="#" class="badge bg-primary text-decoration-none">基本面</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 订阅新闻 -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-envelope"></i> 订阅资讯</h5>
+        </div>
+        <div class="card-body">
+          <p>订阅我们的新闻通讯，获取最新的豆粕期货市场资讯和分析报告。</p>
+          <form id="subscribeForm">
+            <div class="mb-3">
+              <input
+                type="email"
+                class="form-control"
+                id="subscribeEmail"
+                placeholder="您的邮箱地址"
+                required
+              />
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-send"></i> 立即订阅
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  // 复制链接功能
+  document
+    .getElementById("copyLinkBtn")
+    .addEventListener("click", function (e) {
+      e.preventDefault();
+
+      // 创建一个临时输入框
+      const tempInput = document.createElement("input");
+      tempInput.value = window.location.href;
+      document.body.appendChild(tempInput);
+
+      // 选择并复制
+      tempInput.select();
+      document.execCommand("copy");
+
+      // 移除临时输入框
+      document.body.removeChild(tempInput);
+
+      // 显示提示
+      alert("链接已复制到剪贴板");
+    });
+
+  // 订阅表单提交
+  document
+    .getElementById("subscribeForm")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById("subscribeEmail").value;
+
+      // 发送AJAX请求
+      fetch("/news/api/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: "email=" + encodeURIComponent(email),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            alert(data.message);
+            document.getElementById("subscribeEmail").value = "";
+          } else {
+            alert(data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("订阅出错:", error);
+          alert("订阅失败，请稍后重试");
+        });
+    });
+</script>
+{% endblock %}

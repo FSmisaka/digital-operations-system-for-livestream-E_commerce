@@ -1,0 +1,30 @@
+{
+    "model_key": "MLP_AdvancedFeatures",
+    "timestamp": "20250511_213801",
+    "data_file": "/root/model_train/models/model_data/date1.csv",
+    "target_column": "close",
+    "look_back": 30,
+    "test_samples": 241,
+    "metrics": {
+        "mse": 3339.425420519969,
+        "rmse": 57.78776185768029,
+        "mae": 47.54727514749741,
+        "r2": 0.9514618486122831,
+        "mape": 1.581824061641713,
+        "accuracy": 98.7551867219917
+    },
+    "prediction_stats": {
+        "min": 2679.176513671875,
+        "max": 3685.656494140625,
+        "mean": 3030.205322265625,
+        "std": 246.27169799804688,
+        "median": 2942.766357421875
+    },
+    "actual_stats": {
+        "min": 2567.0,
+        "max": 3622.0,
+        "mean": 3043.7344398340247,
+        "std": 262.29756473392985,
+        "median": 2995.0
+    }
+}

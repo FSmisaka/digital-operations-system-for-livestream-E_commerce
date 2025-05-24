@@ -1,0 +1,341 @@
+{% extends 'base.html' %} {% block title %}新闻资讯 - 豆粕期货价格预测系统{%
+endblock %} {% block head %}
+<style>
+  .news-card {
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+  }
+  .news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .news-tag {
+    font-size: 0.8rem;
+  }
+  .news-date {
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+  .news-source {
+    font-style: italic;
+    color: #6c757d;
+  }
+  .featured-news {
+    position: relative;
+    overflow: hidden;
+    border-radius: 5px;
+    margin-bottom: 30px;
+  }
+
+  .featured-news-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+    color: white;
+  }
+  .featured-news-tag {
+    background-color: #dc3545;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2><i class="bi bi-newspaper"></i> 豆粕期货新闻资讯</h2>
+      <p class="lead">了解最新的市场动态和行业趋势</p>
+    </div>
+    <div class="col-md-4 text-end">
+      <div class="input-group">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="搜索新闻..."
+          aria-label="搜索新闻"
+        />
+        <button class="btn btn-primary" type="button">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 头条新闻 -->
+  {% if featured_news %}
+  <div class="featured-news">
+    <div
+      class="featured-news-content"
+      style="
+        position: relative;
+        background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+        color: #212529;
+        padding: 30px;
+        border-radius: 5px;
+      "
+    >
+      <h2>
+        {% if featured_news.url %}
+        <a
+          href="{{ featured_news.url }}"
+          target="_blank"
+          class="text-decoration-none text-dark"
+          >{{ featured_news.title }}
+          <i class="bi bi-box-arrow-up-right small"></i
+        ></a>
+        {% else %}
+        <a
+          href="{{ url_for('news.detail', news_id=featured_news.id) }}"
+          class="text-decoration-none text-dark"
+          >{{ featured_news.title }}</a
+        >
+        {% endif %}
+      </h2>
+      <p>
+        {{ featured_news.content[:200] }}{% if featured_news.content|length >
+        200 %}...{% endif %}
+      </p>
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="news-date"
+          ><i class="bi bi-calendar3"></i> {{ featured_news.date }}</span
+        >
+        {% if featured_news.url %}
+        <a
+          href="{{ featured_news.url }}"
+          target="_blank"
+          class="btn btn-sm btn-primary"
+          >阅读全文 <i class="bi bi-box-arrow-up-right"></i
+        ></a>
+        {% else %}
+        <a
+          href="{{ url_for('news.detail', news_id=featured_news.id) }}"
+          class="btn btn-sm btn-primary"
+          >阅读全文</a
+        >
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- 新闻列表 -->
+  <div class="row">
+    <div class="col-md-8 news-list-container">
+      <!-- 新闻卡片 -->
+      {% for news in news_list %}
+      <div class="card news-card">
+        <div class="row g-0">
+          <div class="col-md-12">
+            <div class="card-body">
+              <h5 class="card-title mt-2">
+                {% if news.url %}
+                <a
+                  href="{{ news.url }}"
+                  target="_blank"
+                  class="text-decoration-none"
+                  >{{ news.title }}
+                  <i class="bi bi-box-arrow-up-right small"></i
+                ></a>
+                {% else %}
+                <a
+                  href="{{ url_for('news.detail', news_id=news.id) }}"
+                  class="text-decoration-none"
+                  >{{ news.title }}</a
+                >
+                {% endif %}
+              </h5>
+              <p class="card-text">
+                {{ news.content[:150] }}{% if news.content|length > 150 %}...{%
+                endif %}
+              </p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="news-date"
+                  ><i class="bi bi-calendar3"></i> {{ news.date }}</span
+                >
+                {% if news.url %}
+                <a
+                  href="{{ news.url }}"
+                  target="_blank"
+                  class="btn btn-sm btn-outline-primary"
+                  >阅读全文 <i class="bi bi-box-arrow-up-right"></i
+                ></a>
+                {% else %}
+                <a
+                  href="{{ url_for('news.detail', news_id=news.id) }}"
+                  class="btn btn-sm btn-outline-primary"
+                  >阅读全文</a
+                >
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      <!-- 分页 -->
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <div>
+          <span class="text-muted news-pagination-info"
+            >显示 1-5 条，共 15 条</span
+          >
+        </div>
+        <nav>
+          <ul class="pagination pagination-sm news-pagination">
+            <!-- 分页按钮将由JavaScript动态生成 -->
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <!-- 热门新闻 -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-fire"></i> 热门新闻</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            {% for news in popular_news %}
+            <li class="list-group-item px-0">
+              {% if news.url %}
+              <a
+                href="{{ news.url }}"
+                target="_blank"
+                class="text-decoration-none"
+                >{{ news.title }} <i class="bi bi-box-arrow-up-right small"></i
+              ></a>
+              {% else %}
+              <a
+                href="{{ url_for('news.detail', news_id=news.id) }}"
+                class="text-decoration-none"
+                >{{ news.title }}</a
+              >
+              {% endif %}
+              <div class="small text-muted mt-1">
+                <i class="bi bi-eye"></i> {{ news.views }} 阅读 ·
+                <i class="bi bi-calendar3"></i> {{ news.date }}
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <!-- 订阅新闻 -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-envelope"></i> 订阅资讯</h5>
+        </div>
+        <div class="card-body">
+          <p>订阅我们的新闻通讯，获取最新的豆粕期货市场资讯和分析报告。</p>
+          <form>
+            <div class="mb-3">
+              <input
+                type="email"
+                class="form-control"
+                placeholder="您的邮箱地址"
+              />
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-send"></i> 立即订阅
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- 市场日历 -->
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-calendar-event"></i> 市场日历</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item px-0">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <strong>USDA大豆产量报告</strong>
+                  <div class="small text-muted">美国农业部</div>
+                </div>
+                <span class="badge bg-primary">05-10</span>
+              </div>
+            </li>
+            <li class="list-group-item px-0">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <strong>豆粕期货交割日</strong>
+                  <div class="small text-muted">大连商品交易所</div>
+                </div>
+                <span class="badge bg-primary">05-15</span>
+              </div>
+            </li>
+            <li class="list-group-item px-0">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <strong>全球油脂油料峰会</strong>
+                  <div class="small text-muted">北京</div>
+                </div>
+                <span class="badge bg-primary">05-20</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<!-- 引入分页功能脚本 -->
+<script src="{{ url_for('static', filename='js/pagination.js') }}"></script>
+<script>
+  // 这里可以添加新闻页面特定的JavaScript代码
+  // 例如新闻搜索、过滤等功能
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // 搜索功能
+    const searchInput = document.querySelector(
+      'input[placeholder="搜索新闻..."]',
+    );
+    const searchButton = searchInput.nextElementSibling;
+
+    if (searchInput && searchButton) {
+      // 点击搜索按钮时执行搜索
+      searchButton.addEventListener("click", function () {
+        performSearch();
+      });
+
+      // 按回车键时执行搜索
+      searchInput.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          performSearch();
+        }
+      });
+
+      function performSearch() {
+        const keyword = searchInput.value.trim();
+        if (keyword) {
+          window.location.href = `/news/search?keyword=${encodeURIComponent(keyword)}`;
+        }
+      }
+    }
+
+    // 更新分页信息
+    const newsCards = document.querySelectorAll(".news-card");
+    const paginationInfo = document.querySelector(".news-pagination-info");
+
+    if (paginationInfo && newsCards.length > 0) {
+      paginationInfo.textContent = `显示 1-${newsCards.length} 条，共 ${newsCards.length} 条`;
+    }
+  });
+</script>
+{% endblock %}

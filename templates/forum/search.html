@@ -1,0 +1,236 @@
+{% extends 'base.html' %} {% block title %}搜索结果: {{ keyword }} -
+豆粕期货价格预测系统{% endblock %} {% block head %}
+<style>
+  .topic-card {
+    border-left: 4px solid #007bff;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+  }
+  .topic-card:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  .topic-card.hot {
+    border-left-color: #dc3545;
+  }
+  .topic-card.announcement {
+    border-left-color: #ffc107;
+  }
+
+  .topic-stats {
+    text-align: center;
+    min-width: 60px;
+  }
+  .topic-badge {
+    font-size: 0.7rem;
+    padding: 2px 5px;
+  }
+  .highlight {
+    background-color: #fff3cd;
+    padding: 0 3px;
+    border-radius: 3px;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2><i class="bi bi-search"></i> 搜索结果: "{{ keyword }}"</h2>
+      <p class="lead">找到 {{ topics|length }} 个相关主题</p>
+    </div>
+    <div class="col-md-4 text-end">
+      <form action="{{ url_for('forum.search') }}" method="get">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            name="keyword"
+            value="{{ keyword }}"
+            placeholder="搜索主题..."
+            aria-label="搜索主题"
+          />
+          <button class="btn btn-primary" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 搜索结果列表 -->
+  <div class="row">
+    <div class="col-md-9">
+      {% if topics %}
+      <div class="list-group">
+        {% for topic in topics %}
+        <div
+          class="list-group-item topic-card {{ 'hot' if topic.is_hot else 'announcement' if topic.is_announcement else '' }} d-flex align-items-center p-3"
+        >
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center">
+              <h6 class="mb-0">
+                {% if topic.is_sticky %}<span
+                  class="badge bg-danger topic-badge me-1"
+                  >置顶</span
+                >{% endif %} {% if topic.is_announcement %}<span
+                  class="badge bg-warning topic-badge me-1"
+                  >公告</span
+                >{% endif %} {% if topic.is_hot %}<span
+                  class="badge bg-danger topic-badge me-1"
+                  >热门</span
+                >{% endif %}
+                <span
+                  class="badge bg-{{ 'primary' if topic.category == 'market_analysis' else 'warning' if topic.category == 'trading_strategy' else 'success' if topic.category == 'news_analysis' else 'info' if topic.category == 'beginner' else 'secondary' }} topic-badge me-1"
+                  >{{ topic.category_name }}</span
+                >
+                <a
+                  href="{{ url_for('forum.topic', topic_id=topic.id) }}"
+                  class="text-decoration-none"
+                >
+                  {{ topic.title | replace(keyword, '<span class="highlight"
+                    >' + keyword + '</span
+                  >') | safe }}
+                </a>
+              </h6>
+              <small class="text-muted">{{ topic.created_at }}</small>
+            </div>
+            <div class="small text-muted mt-1">
+              <span class="fw-bold">{{ topic.username }}</span> · 最后回复：{{
+              topic.last_reply_at }} by {{ topic.last_reply_user }}
+            </div>
+            <div class="mt-2">
+              <p class="mb-0 text-muted">
+                {{ topic.content[:150] | replace(keyword, '<span
+                  class="highlight"
+                  >' + keyword + '</span
+                >') | safe }}...
+              </p>
+            </div>
+          </div>
+          <div class="ms-3 topic-stats">
+            <div class="fw-bold">{{ topic.replies }}</div>
+            <small class="text-muted">回复</small>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- 分页 -->
+      {% if topics|length > 10 %}
+      <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true"
+              >上一页</a
+            >
+          </li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">下一页</a>
+          </li>
+        </ul>
+      </nav>
+      {% endif %} {% else %}
+      <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i> 没有找到与 "{{ keyword }}"
+        相关的主题，请尝试其他关键词。
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-3">
+      <!-- 搜索技巧 -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-lightbulb"></i> 搜索技巧</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2">
+              <i class="bi bi-check-circle text-success me-2"></i>
+              使用简短、具体的关键词
+            </li>
+            <li class="mb-2">
+              <i class="bi bi-check-circle text-success me-2"></i>
+              尝试不同的词语组合
+            </li>
+            <li class="mb-2">
+              <i class="bi bi-check-circle text-success me-2"></i>
+              使用行业专业术语
+            </li>
+            <li>
+              <i class="bi bi-check-circle text-success me-2"></i>
+              搜索特定版块的内容
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 热门搜索 -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-fire"></i> 热门搜索</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex flex-wrap gap-2">
+            <a
+              href="{{ url_for('forum.search', keyword='豆粕') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >豆粕</a
+            >
+            <a
+              href="{{ url_for('forum.search', keyword='技术分析') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >技术分析</a
+            >
+            <a
+              href="{{ url_for('forum.search', keyword='交易策略') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >交易策略</a
+            >
+            <a
+              href="{{ url_for('forum.search', keyword='基本面') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >基本面</a
+            >
+            <a
+              href="{{ url_for('forum.search', keyword='价格预测') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >价格预测</a
+            >
+            <a
+              href="{{ url_for('forum.search', keyword='深度学习') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >深度学习</a
+            >
+            <a
+              href="{{ url_for('forum.search', keyword='风险控制') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >风险控制</a
+            >
+            <a
+              href="{{ url_for('forum.search', keyword='新手入门') }}"
+              class="badge bg-secondary text-decoration-none p-2"
+              >新手入门</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- 返回论坛首页 -->
+      <div class="d-grid">
+        <a href="{{ url_for('forum.index') }}" class="btn btn-outline-primary">
+          <i class="bi bi-arrow-left"></i> 返回论坛首页
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  // 这里可以添加搜索页面特定的JavaScript代码
+</script>
+{% endblock %}

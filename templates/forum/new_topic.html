@@ -1,0 +1,537 @@
+{% extends 'base.html' %} {% block title %}发布新主题 - 豆粕期货价格预测系统{%
+endblock %} {% block head %}
+<style>
+  .editor-toolbar {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-bottom: none;
+    border-radius: 0.25rem 0.25rem 0 0;
+    padding: 5px;
+  }
+  .editor-toolbar button {
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 1rem;
+  }
+  .editor-toolbar button:hover {
+    color: #007bff;
+  }
+  .topic-form textarea {
+    border-radius: 0 0 0.25rem 0.25rem;
+    resize: vertical;
+    min-height: 300px;
+  }
+  .preview-area {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 15px;
+    min-height: 300px;
+    background-color: #fff;
+  }
+  .tag-input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 5px;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    min-height: 38px;
+  }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: #e9ecef;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.9rem;
+  }
+  .tag .close {
+    margin-left: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
+  }
+  .tag-input input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 5px;
+    min-width: 60px;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('main.index') }}">首页</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('forum.index') }}">论坛讨论</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">发布新主题</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-9">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-plus-circle"></i> 发布新主题</h5>
+        </div>
+        <div class="card-body">
+          <form
+            id="newTopicForm"
+            action="{{ url_for('forum.create_topic') }}"
+            method="post"
+            class="topic-form"
+          >
+            <div class="mb-3">
+              <label for="topicCategory" class="form-label"
+                >选择版块 <span class="text-danger">*</span></label
+              >
+              <select
+                class="form-select"
+                id="topicCategory"
+                name="category"
+                required
+              >
+                <option value="" selected disabled>请选择版块</option>
+                <option value="market_analysis">市场分析</option>
+                <option value="trading_strategy">交易策略</option>
+                <option value="news_analysis">新闻解读</option>
+                <option value="beginner">新手交流</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="topicTitle" class="form-label"
+                >主题标题 <span class="text-danger">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="topicTitle"
+                name="title"
+                placeholder="请输入主题标题（5-50字）"
+                minlength="5"
+                maxlength="50"
+                required
+              />
+              <div class="form-text">标题应简明扼要，清晰表达主题内容</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="topicContent" class="form-label"
+                >主题内容 <span class="text-danger">*</span></label
+              >
+              <div class="editor-toolbar">
+                <button type="button" onclick="formatText('bold')">
+                  <i class="bi bi-type-bold"></i>
+                </button>
+                <button type="button" onclick="formatText('italic')">
+                  <i class="bi bi-type-italic"></i>
+                </button>
+                <button type="button" onclick="formatText('underline')">
+                  <i class="bi bi-type-underline"></i>
+                </button>
+                <button type="button" onclick="formatText('link')">
+                  <i class="bi bi-link"></i>
+                </button>
+                <button type="button" onclick="formatText('image')">
+                  <i class="bi bi-image"></i>
+                </button>
+                <button type="button" onclick="formatText('code')">
+                  <i class="bi bi-code"></i>
+                </button>
+                <button type="button" onclick="formatText('quote')">
+                  <i class="bi bi-quote"></i>
+                </button>
+                <button
+                  type="button"
+                  class="float-end"
+                  onclick="togglePreview()"
+                >
+                  <i class="bi bi-eye"></i> 预览
+                </button>
+              </div>
+              <textarea
+                class="form-control"
+                id="topicContent"
+                name="content"
+                rows="12"
+                placeholder="请输入主题内容（至少20字）"
+                minlength="20"
+                required
+              ></textarea>
+              <div
+                id="previewArea"
+                class="preview-area mt-3"
+                style="display: none"
+              ></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="topicTags" class="form-label"
+                >标签（最多5个，按回车添加）</label
+              >
+              <div class="tag-input" id="tagContainer">
+                <input
+                  type="text"
+                  id="tagInput"
+                  placeholder="输入标签后按回车"
+                />
+              </div>
+              <input type="hidden" id="topicTags" name="tags" value="" />
+              <div class="form-text">
+                添加相关标签，有助于其他用户找到您的主题
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="notifyCheckbox"
+                  name="notify"
+                  checked
+                />
+                <label class="form-check-label" for="notifyCheckbox">
+                  有新回复时通知我
+                </label>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <a
+                href="{{ url_for('forum.index') }}"
+                class="btn btn-outline-secondary"
+              >
+                <i class="bi bi-arrow-left"></i> 返回论坛
+              </a>
+              <div>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary me-2"
+                  id="previewBtn"
+                >
+                  <i class="bi bi-eye"></i> 预览
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-send"></i> 发布主题
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <!-- 发帖指南 -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-info-circle"></i> 发帖指南</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2">
+              <i class="bi bi-check-circle text-success me-2"></i>
+              标题简明扼要，内容详细清晰
+            </li>
+            <li class="mb-2">
+              <i class="bi bi-check-circle text-success me-2"></i>
+              选择正确的版块发布主题
+            </li>
+            <li class="mb-2">
+              <i class="bi bi-check-circle text-success me-2"></i>
+              添加相关标签，方便他人查找
+            </li>
+            <li class="mb-2">
+              <i class="bi bi-check-circle text-success me-2"></i>
+              文明发言，禁止人身攻击
+            </li>
+            <li>
+              <i class="bi bi-check-circle text-success me-2"></i>
+              禁止发布广告和垃圾信息
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 格式指南 -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-markdown"></i> 格式指南</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2"><code>**文本**</code> - <strong>粗体</strong></li>
+            <li class="mb-2"><code>*文本*</code> - <em>斜体</em></li>
+            <li class="mb-2"><code>__文本__</code> - <u>下划线</u></li>
+            <li class="mb-2">
+              <code>[链接文本](URL)</code> - <a href="#">链接</a>
+            </li>
+            <li class="mb-2"><code>![描述](图片URL)</code> - 图片</li>
+            <li class="mb-2"><code>```代码```</code> - 代码块</li>
+            <li><code>> 引用文本</code> - 引用</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 热门标签 -->
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-tags"></i> 热门标签</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex flex-wrap gap-2">
+            <span
+              class="badge bg-secondary"
+              style="cursor: pointer"
+              onclick="addTag('豆粕')"
+              >豆粕</span
+            >
+            <span
+              class="badge bg-secondary"
+              style="cursor: pointer"
+              onclick="addTag('技术分析')"
+              >技术分析</span
+            >
+            <span
+              class="badge bg-secondary"
+              style="cursor: pointer"
+              onclick="addTag('交易策略')"
+              >交易策略</span
+            >
+            <span
+              class="badge bg-secondary"
+              style="cursor: pointer"
+              onclick="addTag('基本面')"
+              >基本面</span
+            >
+            <span
+              class="badge bg-secondary"
+              style="cursor: pointer"
+              onclick="addTag('价格预测')"
+              >价格预测</span
+            >
+            <span
+              class="badge bg-secondary"
+              style="cursor: pointer"
+              onclick="addTag('深度学习')"
+              >深度学习</span
+            >
+            <span
+              class="badge bg-secondary"
+              style="cursor: pointer"
+              onclick="addTag('风险控制')"
+              >风险控制</span
+            >
+            <span
+              class="badge bg-secondary"
+              style="cursor: pointer"
+              onclick="addTag('新手入门')"
+              >新手入门</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  // 标签管理
+  const tagInput = document.getElementById("tagInput");
+  const tagContainer = document.getElementById("tagContainer");
+  const topicTags = document.getElementById("topicTags");
+  const tags = [];
+
+  // 添加标签
+  function addTag(value) {
+    value = value.trim();
+    if (value && !tags.includes(value) && tags.length < 5) {
+      tags.push(value);
+      renderTags();
+      tagInput.value = "";
+    } else if (tags.length >= 5) {
+      alert("最多只能添加5个标签");
+    }
+  }
+
+  // 删除标签
+  function removeTag(index) {
+    tags.splice(index, 1);
+    renderTags();
+  }
+
+  // 渲染标签
+  function renderTags() {
+    // 清空容器，保留输入框
+    while (tagContainer.firstChild) {
+      tagContainer.removeChild(tagContainer.firstChild);
+    }
+
+    // 添加标签
+    tags.forEach((tag, index) => {
+      const tagElement = document.createElement("span");
+      tagElement.className = "tag";
+      tagElement.innerHTML = `${tag} <span class="close" onclick="removeTag(${index})">&times;</span>`;
+      tagContainer.appendChild(tagElement);
+    });
+
+    // 添加输入框
+    tagContainer.appendChild(tagInput);
+
+    // 更新隐藏字段
+    topicTags.value = JSON.stringify(tags);
+  }
+
+  // 监听输入框回车事件
+  tagInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      addTag(this.value);
+    }
+  });
+
+  // 文本格式化
+  function formatText(type) {
+    const textarea = document.getElementById("topicContent");
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+    let replacement = "";
+
+    switch (type) {
+      case "bold":
+        replacement = `**${selectedText}**`;
+        break;
+      case "italic":
+        replacement = `*${selectedText}*`;
+        break;
+      case "underline":
+        replacement = `__${selectedText}__`;
+        break;
+      case "link":
+        const url = prompt("请输入链接地址:", "http://");
+        if (url) {
+          replacement = `[${selectedText || "链接文本"}](${url})`;
+        } else {
+          return;
+        }
+        break;
+      case "image":
+        const imageUrl = prompt("请输入图片地址:", "http://");
+        if (imageUrl) {
+          replacement = `![${selectedText || "图片描述"}](${imageUrl})`;
+        } else {
+          return;
+        }
+        break;
+      case "code":
+        replacement = `\`\`\`\n${selectedText}\n\`\`\``;
+        break;
+      case "quote":
+        replacement = selectedText
+          .split("\n")
+          .map((line) => `> ${line}`)
+          .join("\n");
+        break;
+    }
+
+    textarea.value =
+      textarea.value.substring(0, start) +
+      replacement +
+      textarea.value.substring(end);
+    textarea.focus();
+    textarea.selectionStart = start;
+    textarea.selectionEnd = start + replacement.length;
+  }
+
+  // 切换预览
+  function togglePreview() {
+    const textarea = document.getElementById("topicContent");
+    const previewArea = document.getElementById("previewArea");
+
+    if (previewArea.style.display === "none") {
+      // 显示预览
+      previewArea.style.display = "block";
+      previewArea.innerHTML = formatMarkdown(textarea.value);
+    } else {
+      // 隐藏预览
+      previewArea.style.display = "none";
+    }
+  }
+
+  // 预览按钮
+  document
+    .getElementById("previewBtn")
+    .addEventListener("click", togglePreview);
+
+  // 简单的Markdown格式化（实际应用中应使用专业的Markdown解析库）
+  function formatMarkdown(text) {
+    // 替换粗体
+    text = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    // 替换斜体
+    text = text.replace(/\*(.*?)\*/g, "<em>$1</em>");
+    // 替换下划线
+    text = text.replace(/__(.*?)__/g, "<u>$1</u>");
+    // 替换链接
+    text = text.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+    // 替换图片
+    text = text.replace(
+      /!\[(.*?)\]\((.*?)\)/g,
+      '<img src="$2" alt="$1" style="max-width:100%;">',
+    );
+    // 替换代码块
+    text = text.replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>");
+    // 替换引用
+    text = text.replace(/^> (.*?)$/gm, "<blockquote>$1</blockquote>");
+    // 替换换行
+    text = text.replace(/\n/g, "<br>");
+
+    return text;
+  }
+
+  // 表单提交
+  document
+    .getElementById("newTopicForm")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const category = document.getElementById("topicCategory").value;
+      const title = document.getElementById("topicTitle").value.trim();
+      const content = document.getElementById("topicContent").value.trim();
+
+      if (!category) {
+        alert("请选择版块");
+        return;
+      }
+
+      if (!title || title.length < 5) {
+        alert("标题不能为空，且至少5个字符");
+        return;
+      }
+
+      if (!content || content.length < 20) {
+        alert("内容不能为空，且至少20个字符");
+        return;
+      }
+
+      // 在实际应用中，这里应该发送AJAX请求
+      alert("主题已提交，等待审核");
+      // 提交成功后跳转到论坛首页
+      window.location.href = "{{ url_for('forum.index') }}";
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,611 @@
+{% extends 'base.html' %} {% block title %}{{ topic.title }} -
+豆粕期货价格预测系统{% endblock %} {% block head %}
+<style>
+  .topic-header {
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+  }
+  .topic-meta {
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+  .topic-content {
+    line-height: 1.8;
+    font-size: 1.1rem;
+  }
+  .topic-tag {
+    font-size: 0.8rem;
+  }
+  .reply-card {
+    margin-bottom: 20px;
+    border-left: 4px solid #007bff;
+  }
+  .reply-header {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-bottom: 1px solid #dee2e6;
+  }
+  .reply-content {
+    padding: 15px;
+    line-height: 1.6;
+  }
+  .reply-footer {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-top: 1px solid #dee2e6;
+    font-size: 0.9rem;
+  }
+
+  .user-info {
+    font-size: 0.9rem;
+  }
+  .user-stats {
+    font-size: 0.8rem;
+    color: #6c757d;
+  }
+  .editor-toolbar {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-bottom: none;
+    border-radius: 0.25rem 0.25rem 0 0;
+    padding: 5px;
+  }
+  .editor-toolbar button {
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 1rem;
+  }
+  .editor-toolbar button:hover {
+    color: #007bff;
+  }
+  .reply-form textarea {
+    border-radius: 0 0 0.25rem 0.25rem;
+    resize: vertical;
+    min-height: 150px;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('main.index') }}">首页</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('forum.index') }}">论坛讨论</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="{{ url_for('forum.index', category=topic.category) }}"
+              >{{ topic.category_name }}</a
+            >
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            {{ topic.title }}
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-9">
+      <!-- 主题内容 -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="topic-header">
+            <h2>
+              {% if topic.is_sticky %}<span
+                class="badge bg-danger topic-tag me-1"
+                >置顶</span
+              >{% endif %} {% if topic.is_announcement %}<span
+                class="badge bg-warning topic-tag me-1"
+                >公告</span
+              >{% endif %} {% if topic.is_hot %}<span
+                class="badge bg-danger topic-tag me-1"
+                >热门</span
+              >{% endif %}
+              <span
+                class="badge bg-{{ 'primary' if topic.category == 'market_analysis' else 'warning' if topic.category == 'trading_strategy' else 'success' if topic.category == 'news_analysis' else 'info' if topic.category == 'beginner' else 'secondary' }} topic-tag me-1"
+                >{{ topic.category_name }}</span
+              >
+              {{ topic.title }}
+            </h2>
+            <div
+              class="topic-meta d-flex justify-content-between align-items-center mt-3"
+            >
+              <div class="d-flex align-items-center">
+                <div>
+                  <div class="fw-bold">{{ topic.username }}</div>
+                  <div class="small">发表于：{{ topic.created_at }}</div>
+                </div>
+              </div>
+              <div class="text-end">
+                <div><i class="bi bi-eye"></i> {{ topic.views }} 浏览</div>
+                <div>
+                  <i class="bi bi-chat-dots"></i> {{ topic.replies }} 回复
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-content">
+            {{ topic.content | replace('\n', '<br />') | replace('[', '<a
+              href="') | replace('](', '"
+              >') | replace(')', '</a
+            >') | safe }}
+          </div>
+
+          {% if topic.tags %}
+          <div class="mt-4">
+            <span class="text-muted me-2">标签：</span>
+            {% for tag in topic.tags %}
+            <a
+              href="{{ url_for('forum.search', keyword=tag) }}"
+              class="badge bg-secondary text-decoration-none me-1"
+              >{{ tag }}</a
+            >
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+            <div>
+              <button
+                class="btn btn-sm btn-outline-primary me-2"
+                id="likeTopicBtn"
+              >
+                <i class="bi bi-hand-thumbs-up"></i> 点赞
+              </button>
+              <button
+                class="btn btn-sm btn-outline-primary me-2"
+                id="favoriteTopicBtn"
+              >
+                <i class="bi bi-bookmark"></i> 收藏
+              </button>
+              <button class="btn btn-sm btn-outline-primary" id="shareTopicBtn">
+                <i class="bi bi-share"></i> 分享
+              </button>
+            </div>
+            <div>
+              <button class="btn btn-sm btn-outline-primary" id="replyTopicBtn">
+                <i class="bi bi-reply"></i> 回复
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 回复列表 -->
+      <h4 class="mb-3">
+        <i class="bi bi-chat-dots"></i> 全部回复 ({{ replies|length }})
+      </h4>
+
+      {% for reply in replies %}
+      <div class="card reply-card" id="reply-{{ reply.id }}">
+        <div
+          class="reply-header d-flex justify-content-between align-items-center"
+        >
+          <div class="d-flex align-items-center">
+            <div>
+              <div class="fw-bold">{{ reply.username }}</div>
+              <div class="small">{{ reply.created_at }}</div>
+            </div>
+          </div>
+          <div class="text-end">
+            <span class="badge bg-secondary">#{{ loop.index }}</span>
+          </div>
+        </div>
+        <div class="reply-content">
+          {{ reply.content | replace('\n', '<br />') | replace('[', '<a
+            href="') | replace('](', '"
+            >') | replace(')', '</a
+          >') | safe }}
+        </div>
+        <div
+          class="reply-footer d-flex justify-content-between align-items-center"
+        >
+          <div>
+            <button
+              class="btn btn-sm btn-link text-decoration-none"
+              id="likeReplyBtn-{{ reply.id }}"
+            >
+              <i class="bi bi-hand-thumbs-up"></i> 点赞 ({{ reply.likes }})
+            </button>
+          </div>
+          <div>
+            <button
+              class="btn btn-sm btn-link text-decoration-none"
+              onclick="quoteReply({{ reply.id }})"
+            >
+              <i class="bi bi-quote"></i> 引用
+            </button>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      <!-- 分页 -->
+      {% if replies|length > 10 %}
+      <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true"
+              >上一页</a
+            >
+          </li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">下一页</a>
+          </li>
+        </ul>
+      </nav>
+      {% endif %}
+
+      <!-- 回复表单 -->
+      <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-reply"></i> 发表回复</h5>
+        </div>
+        <div class="card-body">
+          <form
+            id="replyForm"
+            action="{{ url_for('forum.reply', topic_id=topic.id) }}"
+            method="post"
+          >
+            <div class="mb-3">
+              <div class="editor-toolbar">
+                <button type="button" onclick="formatText('bold')">
+                  <i class="bi bi-type-bold"></i>
+                </button>
+                <button type="button" onclick="formatText('italic')">
+                  <i class="bi bi-type-italic"></i>
+                </button>
+                <button type="button" onclick="formatText('underline')">
+                  <i class="bi bi-type-underline"></i>
+                </button>
+                <button type="button" onclick="formatText('link')">
+                  <i class="bi bi-link"></i>
+                </button>
+                <button type="button" onclick="formatText('image')">
+                  <i class="bi bi-image"></i>
+                </button>
+                <button type="button" onclick="formatText('code')">
+                  <i class="bi bi-code"></i>
+                </button>
+                <button type="button" onclick="formatText('quote')">
+                  <i class="bi bi-quote"></i>
+                </button>
+              </div>
+              <textarea
+                class="form-control"
+                id="replyContent"
+                name="content"
+                rows="6"
+                placeholder="请输入回复内容..."
+                required
+              ></textarea>
+            </div>
+            <div class="d-flex justify-content-between">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="subscribeCheckbox"
+                  name="subscribe"
+                  checked
+                />
+                <label class="form-check-label" for="subscribeCheckbox">
+                  有新回复时通知我
+                </label>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-send"></i> 提交回复
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <!-- 作者信息 -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-person"></i> 作者信息</h5>
+        </div>
+        <div class="card-body text-center">
+          <h5>{{ topic.username }}</h5>
+          <div class="user-info mb-3">
+            {% if topic.user_id == 1 %}
+            <span class="badge bg-danger">管理员</span>
+            {% else %}
+            <span class="badge bg-primary">会员</span>
+            {% endif %}
+          </div>
+          <div class="user-stats d-flex justify-content-around">
+            <div>
+              <div class="fw-bold">{{ user.posts }}</div>
+              <div>主题</div>
+            </div>
+            <div>
+              <div class="fw-bold">{{ user.replies }}</div>
+              <div>回复</div>
+            </div>
+            <div>
+              <div class="fw-bold">{{ user.join_date }}</div>
+              <div>注册</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 相关主题 -->
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-link-45deg"></i> 相关主题</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            {% for related in related_topics %}
+            <li class="list-group-item px-0">
+              <a
+                href="{{ url_for('forum.topic', topic_id=related.id) }}"
+                class="text-decoration-none"
+                >{{ related.title }}</a
+              >
+              <div class="small text-muted mt-1">
+                <i class="bi bi-person"></i> {{ related.username }} ·
+                <i class="bi bi-chat-dots"></i> {{ related.replies }} 回复
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <!-- 热门标签 -->
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-tags"></i> 热门标签</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex flex-wrap gap-2">
+            <a
+              href="{{ url_for('forum.search', keyword='豆粕') }}"
+              class="badge bg-secondary text-decoration-none"
+              >豆粕</a
+            >
+            <a
+              href="{{ url_for('forum.search', keyword='技术分析') }}"
+              class="badge bg-secondary text-decoration-none"
+              >技术分析</a
+            >
+            <a
+              href="{{ url_for('forum.search', keyword='交易策略') }}"
+              class="badge bg-secondary text-decoration-none"
+              >交易策略</a
+            >
+            <a
+              href="{{ url_for('forum.search', keyword='基本面') }}"
+              class="badge bg-secondary text-decoration-none"
+              >基本面</a
+            >
+            <a
+              href="{{ url_for('forum.search', keyword='价格预测') }}"
+              class="badge bg-secondary text-decoration-none"
+              >价格预测</a
+            >
+            <a
+              href="{{ url_for('forum.search', keyword='深度学习') }}"
+              class="badge bg-secondary text-decoration-none"
+              >深度学习</a
+            >
+            <a
+              href="{{ url_for('forum.search', keyword='风险控制') }}"
+              class="badge bg-secondary text-decoration-none"
+              >风险控制</a
+            >
+            <a
+              href="{{ url_for('forum.search', keyword='新手入门') }}"
+              class="badge bg-secondary text-decoration-none"
+              >新手入门</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  // 引用回复
+  function quoteReply(replyId) {
+    const replyContent = document.querySelector(
+      `#reply-${replyId} .reply-content`,
+    ).innerText;
+    const replyUsername = document.querySelector(
+      `#reply-${replyId} .fw-bold`,
+    ).innerText;
+    const quoteText = `> 引用 ${replyUsername} 的发言：\n> ${replyContent.trim()}\n\n`;
+
+    const textarea = document.getElementById("replyContent");
+    textarea.value = quoteText + textarea.value;
+    textarea.focus();
+
+    // 滚动到回复框
+    document.getElementById("replyForm").scrollIntoView({ behavior: "smooth" });
+  }
+
+  // 文本格式化
+  function formatText(type) {
+    const textarea = document.getElementById("replyContent");
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+    let replacement = "";
+
+    switch (type) {
+      case "bold":
+        replacement = `**${selectedText}**`;
+        break;
+      case "italic":
+        replacement = `*${selectedText}*`;
+        break;
+      case "underline":
+        replacement = `__${selectedText}__`;
+        break;
+      case "link":
+        const url = prompt("请输入链接地址:", "http://");
+        if (url) {
+          replacement = `[${selectedText || "链接文本"}](${url})`;
+        } else {
+          return;
+        }
+        break;
+      case "image":
+        const imageUrl = prompt("请输入图片地址:", "http://");
+        if (imageUrl) {
+          replacement = `![${selectedText || "图片描述"}](${imageUrl})`;
+        } else {
+          return;
+        }
+        break;
+      case "code":
+        replacement = `\`\`\`\n${selectedText}\n\`\`\``;
+        break;
+      case "quote":
+        replacement = selectedText
+          .split("\n")
+          .map((line) => `> ${line}`)
+          .join("\n");
+        break;
+    }
+
+    textarea.value =
+      textarea.value.substring(0, start) +
+      replacement +
+      textarea.value.substring(end);
+    textarea.focus();
+    textarea.selectionStart = start;
+    textarea.selectionEnd = start + replacement.length;
+  }
+
+  // 表单提交
+  document.getElementById("replyForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const content = document.getElementById("replyContent").value.trim();
+    if (!content) {
+      alert("回复内容不能为空");
+      return;
+    }
+
+    // 获取表单数据
+    const formData = new FormData();
+    formData.append("content", content);
+
+    // 显示加载状态
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> 提交中...';
+    submitBtn.disabled = true;
+
+    // 发送AJAX请求
+    fetch(this.action, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          // 回复成功
+          alert("回复发表成功");
+          document.getElementById("replyContent").value = "";
+
+          // 刷新页面显示新回复
+          window.location.reload();
+        } else {
+          // 回复失败
+          alert("回复失败: " + data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("回复提交出错:", error);
+        alert("回复提交出错，请稍后再试");
+      })
+      .finally(() => {
+        // 恢复按钮状态
+        submitBtn.innerHTML = originalBtnText;
+        submitBtn.disabled = false;
+      });
+  });
+
+  // 点赞主题
+  document
+    .getElementById("likeTopicBtn")
+    .addEventListener("click", function () {
+      alert("点赞成功");
+      this.innerHTML = '<i class="bi bi-hand-thumbs-up-fill"></i> 已点赞';
+      this.disabled = true;
+    });
+
+  // 收藏主题
+  document
+    .getElementById("favoriteTopicBtn")
+    .addEventListener("click", function () {
+      alert("收藏成功");
+      this.innerHTML = '<i class="bi bi-bookmark-fill"></i> 已收藏';
+      this.disabled = true;
+    });
+
+  // 分享主题
+  document
+    .getElementById("shareTopicBtn")
+    .addEventListener("click", function () {
+      // 创建一个临时输入框
+      const tempInput = document.createElement("input");
+      tempInput.value = window.location.href;
+      document.body.appendChild(tempInput);
+
+      // 选择并复制
+      tempInput.select();
+      document.execCommand("copy");
+
+      // 移除临时输入框
+      document.body.removeChild(tempInput);
+
+      alert("链接已复制到剪贴板");
+    });
+
+  // 回复按钮滚动到回复框
+  document
+    .getElementById("replyTopicBtn")
+    .addEventListener("click", function () {
+      document
+        .getElementById("replyForm")
+        .scrollIntoView({ behavior: "smooth" });
+      document.getElementById("replyContent").focus();
+    });
+
+  // 点赞回复
+  document.querySelectorAll('[id^="likeReplyBtn-"]').forEach((button) => {
+    button.addEventListener("click", function () {
+      const replyId = this.id.split("-")[1];
+      alert(`回复 #${replyId} 点赞成功`);
+
+      // 更新点赞数
+      const likeCount = parseInt(this.innerText.match(/\d+/)[0]) + 1;
+      this.innerHTML = `<i class="bi bi-hand-thumbs-up-fill"></i> 点赞 (${likeCount})`;
+      this.disabled = true;
+    });
+  });
+</script>
+{% endblock %}

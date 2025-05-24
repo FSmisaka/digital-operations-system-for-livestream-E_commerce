@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}添加用户 - 豆粕期货预测系统{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2><i class="bi bi-person-plus"></i> 添加用户</h2>
+        <a href="{{ url_for('auth.manage_users') }}" class="btn btn-secondary">
+          <i class="bi bi-arrow-left"></i> 返回用户管理
+        </a>
+      </div>
+      <hr />
+    </div>
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="关闭"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <form method="post" action="{{ url_for('auth.add_user') }}">
+            <div class="mb-3">
+              <label for="username" class="form-label">用户名</label>
+              <input type="text" class="form-control" id="username" name="username" required>
+              <div class="form-text">输入用户的唯一标识名称</div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="role" class="form-label">用户角色</label>
+              <select class="form-select" id="role" name="role">
+                <option value="user" selected>普通用户</option>
+                <option value="admin">管理员</option>
+              </select>
+              <div class="form-text">
+                管理员可以访问系统的所有功能，包括用户管理、模型评估等。
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-person-plus"></i> 添加用户
+              </button>
+              <a href="{{ url_for('auth.manage_users') }}" class="btn btn-outline-secondary">取消</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 在页面加载完成后处理闪现消息的自动消失
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert) {
+      setTimeout(function() {
+        const closeButton = alert.querySelector('.btn-close');
+        if (closeButton) {
+          closeButton.click();
+        }
+      }, 5000); // 5秒后自动关闭
+    });
+  });
+</script>
+{% endblock %} 
