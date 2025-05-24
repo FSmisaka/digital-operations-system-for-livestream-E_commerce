@@ -5,7 +5,7 @@ from datetime import datetime
 import time
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash, session
 from views.auth import login_required
-from views.data_utils import reset_data_file_path
+from views.data_utils import reset_data_file_path, load_data, save_data
 
 # 设置日志记录
 logging.basicConfig(level=logging.INFO)
@@ -335,47 +335,6 @@ SAMPLE_REPLIES = [
     }
 ]
 
-def load_data(file_path, default_data=None):
-    try:
-        # 获取当前文件所在目录
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        full_path = os.path.join(current_dir, file_path)
-
-        # 确保目录存在
-        os.makedirs(os.path.dirname(full_path), exist_ok=True)
-
-        # 检查文件是否存在
-        if os.path.exists(full_path):
-            with open(full_path, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        else:
-            logger.warning(f"数据文件不存在: {full_path}，使用默认数据")
-            # 如果文件不存在且提供了默认数据，则保存默认数据
-            if default_data:
-                save_data(file_path, default_data)
-            return default_data or []
-    except Exception as e:
-        logger.error(f"加载数据时出错: {e}")
-        return default_data or []
-
-def save_data(file_path, data):
-    try:
-        # 获取当前文件所在目录
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        full_path = os.path.join(current_dir, file_path)
-
-        # 确保目录存在
-        os.makedirs(os.path.dirname(full_path), exist_ok=True)
-
-        with open(full_path, 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
-
-        logger.info(f"数据已保存到: {full_path}")
-        return True
-    except Exception as e:
-        logger.error(f"保存数据时出错: {e}")
-        return False
-
 def get_created_at(x):
     return x.get('created_at', '')
 
@@ -396,9 +355,9 @@ def index():
         filtered_topics = topics
 
     announcements = [topic for topic in topics if topic.get('is_announcement')]
-    hot_topics = [topic for topic in topics if topic.get('is_hot')]
+    hot_topics = [topic for topic in filtered_topics if topic.get('is_hot')]
     latest_topics = [
-        topic for topic in topics
+        topic for topic in filtered_topics
         if not topic.get('is_announcement') and not topic.get('is_hot')
     ]
     latest_topics.sort(key=get_created_at, reverse=True)
@@ -465,7 +424,7 @@ def topic(topic_id):
 def new_topic():
     return render_template('forum/new_topic.html')
 
-@bp.route('/create', methods=['POST'])
+@bp.route('/create_topic', methods=['POST'])
 @login_required
 def create_topic():
     # 获取表单数据

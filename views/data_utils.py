@@ -1,6 +1,7 @@
 import os
 import logging
 import glob
+import json
 
 # 设置日志记录
 logging.basicConfig(level=logging.INFO)
@@ -86,3 +87,44 @@ def get_full_data_path():
     # 如果仍然找不到，返回原始路径
     logger.error(f"无法找到任何数据文件，返回原始路径: {full_path}")
     return full_path
+
+def load_data(file_path, default_data=None):
+    try:
+        # 获取当前文件所在目录
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        full_path = os.path.join(current_dir, file_path)
+
+        # 确保目录存在
+        os.makedirs(os.path.dirname(full_path), exist_ok=True)
+
+        # 检查文件是否存在
+        if os.path.exists(full_path):
+            with open(full_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        else:
+            logger.warning(f"数据文件不存在: {full_path}，使用默认数据")
+            # 如果文件不存在且提供了默认数据，则保存默认数据
+            if default_data:
+                save_data(file_path, default_data)
+            return default_data or []
+    except Exception as e:
+        logger.error(f"加载数据时出错: {e}")
+        return default_data or []
+
+def save_data(file_path, data):
+    try:
+        # 获取当前文件所在目录
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        full_path = os.path.join(current_dir, file_path)
+
+        # 确保目录存在
+        os.makedirs(os.path.dirname(full_path), exist_ok=True)
+
+        with open(full_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+
+        logger.info(f"数据已保存到: {full_path}")
+        return True
+    except Exception as e:
+        logger.error(f"保存数据时出错: {e}")
+        return False

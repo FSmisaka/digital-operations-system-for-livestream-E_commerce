@@ -1,0 +1,235 @@
+{% extends 'base.html' %} {% block title %}库存记录 - 电商数据分析平台{%
+endblock %} {% block head %}
+<style>
+  .forum-card {
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+  }
+  .forum-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  .topic-card {
+    border-left: 4px solid #007bff;
+    transition: all 0.3s ease;
+  }
+  .topic-card:hover {
+    background-color: #f8f9fa;
+  }
+  .topic-card.hot {
+    border-left-color: #dc3545;
+  }
+  .topic-card.announcement {
+    border-left-color: #ffc107;
+  }
+
+  .topic-stats {
+    text-align: center;
+    min-width: 60px;
+  }
+  .topic-badge {
+    font-size: 0.7rem;
+    padding: 2px 5px;
+  }
+  .last-reply {
+    font-size: 0.85rem;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="container">
+  <!--标题-->
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2><i class="bi bi-box-seam"></i> 电商数据分析平台</h2>
+      <p class="lead">轻松记录库存，规划采购时机</p>
+    </div>
+    <div class="col-md-4 text-end">
+      <button
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#newInventoryModal"
+      >
+        <i class="bi bi-plus-circle"></i> 新建仓库
+      </button>
+    </div>
+  </div>
+</div>
+
+<!--修改仓库浮窗-->
+<div
+  class="modal fade"
+  id="newInventoryModal"
+  tabindex="-1"
+  aria-labelledby="newInventory"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="newInventory">新建仓库</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="newInventoryForm">
+          <div class="mb-3">
+            <label for="inventoryCategory" class="form-label">
+              仓库类别 <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="inventoryCategory"
+              name="category"
+              placeholder="食品、化妆品、电子产品、..."
+              maxlength="10"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="inventoryTitle" class="form-label">
+              仓库名称 <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="inventoryTitle"
+              name="title"
+              placeholder="请输入仓库名称（5-20字）"
+              minlength="5"
+              maxlength="20"
+              required
+            />
+            <div class="form-text">名称应简明扼要，清晰表达仓库内容</div>
+          </div>
+          <div class="mb-3">
+            <label for="inventoryCapacity" class="form-label">
+              数量上限 <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="inventoryCapacity"
+              name="capacity"
+              placeholder="例如：10000"
+              required
+            />
+            <div class="form-text">
+              根据自定单位来填写，例如：件、箱、吨等
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="inventoryExp" class="form-label">
+              销毁日期
+            </label>
+            <input
+              type="date"
+              class="form-control"
+              id="inventoryExp"
+              name="expiration"
+            />
+            <div class="form-text">
+              如果未计划销毁仓库，请在日历中【清除】日期
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          取消
+        </button>
+        <button type="button" class="btn btn-primary" id="submitNewInventory">
+          添加
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='js/pagination.js') }}"></script>
+<script>
+  // 论坛页面特定的JavaScript代码
+  document.addEventListener("DOMContentLoaded", function () {
+    // 处理发布新主题表单提交
+    const newInvForm = document.getElementById("newInventoryForm");
+    const submitNewInvBtn = document.getElementById("submitNewInventory");
+
+    // 处理表单提交
+    submitNewInvBtn.addEventListener("click", function () {
+      // 验证表单
+      const category = document.getElementById("inventoryCategory").value.trim();
+      const title = document.getElementById("inventoryTitle").value.trim();
+      const capacity = document.getElementById("inventoryCapacity").value.trim();
+      const expiration = document.getElementById("inventoryExp").value.trim();
+
+      if (!category) {
+        alert("请填写仓库类别");
+        return;
+      }
+
+      if (!title || title.length < 5) {
+        alert("名称不能为空，至少5个字符");
+        return;
+      }
+
+      if (!capacity) {
+        alert("请填写有效的数量上限");
+        return;
+      }
+
+      // 创建FormData对象
+      const formData = new FormData(newInventoryForm);
+
+      // 显示加载状态
+      submitNewInvBtn.disabled = true;
+      submitNewInvBtn.innerHTML =
+        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 建立中...';
+
+      // 发送AJAX请求
+      fetch('{{ url_for("inv.create_inventory") }}', {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // 恢复按钮状态
+          submitNewInvBtn.disabled = false;
+          submitNewInvBtn.innerHTML = "创建仓库";
+
+          if (data.success) {
+            // 显示成功消息
+            alert(data.message);
+
+            // 关闭模态框
+            const modal = bootstrap.Modal.getInstance(
+              document.getElementById("newInventoryModal"),
+            );
+            modal.hide();
+
+            // 刷新当前页面
+            window.location.reload();
+          } else {
+            // 显示错误消息
+            alert(data.message || "创建失败，请稍后重试");
+          }
+        })
+        .catch((error) => {
+          // 恢复按钮状态
+          submitNewInvBtn.disabled = false;
+          submitNewInvBtn.innerHTML = "创建仓库";
+
+          // 显示错误消息
+          alert("发布失败，请稍后重试");
+          console.error("Error:", error);
+        });
+    });
+
+    // 初始化分页功能
+    initForumPagination();
+  });
+</script>
+{% endblock %}

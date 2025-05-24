@@ -1,0 +1,131 @@
+[
+    {
+        "user_id": 1,
+        "inventory": [
+            {
+                "id": 1,
+                "name": "美妆产品",
+                "category": "化妆品",
+                "capacity": 10000,
+                "quantity": 1000,
+                "expiration_date": "2024-12-31"
+            },
+            {
+                "id": 2,
+                "name": "服饰产品",
+                "category": "服装",
+                "capacity": 10000,
+                "quantity": 500,
+                "expiration_date": null
+            },
+            {
+                "id": 3,
+                "name": "食品产品",
+                "category": "食品",
+                "capacity": 10000,
+                "quantity": 2000,
+                "expiration_date": null
+            },
+            {
+                "id": 4,
+                "name": "数码产品",
+                "category": "电子产品",
+                "capacity": 10000,
+                "quantity": 300,
+                "expiration_date": null
+            }
+        ]
+    },
+    {
+        "user_id": 2,
+        "inventory": [
+            {
+                "id": 1,
+                "name": "家居产品",
+                "category": "家居用品",
+                "capacity": 10000,
+                "quantity": 1500,
+                "expiration_date": null
+            },
+            {
+                "id": 2,
+                "name": "运动产品",
+                "category": "运动器材",
+                "capacity": 10000,
+                "quantity": 800,
+                "expiration_date": null
+            }
+        ]
+    },
+    {
+        "user_id": 3,
+        "inventory": [
+            {
+                "id": 1,
+                "name": "办公产品",
+                "category": "办公用品",
+                "capacity": 10000,
+                "quantity": 2000,
+                "expiration_date": null
+            },
+            {
+                "id": 2,
+                "name": "玩具产品",
+                "category": "玩具",
+                "capacity": 10000,
+                "quantity": 500,
+                "expiration_date": null
+            }
+        ]
+    },
+    {
+        "user_id": 4,
+        "inventory": [
+            {
+                "id": 1,
+                "name": "汽车产品",
+                "category": "汽车配件",
+                "capacity": 10000,
+                "quantity": 100,
+                "expiration_date": null
+            },
+            {
+                "id": 2,
+                "name": "珠宝产品",
+                "category": "珠宝首饰",
+                "capacity": 10000,
+                "quantity": 50,
+                "expiration_date": null
+            }
+        ]
+    },
+    {
+        "user_id": 5,
+        "inventory": [
+            {
+                "id": 1,
+                "name": "书籍产品",
+                "category": "图书",
+                "capacity": 10000,
+                "quantity": 3000,
+                "expiration_date": null
+            },
+            {
+                "id": 2,
+                "name": "乐器产品",
+                "category": "乐器",
+                "capacity": 10000,
+                "quantity": 200,
+                "expiration_date": null
+            },
+            {
+                "id": 3,
+                "name": "你好你好我是化妆品",
+                "category": "化妆品",
+                "capacity": 1000,
+                "quantity": 0,
+                "expiration_date": ""
+            }
+        ]
+    }
+]
