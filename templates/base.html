@@ -62,6 +62,21 @@
                 <i class="bi bi-cart-check-fill"></i> 采购中心
               </a>
             </li>
+            <!--还得改！-->
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="www.baidu.com">
+                <i class="bi bi-box-seam"></i> 库存记录
+              </a>
+            </li>
+            <!--还得改！-->
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="www.baidu.com">
+                <i class="bi bi-telephone"></i> 售后管理
+              </a>
+            </li>
+
             {% if session.user_role == 'admin' %}
             <li class="nav-item">
               <a
@@ -113,10 +128,16 @@
                   >
                 </li>
                 {% endif %}
+                <!--还得改！！-->
                 <li>
-                  <a class="dropdown-item" href="{{ url_for('auth.logout') }}"
-                    ><i class="bi bi-box-arrow-right"></i> 登出</a
-                  >
+                  <a class="dropdown-item" href="www.baidu.com">
+                    <i class="bi bi-person-workspace"></i> 个人中心
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('auth.logout') }}">
+                    <i class="bi bi-box-arrow-right"></i> 登出
+                  </a>
                 </li>
               </ul>
             </li>
