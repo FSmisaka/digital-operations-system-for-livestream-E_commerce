@@ -141,6 +141,7 @@ endblock %} {% block content %}
 {% endblock %} {% block scripts %}
 <script>
   // 页面加载完成后获取最新行情数据
+  // 需要更新 DOM 时可以参考下面的流程
   document.addEventListener("DOMContentLoaded", function () {
     fetchLatestMarketData();
   });
@@ -154,6 +155,7 @@ endblock %} {% block content %}
         }
         return response.json();
       })
+      // data 是一个 Promise 对象，是上一个 then() 的返回值
       .then((data) => {
         // 更新行情数据显示
         updateMarketDisplay(data);
@@ -170,11 +172,12 @@ endblock %} {% block content %}
   function updateMarketDisplay(data) {
     // 更新收盘价
     const priceDisplay = document.getElementById("price-display");
+    // formatNumber() 将数值格式化为更易读、更适合显示的字符串形式
     priceDisplay.textContent = formatNumber(data.close);
 
     // 更新涨跌幅
     const changePercentBadge = document.getElementById("change-percent-badge");
-    const changePercent = data.change_percent.toFixed(1);
+    const changePercent = data.change_percent.toFixed(1); // 1代表保留1位小数
 
     if (data.change_percent > 0) {
       changePercentBadge.textContent = `+${changePercent}%`;
