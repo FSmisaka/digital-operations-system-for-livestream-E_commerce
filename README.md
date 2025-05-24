@@ -1,7 +1,8 @@
 # 豆粕期货价格预测系统
 
 ## 项目简介
-xgp已经通过GitHub提交第一次修改
+xgp已经通过GitHub提交第一次修改  
+wyy尝试一下远端更新后 github desktop 会作何反应
 
 ## 功能特点
 
