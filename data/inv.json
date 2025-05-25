@@ -52,7 +52,7 @@
                 "name": "运动产品",
                 "category": "运动器材",
                 "capacity": 10000,
-                "quantity": 800,
+                "quantity": 8800,
                 "expiration_date": null
             }
         ]
@@ -65,7 +65,7 @@
                 "name": "办公产品",
                 "category": "办公用品",
                 "capacity": 10000,
-                "quantity": 2000,
+                "quantity": 8000,
                 "expiration_date": null
             },
             {
