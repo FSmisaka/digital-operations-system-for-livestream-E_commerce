@@ -115,7 +115,7 @@
                 "name": "乐器产品",
                 "category": "乐器",
                 "capacity": 10000,
-                "quantity": 9200,
+                "quantity": 200,
                 "expiration_date": null
             },
             {
@@ -147,7 +147,7 @@
                 "name": "薯片仓库3",
                 "category": "食品",
                 "capacity": 1000,
-                "quantity": 950,
+                "quantity": 50,
                 "expiration_date": null
             },
             {
@@ -155,7 +155,7 @@
                 "name": "薯片仓库4",
                 "category": "食品",
                 "capacity": 100,
-                "quantity": 910,
+                "quantity": 10,
                 "expiration_date": null
             },
             {
@@ -163,7 +163,7 @@
                 "name": "阿端上来的卡上了",
                 "category": "化妆品",
                 "capacity": 1000,
-                "quantity": 8100,
+                "quantity": 1100,
                 "expiration_date": null
             },
             {
@@ -171,7 +171,7 @@
                 "name": "阿端上来的卡上了",
                 "category": "化妆品",
                 "capacity": 1000,
-                "quantity": 420,
+                "quantity": 120,
                 "expiration_date": "2012-03-02"
             }
         ]
