@@ -6,6 +6,7 @@
   <div class="row mb-4">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">首页</a></li>
         <li class="breadcrumb-item"><a href="{{ url_for('inv.index') }}">库存记录</a></li>
         <li class="breadcrumb-item active">{{ inv.name }}</li>
       </ol>

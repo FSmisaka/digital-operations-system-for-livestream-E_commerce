@@ -26,7 +26,10 @@ endblock %} {% block head %}
   .inv-card.announcement {
     border-left-color: #ffc107;
   }
-
+  .text-expired {
+    color: #6c757d;
+    text-decoration: line-through;
+  }
   .topic-stats {
     text-align: center;
     min-width: 60px;
@@ -71,7 +74,13 @@ endblock %} {% block head %}
           <div class="row g-0">
             <!-- 左侧指标区 -->
             <div class="col-md-3 border-end p-3">
-              <h5 class="card-title">{{ inv.name }}</h5>
+              <h5 class="card-title">
+                {% if exp and exp < today %}
+                  <span class="text-expired">{{ inv.name }}</span>
+                {% else %}
+                  {{ inv.name }}
+                {% endif %}
+              </h5>
               <p class="mb-1"><i class="bi bi-tags"></i> {{ inv.category }}</p>
               <p class="mb-1"><i class="bi bi-box-seam"></i> 库存: {{ inv.quantity }}/{{ inv.capacity }}</p>
               <p class="mb-0 text-muted">
@@ -164,7 +173,9 @@ endblock %} {% block head %}
           <h5 class="mb-0"><i class="bi bi-bar-chart"></i> 危险库存</h5>
         </div>
         <div class="card-body">
-          <h6 class="mb-0">库存过期、库存不足</h6>
+          <h6 class="mb-0">
+            <span class="text-expired">库存过期</span>、库存不足
+          </h6>
           <hr class="my-2" />
           <ul class="list-group">
             {% set ns = namespace(cnt=0) %}
@@ -173,7 +184,11 @@ endblock %} {% block head %}
                 {% set pct = (inv.quantity / inv.capacity * 100) if inv.capacity else 0 %}
                 <li class="list-group-item">
                   <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span>{{ inv.name }}</span>
+                    <span 
+                      {% if inv.expiration_date and inv.expiration_date < today %}class="text-expired"{% endif %}
+                    >
+                      {{ inv.name }}
+                    </span>
                     <span>{{ inv.quantity }} / {{ inv.capacity }} ({{ pct|round(1) }}%)</span>
                     </div>
                   <div class="progress" style="height: 1rem;">
@@ -205,7 +220,7 @@ endblock %} {% block head %}
   </div>
 </div>
 
-<!-- 仓库模态框 -->
+<!-- 新建仓库模态框 -->
 <div
   class="modal fade"
   id="newInventoryModal"
@@ -437,7 +452,6 @@ endblock %} {% block head %}
           console.error("Error:", error);
         });
     });
-
 
     // 更新分页信息
     const invCards = document.querySelectorAll(".inv-card");
