@@ -3,6 +3,7 @@
  */
 document.addEventListener("DOMContentLoaded", function () {
   initNewsPagination();
+  initInvPagination();
   initForumPagination();
 });
 
@@ -50,6 +51,54 @@ function initNewsPagination() {
       updatePagination(pagination, currentPage, totalPages, "news");
       showPage(newsCards, currentPage, itemsPerPage);
       newsContainer.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+}
+
+function initInvPagination() {
+  const invContainer = document.querySelector(".inv-list-container");
+  if (!invContainer) return;
+
+  const invCards = invContainer.querySelectorAll(".inv-card");
+  if (invCards.length === 0) return;
+
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(invCards.length / itemsPerPage);
+  let currentPage = 1;
+
+  const pagination = document.querySelector(".inv-pagination");
+  if (!pagination) return;
+
+  updatePagination(pagination, currentPage, totalPages, "inv");
+  showPage(invCards, currentPage, itemsPerPage);
+
+  pagination.addEventListener("click", function (e) {
+    if (e.target.tagName === "A" || e.target.parentElement.tagName === "A") {
+      e.preventDefault();
+
+      const pageItem = e.target.closest(".page-item");
+      if (!pageItem) return;
+
+      if (pageItem.classList.contains("disabled")) return;
+
+      if (pageItem.classList.contains("page-prev")) {
+        if (currentPage > 1) {
+          currentPage--;
+        }
+      } else if (pageItem.classList.contains("page-next")) {
+        if (currentPage < totalPages) {
+          currentPage++;
+        }
+      } else {
+        const pageNum = parseInt(e.target.textContent);
+        if (!isNaN(pageNum)) {
+          currentPage = pageNum;
+        }
+      }
+
+      updatePagination(pagination, currentPage, totalPages, "inv");
+      showPage(invCards, currentPage, itemsPerPage);
+      invContainer.scrollIntoView({ behavior: "smooth" });
     }
   });
 }
@@ -153,17 +202,32 @@ function updatePagination(pagination, currentPage, totalPages, type) {
 
   const infoElement = document.querySelector(`.${type}-pagination-info`);
   if (infoElement) {
-    const startItem = (currentPage - 1) * (type === "news" ? 5 : 10) + 1;
-    const endItem = Math.min(
-      currentPage * (type === "news" ? 5 : 10),
-      type === "news"
-        ? document.querySelectorAll(".news-card").length
-        : document.querySelectorAll(".topic-card").length,
-    );
-    const totalItems =
-      type === "news"
-        ? document.querySelectorAll(".news-card").length
-        : document.querySelectorAll(".topic-card").length;
-    infoElement.textContent = `显示 ${startItem}-${endItem} 条，共 ${totalItems} 条`;
+    if (type === "news") {
+      const startItem = (currentPage - 1) * (5) + 1;
+      const endItem = Math.min(
+        currentPage * (5), 
+        document.querySelectorAll(".news-card").length
+      );
+      const totalItems = document.querySelectorAll(".news-card").length;
+      infoElement.textContent = `显示 ${startItem}-${endItem} 条，共 ${totalItems} 条`;
+    }
+    else if (type === "inv") {
+      const startItem = (currentPage - 1) * (5) + 1;
+      const endItem = Math.min(
+        currentPage * (5), 
+        document.querySelectorAll(".inv-card").length
+      );
+      const totalItems = document.querySelectorAll(".inv-card").length;
+      infoElement.textContent = `显示 ${startItem}-${endItem} 条，共 ${totalItems} 条`;
+    }
+    else {
+      const startItem = (currentPage - 1) * (10) + 1;
+      const endItem = Math.min(
+        currentPage * (10), 
+        document.querySelectorAll(".topic-card").length
+      );
+      const totalItems = document.querySelectorAll(".topic-card").length;
+      infoElement.textContent = `显示 ${startItem}-${endItem} 条，共 ${totalItems} 条`;
+    }
   }
 }

@@ -1,9 +1,9 @@
 import logging
-import os
 import json
 from views.auth import login_required
 from views.data_utils import load_data, save_data
 from flask import Blueprint, render_template, jsonify, request, session
+from datetime import date, datetime
 
 # 设置日志记录
 logging.basicConfig(level=logging.INFO)
@@ -16,17 +16,30 @@ INV_FILE = f'../data/inv.json'
 @bp.route('/')
 @login_required
 def index():
-    return render_template(
-        'inv/index.html'
-    )
+    user_id = session.get('user_id')
+    inv_list = []
+    for inv in load_data(INV_FILE):
+        if inv['user_id'] == user_id:
+            inv_list = inv['inventory']
+            break
+    
+    for i in inv_list:
+        exp_str = i.get('expiration_date', None)
+        if exp_str:
+            i['expiration_date'] = datetime.strptime(exp_str, '%Y-%m-%d').date()
+        else:
+            i['expiration_date'] = None
 
-@bp.route('/api/get_inv')
-@login_required
-def get_inv():
-    with open('./data/inv.json', 'r', encoding='utf-8') as f:
-        inv_data = json.load(f)
-    logger.info("成功获取库存数据")
-    return jsonify(inv_data)
+    inv_list.sort(key=lambda x: (
+        x['expiration_date'] if x['expiration_date'] else date.today(),
+        x['quantity'] / x['capacity'] if x['capacity'] else 0
+    ))
+
+    return render_template(
+        'inv/index.html',
+        inv_list=inv_list,
+        today=date.today()
+    )
 
 @bp.route('/create_inventory', methods=['POST'])
 @login_required
@@ -35,13 +48,15 @@ def create_inventory():
     category = request.form.get('category')
     title = request.form.get('title')
     capacity = request.form.get('capacity')
-    expiration = request.form.get('expiration', '')
+    expiration = request.form.get('expiration', None)
 
     # 验证数据
     if not category or not title or not capacity:
         return jsonify({'success': False, 'message': '请填写完整信息'}), 400
     
-    if type(capacity) != int:
+    try:
+        capacity = int(capacity)
+    except:
         return jsonify({'success': False, 'message': '仓库上限只能为整数'}), 400
 
     # 加载库存数据

@@ -1,25 +1,29 @@
 {% extends 'base.html' %} {% block title %}库存记录 - 电商数据分析平台{%
 endblock %} {% block head %}
 <style>
-  .forum-card {
+  .inv-card {
     transition: all 0.3s ease;
     margin-bottom: 20px;
   }
-  .forum-card:hover {
+  .inv-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   }
-  .topic-card {
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  .inv-card {
     border-left: 4px solid #007bff;
     transition: all 0.3s ease;
   }
-  .topic-card:hover {
+  .inv-card:hover {
     background-color: #f8f9fa;
   }
-  .topic-card.hot {
+  .inv-card.hot {
     border-left-color: #dc3545;
   }
-  .topic-card.announcement {
+  .inv-card.announcement {
     border-left-color: #ffc107;
   }
 
@@ -49,8 +53,138 @@ endblock %} {% block head %}
         data-bs-toggle="modal"
         data-bs-target="#newInventoryModal"
       >
-        <i class="bi bi-plus-circle"></i> 新建仓库
+        <i class="bi bi-plus-circle"></i> 新建库存
       </button>
+    </div>
+  </div>
+
+  <!-- 主页面 -->
+  <div class="row">
+    <div class="col-md-8 inv-list-container">
+      <!-- 仓库卡片 -->
+      {% for inv in inv_list %}
+        {% set exp = inv.expiration_date %}
+        <div class="card inv-card {% if exp and exp < today %}hot{% endif %} mb-3">
+          <div class="row g-0">
+            <!-- 左侧指标区 -->
+            <div class="col-md-3 border-end p-3">
+              <h5 class="card-title">{{ inv.name }}</h5>
+              <p class="mb-1"><i class="bi bi-tags"></i> {{ inv.category }}</p>
+              <p class="mb-1"><i class="bi bi-box-seam"></i> 库存 {{ inv.quantity }} / {{ inv.capacity }}</p>
+              <p class="mb-0 text-muted">
+                到期：
+                {% if inv.expiration_date %}
+                    {{ inv.expiration_date }}
+                {% else %}
+                    无期限
+                {% endif %}
+              </p>
+            </div>
+            <!-- 右侧操作区 -->
+            <div class="col-md-9 p-3 d-flex flex-column justify-content-between">
+              <div>
+                <p class="mb-0"> 其它信息</p>
+              </div>
+            <div class="btn-group gap-2" role="group">
+              <a href="#" class="btn btn-sm btn-primary">查看详情</a>
+              <a href="#" class="btn btn-sm btn-warning">修改信息</a>
+              <a href="#" class="btn btn-sm btn-danger">删除仓库</a>
+            </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+      <!-- 分页 -->
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <div>
+          <span class="text-muted inv-pagination-info"
+            >显示 1-5 条，共 15 条</span
+          >
+        </div>
+        <nav>
+          <ul class="pagination pagination-sm inv-pagination">
+            <!-- 分页按钮将由JavaScript动态生成 -->
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <!-- 采购提醒 -->
+      <div class="card mb-4">
+        <div class="card-header bg-danger text-white">
+            <h5 class="mb-0"><i class="bi bi-bell"></i> 采购提醒</h5>
+        </div>
+        <div class="card-body">
+          <h5 class="mb-0">库存数量不足时发出预警</h5>
+          <hr class="my-2" />
+          <ul class="list-group list-group-flush" id="alert-list">
+            {% set ns = namespace(cnt=0) %}
+            {% for inv in inv_list %}
+              {% if inv.quantity < 0.2*inv.capacity and ns.cnt < 5 %}
+                <li class="list-group-item">
+                  <a
+                    href="#"
+                    target="_blank"
+                    class="text-decoration-none"
+                  > {{ inv.name }} <i class="bi bi-box-arrow-up-right small"></i>
+                  </a>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="md-0"><i class="bi bi-tags"></i>{{ inv.category }}</span>
+                    <span class="badge bg-danger">{{ inv.quantity }} / {{ inv.capacity }}</span>
+                  </div>
+                </li>
+                {% set ns.cnt = ns.cnt + 1 %}
+              {% endif %}
+            {% endfor %}
+            {% if ns.cnt == 0 %}
+              <p class="mb-0">库存很健康 ~</p>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+
+      <!-- 库存概览 -->
+      <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+          <h5 class="mb-0"><i class="bi bi-bar-chart"></i> 库存概览</h5>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+              {% set ns = namespace(cnt=0) %}
+              {% for inv in inv_list %}
+                {% if ns.cnt < 5 %}
+                  {% set pct = (inv.quantity / inv.capacity * 100) if inv.capacity else 0 %}
+                  <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span>{{ inv.name }}</span>
+                      <span>{{ inv.quantity }} / {{ inv.capacity }} ({{ pct|round(1) }}%)</span>
+                      </div>
+                    <div class="progress" style="height: 1rem;">
+                      <div
+                        class="progress-bar 
+                          {% if pct < 33 %}
+                            bg-danger
+                          {% elif pct < 66 %}
+                            bg-warning
+                          {% else %}
+                            bg-success
+                          {% endif %}"
+                        role="progressbar"
+                        style="width: {{ pct }}%;"
+                        aria-valuenow="{{ inv.quantity }}"
+                        aria-valuemin="0"
+                        aria-valuemax="{{ inv.capacity }}"
+                      ></div>
+                    </div>
+                  </li>
+                  {% set ns.cnt = ns.cnt + 1 %}
+                {% endif %}
+              {% endfor %}
+            </ul>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -99,9 +233,9 @@ endblock %} {% block head %}
               class="form-control"
               id="inventoryTitle"
               name="title"
-              placeholder="请输入仓库名称（5-20字）"
-              minlength="5"
-              maxlength="20"
+              placeholder="请输入仓库名称（1-8个字）"
+              minlength="1"
+              maxlength="8"
               required
             />
             <div class="form-text">名称应简明扼要，清晰表达仓库内容</div>
@@ -131,6 +265,7 @@ endblock %} {% block head %}
               class="form-control"
               id="inventoryExp"
               name="expiration"
+              min="{{ today }}"
             />
             <div class="form-text">
               如果未计划销毁仓库，请在日历中【清除】日期
@@ -152,7 +287,7 @@ endblock %} {% block head %}
 {% endblock %} {% block scripts %}
 <script src="{{ url_for('static', filename='js/pagination.js') }}"></script>
 <script>
-  // 论坛页面特定的JavaScript代码
+  // 新建仓库
   document.addEventListener("DOMContentLoaded", function () {
     // 处理发布新主题表单提交
     const newInvForm = document.getElementById("newInventoryForm");
@@ -171,8 +306,8 @@ endblock %} {% block head %}
         return;
       }
 
-      if (!title || title.length < 5) {
-        alert("名称不能为空，至少5个字符");
+      if (!title || title.length < 1) {
+        alert("名称不能为空，至少1个字符");
         return;
       }
 
@@ -228,8 +363,16 @@ endblock %} {% block head %}
         });
     });
 
-    // 初始化分页功能
-    initForumPagination();
+
+    // 更新分页信息
+    const invCards = document.querySelectorAll(".inv-card");
+    const paginationInfo = document.querySelector(".inv-pagination-info");
+
+    if (paginationInfo && invCards.length > 0) {
+      paginationInfo.textContent = `显示 1-${invCards.length} 条，共 ${invCards.length} 条`;
+    }
+
   });
 </script>
+
 {% endblock %}

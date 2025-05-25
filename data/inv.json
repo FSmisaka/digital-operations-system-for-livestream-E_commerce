@@ -115,16 +115,64 @@
                 "name": "乐器产品",
                 "category": "乐器",
                 "capacity": 10000,
-                "quantity": 200,
+                "quantity": 9200,
                 "expiration_date": null
             },
             {
                 "id": 3,
-                "name": "你好你好我是化妆品",
+                "name": "你好我是化妆品",
                 "category": "化妆品",
                 "capacity": 1000,
-                "quantity": 0,
-                "expiration_date": ""
+                "quantity": 1000,
+                "expiration_date": null
+            },
+            {
+                "id": 4,
+                "name": "薯片仓库1",
+                "category": "食品",
+                "capacity": 1000,
+                "quantity": 500,
+                "expiration_date": null
+            },
+            {
+                "id": 5,
+                "name": "薯片仓库2",
+                "category": "食品",
+                "capacity": 1000,
+                "quantity": 1000,
+                "expiration_date": null
+            },
+            {
+                "id": 6,
+                "name": "薯片仓库3",
+                "category": "食品",
+                "capacity": 1000,
+                "quantity": 950,
+                "expiration_date": null
+            },
+            {
+                "id": 7,
+                "name": "薯片仓库4",
+                "category": "食品",
+                "capacity": 100,
+                "quantity": 910,
+                "expiration_date": null
+            },
+            {
+                "id": 8,
+                "name": "阿端上来的卡上了",
+                "category": "化妆品",
+                "capacity": 1000,
+                "quantity": 8100,
+                "expiration_date": null
+            },
+            {
+                "id": 9,
+                "name": "阿端上来的卡上了",
+                "category": "化妆品",
+                "capacity": 1000,
+                "quantity": 420,
+                "expiration_date": "2012-03-02"
             }
         ]
     }
