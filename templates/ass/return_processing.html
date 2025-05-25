@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}退货处理{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">退货处理</h5>
+        </div>
+        <div class="card-body">
+            <!-- 搜索区域 -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <form class="form-inline" method="GET">
+                        <input type="text" class="form-control mr-2" name="search" placeholder="输入订单号搜索" value="{{ request.args.get('search', '') }}">
+                        <button type="submit" class="btn btn-primary">搜索</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 退货记录列表 -->
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>退货ID</th>
+                            <th>订单号</th>
+                            <th>商品名称</th>
+                            <th>退货理由</th>
+                            <th>申请时间</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in return_records.itertuples() %}
+                        <tr>
+                            <td>{{ record.return_id }}</td>
+                            <td>{{ record.order_id }}</td>
+                            <td>{{ record.product_name }}</td>
+                            <td>{{ record.reason }}</td>
+                            <td>{{ record.apply_time }}</td>
+                            <td>
+                                <span class="badge {% if record.status == '已同意' %}bg-success{% elif record.status == '已拒绝' %}bg-danger{% else %}bg-warning{% endif %}">
+                                    {{ record.status }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if record.status == '待处理' %}
+                                <button class="btn btn-sm btn-success" onclick="processReturn('{{ record.return_id }}', '同意')">同意</button>
+                                <button class="btn btn-sm btn-danger" onclick="processReturn('{{ record.return_id }}', '拒绝')">拒绝</button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function processReturn(returnId, action) {
+    if (confirm(`确定要${action}这个退货申请吗？`)) {
+        fetch('/ass/api/process_return', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                return_id: returnId,
+                action: action
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                location.reload();
+            } else {
+                alert(data.message || '处理失败，请重试');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('处理失败，请重试');
+        });
+    }
+}
+</script>
+{% endblock %} 

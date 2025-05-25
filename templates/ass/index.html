@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">售后管理</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">客服聊天</h5>
+                    <p class="card-text">与客户进行在线沟通，查看历史对话记录。</p>
+                    <a href="{{ url_for('ass.customer_service') }}" class="btn btn-primary">进入客服聊天</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">退货处理</h5>
+                    <p class="card-text">管理和处理客户的退货申请，支持筛选和回复。</p>
+                    <a href="{{ url_for('ass.return_processing') }}" class="btn btn-warning">进入退货处理</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">物流管理</h5>
+                    <p class="card-text">查看订单物流状态，支持分类筛选。</p>
+                    <a href="{{ url_for('ass.logistics') }}" class="btn btn-info">进入物流管理</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

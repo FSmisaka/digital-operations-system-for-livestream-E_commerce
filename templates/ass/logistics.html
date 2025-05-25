@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}物流管理{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">物流管理</h5>
+            <div>
+                <button class="btn btn-primary" onclick="refreshLogistics()">
+                    <i class="fas fa-sync"></i> 刷新状态
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <!-- 搜索区域 -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <form class="form-inline" method="GET">
+                        <input type="text" class="form-control mr-2" name="search" placeholder="输入订单号或运单号" value="{{ request.args.get('search', '') }}">
+                        <button type="submit" class="btn btn-primary">搜索</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 物流记录列表 -->
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>订单号</th>
+                            <th>运单号</th>
+                            <th>收件人</th>
+                            <th>联系电话</th>
+                            <th>配送地址</th>
+                            <th>配送类型</th>
+                            <th>状态</th>
+                            <th>更新时间</th>
+                            <th>备注</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in logistics_records.itertuples() %}
+                        <tr>
+                            <td>{{ record.order_id }}</td>
+                            <td>{{ record.tracking_number }}</td>
+                            <td>{{ record.receiver_name }}</td>
+                            <td>{{ record.phone }}</td>
+                            <td>{{ record.address }}</td>
+                            <td>
+                                <span class="badge bg-primary {% if record.delivery_type == '发货配送' %}bg-primary{% else %}bg-warning{% endif %}">
+                                    {{ record.delivery_type }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge {% if record.status == '已签收' %}bg-success{% elif record.status == '运输中' %}bg-info{% elif record.status == '已退回' %}bg-danger{% else %}bg-secondary{% endif %}">
+                                    {{ record.status }}
+                                </span>
+                            </td>
+                            <td>{{ record.update_time }}</td>
+                            <td>{{ record.remark }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function refreshLogistics() {
+    fetch('/ass/api/update_logistics', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // 刷新页面以显示最新状态
+            location.reload();
+        } else {
+            alert(data.message || '更新失败，请重试');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('更新失败，请重试');
+    });
+}
+</script>
+{% endblock %} 
