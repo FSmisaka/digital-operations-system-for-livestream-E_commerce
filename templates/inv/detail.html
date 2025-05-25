@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% block title %}{{ inv.name }} - 仓库详情{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row mb-4">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">首页</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('inv.index') }}">库存记录</a></li>
+        <li class="breadcrumb-item active">{{ inv.name }}</li>
+      </ol>
+    </nav>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h3 class="card-title">
+            <i class="bi bi-box-seam-fill"></i> {{ inv.name }}
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <h5 class="mb-3">基本信息</h5>
+            <div class="col-md-4">
+                <p class="mb-2"><i class="bi bi-tags"></i> <strong>类别:</strong> {{ inv.category }}</p>
+                <p class="mb-2"><i class="bi bi-box-seam"></i> <strong>库存状态:</strong> {{ inv.quantity }}/{{ inv.capacity }}</p>
+                <p class="mb-2"><i class="bi bi-calendar-event"></i> <strong>过期时间:</strong> 
+                  {% if inv.expiration_date %}
+                    {{ inv.expiration_date }}
+                  {% else %}
+                    无期限
+                  {% endif %}
+                </p>
+                <p class="mb-2"><i class="bi bi-geo-alt"></i> <strong>存放位置:</strong> {{ inv.location|default('未设置') }}</p>
+                <p class="mb-2"><i class="bi bi-person"></i> <strong>负责人:</strong> {{ inv.manager|default('未设置') }}</p>
+            </div>
+            <div class="col-md-8">
+              <h5 class="mb-2">库存使用率</h5>
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small">当前使用: {{ inv.quantity }}/{{ inv.capacity }}</span>
+                <span class="small">使用率: {{ (inv.quantity / inv.capacity * 100)|round(1) }}%</span>
+              </div>
+              <div class="progress" style="height: 25px;">
+                {% set percentage = (inv.quantity / inv.capacity * 100) %}
+                <div class="progress-bar 
+                  {% if percentage < 33 %}
+                    bg-danger
+                  {% elif percentage < 66 %}
+                    bg-warning
+                  {% else %}
+                    bg-success
+                  {% endif %}" 
+                  role="progressbar" 
+                  style="width: {{ percentage }}%"
+                  aria-valuenow="{{ inv.quantity }}"
+                  aria-valuemin="0" 
+                  aria-valuemax="{{ inv.capacity }}">
+                  {{ percentage|round(1) }}%
+                </div>
+              </div>
+              <div class="mt-2 d-flex justify-content-end">
+                <small class="text-muted">
+                  {% if percentage < 33 %}
+                    <i class="bi bi-exclamation-triangle-fill text-danger"></i> 库存不足，需要补货
+                  {% elif percentage < 66 %}
+                    <i class="bi bi-exclamation-circle-fill text-warning"></i> 库存适中，请关注变化
+                  {% else %}
+                    <i class="bi bi-check-circle-fill text-success"></i> 库存充足
+                  {% endif %}
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 右侧图表 -->
+    <div class="col-md-4">
+      <div class="card h-100">
+        <div class="card-header bg-info text-white">
+          <h5 class="mb-0"><i class="bi bi-graph-up"></i> 库存趋势</h5>
+        </div>
+        <div class="card-body d-flex align-items-center">
+          <canvas id="stockChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 下方操作记录 -->
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0"><i class="bi bi-clock-history"></i> 操作记录</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>时间</th>
+                  <th>操作类型</th>
+                  <th>变动数量</th>
+                  <th>操作人</th>
+                  <th>备注</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- 示例数据 -->
+                <tr>
+                  <td>2024-05-25 14:30</td>
+                  <td><span class="badge bg-success">入库</span></td>
+                  <td>+100</td>
+                  <td>管理员</td>
+                  <td>常规补货</td>
+                </tr>
+                <tr>
+                  <td>2024-05-24 16:20</td>
+                  <td><span class="badge bg-danger">出库</span></td>
+                  <td>-50</td>
+                  <td>销售部</td>
+                  <td>订单发货</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧备注 -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0"><i class="bi bi-sticky"></i> 仓库备注</h5>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="mb-3">
+              <textarea class="form-control" rows="3" placeholder="添加备注..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">保存备注</button>
+          </form>
+          <hr>
+          <div class="notes-list">
+            <div class="note-item mb-2">
+              <small class="text-muted">2024-05-25</small>
+              <p class="mb-1">需要注意温度控制在20度以下</p>
+            </div>
+            <div class="note-item mb-2">
+              <small class="text-muted">2024-05-24</small>
+              <p class="mb-1">已完成月度盘点</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 库存趋势图表
+  const ctx = document.getElementById('stockChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['1月', '2月', '3月', '4月', '5月'],
+      datasets: [{
+        label: '库存量',
+        data: [650, 590, 800, 810, 560],
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+});
+</script>
+{% endblock %}

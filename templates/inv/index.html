@@ -26,7 +26,10 @@ endblock %} {% block head %}
   .inv-card.announcement {
     border-left-color: #ffc107;
   }
-
+  .text-expired {
+    color: #6c757d;
+    text-decoration: line-through;
+  }
   .topic-stats {
     text-align: center;
     min-width: 60px;
@@ -71,11 +74,17 @@ endblock %} {% block head %}
           <div class="row g-0">
             <!-- 左侧指标区 -->
             <div class="col-md-3 border-end p-3">
-              <h5 class="card-title">{{ inv.name }}</h5>
+              <h5 class="card-title">
+                {% if exp and exp < today %}
+                  <span class="text-expired">{{ inv.name }}</span>
+                {% else %}
+                  {{ inv.name }}
+                {% endif %}
+              </h5>
               <p class="mb-1"><i class="bi bi-tags"></i> {{ inv.category }}</p>
-              <p class="mb-1"><i class="bi bi-box-seam"></i> 库存 {{ inv.quantity }} / {{ inv.capacity }}</p>
+              <p class="mb-1"><i class="bi bi-box-seam"></i> 库存: {{ inv.quantity }}/{{ inv.capacity }}</p>
               <p class="mb-0 text-muted">
-                到期：
+                <i class="bi bi-calendar-event-fill"></i>
                 {% if inv.expiration_date %}
                     {{ inv.expiration_date }}
                 {% else %}
@@ -88,17 +97,20 @@ endblock %} {% block head %}
               <div>
                 <p class="mb-0"> 其它信息</p>
               </div>
-            <div class="btn-group gap-2" role="group">
-              <a href="#" class="btn btn-sm btn-primary">
-                <i class="bi bi-search"></i> 查看详情
-              </a>
-              <a href="#" class="btn btn-sm btn-warning">
-                <i class="bi bi-pencil-square"></i> 修改信息
-              </a>
-              <a href="#" class="btn btn-sm btn-danger">
-                <i class="bi bi-trash"></i> 删除仓库
-              </a>
-            </div>
+              <div class="btn-group gap-2" role="group">
+                <a href="{{ url_for('inv.detail', inv_id=inv.id) }}" class="btn btn-sm btn-primary">
+                  <i class="bi bi-search"></i> 查看详情
+                </a>
+                <button class="btn btn-sm btn-warning" onclick="openStockInModal('{{ inv.id }}', '{{ inv.name }}')">
+                  <i class="bi bi-box-arrow-in-down"></i> 入库
+                </button>
+                <button class="btn btn-sm btn-warning" onclick="openStockOutModal('{{ inv.id }}', '{{ inv.name }}')">
+                  <i class="bi bi-box-arrow-up"></i> 出库
+                </button>
+                <button class="btn btn-sm btn-danger" onclick="deleteInventory('{{ inv.id }}')">
+                  <i class="bi bi-trash"></i> 删除仓库
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -161,7 +173,9 @@ endblock %} {% block head %}
           <h5 class="mb-0"><i class="bi bi-bar-chart"></i> 危险库存</h5>
         </div>
         <div class="card-body">
-          <h6 class="mb-0">库存过期、库存不足</h6>
+          <h6 class="mb-0">
+            <span class="text-expired">库存过期</span>、库存不足
+          </h6>
           <hr class="my-2" />
           <ul class="list-group">
             {% set ns = namespace(cnt=0) %}
@@ -170,7 +184,11 @@ endblock %} {% block head %}
                 {% set pct = (inv.quantity / inv.capacity * 100) if inv.capacity else 0 %}
                 <li class="list-group-item">
                   <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span>{{ inv.name }}</span>
+                    <span 
+                      {% if inv.expiration_date and inv.expiration_date < today %}class="text-expired"{% endif %}
+                    >
+                      {{ inv.name }}
+                    </span>
                     <span>{{ inv.quantity }} / {{ inv.capacity }} ({{ pct|round(1) }}%)</span>
                     </div>
                   <div class="progress" style="height: 1rem;">
@@ -202,7 +220,7 @@ endblock %} {% block head %}
   </div>
 </div>
 
-<!--修改仓库浮窗-->
+<!-- 新建仓库模态框 -->
 <div
   class="modal fade"
   id="newInventoryModal"
@@ -297,6 +315,65 @@ endblock %} {% block head %}
     </div>
   </div>
 </div>
+
+<!-- 入库模态框 -->
+<div class="modal fade" id="stockInModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-box-arrow-in-down"></i> 入库操作</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="stockInForm">
+          <input type="hidden" id="stockInId" name="inv_id">
+          <div class="mb-3">
+            <label class="form-label">仓库名称</label>
+            <input type="text" class="form-control" id="stockInName" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">入库数量 <span class="text-danger">*</span></label>
+            <input type="number" class="form-control" name="quantity" required min="1">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" onclick="submitStockIn()">确认入库</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 出库模态框 -->
+<div class="modal fade" id="stockOutModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-box-arrow-up"></i> 出库操作</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="stockOutForm">
+          <input type="hidden" id="stockOutId" name="inv_id">
+          <div class="mb-3">
+            <label class="form-label">仓库名称</label>
+            <input type="text" class="form-control" id="stockOutName" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">出库数量 <span class="text-danger">*</span></label>
+            <input type="number" class="form-control" name="quantity" required min="1">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" onclick="submitStockOut()">确认出库</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %} {% block scripts %}
 <script src="{{ url_for('static', filename='js/pagination.js') }}"></script>
 <script>
@@ -376,7 +453,6 @@ endblock %} {% block head %}
         });
     });
 
-
     // 更新分页信息
     const invCards = document.querySelectorAll(".inv-card");
     const paginationInfo = document.querySelector(".inv-pagination-info");
@@ -386,6 +462,103 @@ endblock %} {% block head %}
     }
 
   });
+
+// 删除仓库
+function deleteInventory(invId) {
+if (!confirm(`确定要删除仓库${invId}？此操作不可恢复。`)) {
+  return;
+}
+
+fetch(`/inv/delete/${invId}`, {
+  method: 'DELETE',
+  headers: {
+    'Content-Type': 'application/json',
+  }
+})
+.then(response => response.json())
+.then(data => {
+  if (data.success) {
+    alert('删除成功！');
+    window.location.reload();
+  } else {
+    alert(data.message || '删除失败，请稍后重试');
+  }
+})
+.catch(error => {
+  console.error('Error:', error);
+  alert('删除失败，请稍后重试');
+});
+}
+
+function openStockInModal(invId, invName) {
+  document.getElementById('stockInId').value = invId;
+  document.getElementById('stockInName').value = invName;
+  new bootstrap.Modal(document.getElementById('stockInModal')).show();
+}
+
+function submitStockIn() {
+  const form = document.getElementById('stockInForm');
+  const formData = new FormData(form);
+  
+  fetch(`/inv/stock/${formData.get('inv_id')}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      operation: 'in',
+      quantity: parseInt(formData.get('quantity'))
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('入库成功！');
+      window.location.reload();
+    } else {
+      alert(data.message || '操作失败，请重试');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('操作失败，请重试');
+  });
+}
+
+function openStockOutModal(invId, invName) {
+  document.getElementById('stockOutId').value = invId;
+  document.getElementById('stockOutName').value = invName;
+  new bootstrap.Modal(document.getElementById('stockOutModal')).show();
+}
+
+function submitStockOut() {
+  const form = document.getElementById('stockOutForm');
+  const formData = new FormData(form);
+  
+  fetch(`/inv/stock/${formData.get('inv_id')}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      operation: 'out',
+      quantity: parseInt(formData.get('quantity'))
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('出库成功！');
+      window.location.reload();
+    } else {
+      alert(data.message || '操作失败，请重试');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('操作失败，请重试');
+  });
+}
 </script>
 
 {% endblock %}

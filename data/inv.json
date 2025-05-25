@@ -103,14 +103,6 @@
         "user_id": 5,
         "inventory": [
             {
-                "id": 1,
-                "name": "书籍产品",
-                "category": "图书",
-                "capacity": 10000,
-                "quantity": 3000,
-                "expiration_date": null
-            },
-            {
                 "id": 2,
                 "name": "乐器产品",
                 "category": "乐器",
@@ -168,11 +160,11 @@
             },
             {
                 "id": 9,
-                "name": "阿端上来的卡上了",
-                "category": "化妆品",
-                "capacity": 1000,
-                "quantity": 120,
-                "expiration_date": "2012-03-02"
+                "name": "我是电子产品",
+                "category": "电子产品",
+                "capacity": 99999,
+                "quantity": 9999,
+                "expiration_date": "2003-12-12"
             }
         ]
     }
