@@ -11,6 +11,9 @@ class Config:
     NEWS_API_KEY = os.environ.get('NEWS_API_KEY')
     MARKET_API_KEY = os.environ.get('MARKET_API_KEY')
 
+# DeepSeek API配置
+DEEPSEEK_API_KEY = 'sk-84d110f0618f483984f74b1d3429947e'  # 请替换为实际的API密钥
+
 LSTM_CONFIG = {
     'lstm_units1': 192,  
     'lstm_units2': 128,  

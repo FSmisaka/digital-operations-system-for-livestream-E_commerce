@@ -1,0 +1,31 @@
+{
+    "streamer_info": {
+        "name": "主播小美",
+        "platform": "抖音",
+        "follower_count": 150000,
+        "total_likes": 2500000,
+        "join_date": "2023-01-01",
+        "categories": ["美妆", "护肤", "生活分享"],
+        "average_stream_duration": 120,
+        "stream_frequency": "每周3-4次",
+        "peak_viewers": 50000,
+        "average_viewers": 15000
+    },
+    "achievements": [
+        {
+            "title": "月度最佳主播",
+            "date": "2023-12",
+            "description": "单月直播收入突破50万"
+        },
+        {
+            "title": "年度新人奖",
+            "date": "2023",
+            "description": "年度增长最快主播"
+        }
+    ],
+    "social_media": {
+        "weibo": "主播小美",
+        "xiaohongshu": "主播小美",
+        "douyin": "主播小美"
+    }
+} 

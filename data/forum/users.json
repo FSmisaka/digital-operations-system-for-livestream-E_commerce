@@ -72,5 +72,16 @@
         "replies": 0,
         "join_date": "2025-05-25",
         "last_active": "2025-05-25"
+    },
+    {
+        "id": 7,
+        "username": "22377318",
+        "password": "123",
+        "avatar": "https://via.placeholder.com/40",
+        "role": "admin",
+        "posts": 0,
+        "replies": 0,
+        "join_date": "2025-05-25",
+        "last_active": "2025-05-25"
     }
 ]
