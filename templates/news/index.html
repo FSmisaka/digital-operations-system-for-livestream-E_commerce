@@ -1,341 +1,128 @@
-{% extends 'base.html' %} {% block title %}新闻资讯 - 豆粕期货价格预测系统{%
-endblock %} {% block head %}
-<style>
-  .news-card {
-    transition: all 0.3s ease;
-    margin-bottom: 20px;
-  }
-  .news-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  }
+<!-- templates/news/index.html -->
+{% extends 'base.html' %}
+{% block title %}选品建议 - 直播电商数字化运营系统{% endblock %}
 
-  .news-tag {
-    font-size: 0.8rem;
-  }
-  .news-date {
-    color: #6c757d;
-    font-size: 0.9rem;
-  }
-  .news-source {
-    font-style: italic;
-    color: #6c757d;
-  }
-  .featured-news {
-    position: relative;
-    overflow: hidden;
-    border-radius: 5px;
-    margin-bottom: 30px;
-  }
-
-  .featured-news-content {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 20px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
-    color: white;
-  }
-  .featured-news-tag {
-    background-color: #dc3545;
-    color: white;
-    padding: 3px 10px;
-    border-radius: 3px;
-    font-size: 0.8rem;
-    margin-bottom: 10px;
-    display: inline-block;
-  }
-</style>
-{% endblock %} {% block content %}
+{% block content %}
 <div class="container">
+  <!-- 标题区域 -->
   <div class="row mb-4">
     <div class="col-md-8">
-      <h2><i class="bi bi-basket"></i> 选品建议</h2>
-      <p class="lead">了解最新的市场动态和行业趋势</p>
-    </div>
-    <div class="col-md-4 text-end">
-      <div class="input-group">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="搜索新闻..."
-          aria-label="搜索新闻"
-        />
-        <button class="btn btn-primary" type="button">
-          <i class="bi bi-search"></i>
-        </button>
-      </div>
+      <h2><i class="bi bi-basket-fill"></i> 选品建议</h2>
+      <p class="lead">智能算法选品，助力直播爆单</p>
     </div>
   </div>
 
-  <!-- 头条新闻 -->
-  {% if featured_news %}
-  <div class="featured-news">
-    <div
-      class="featured-news-content"
-      style="
-        position: relative;
-        background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
-        color: #212529;
-        padding: 30px;
-        border-radius: 5px;
-      "
-    >
-      <h2>
-        {% if featured_news.url %}
-        <a
-          href="{{ featured_news.url }}"
-          target="_blank"
-          class="text-decoration-none text-dark"
-          >{{ featured_news.title }}
-          <i class="bi bi-box-arrow-up-right small"></i
-        ></a>
-        {% else %}
-        <a
-          href="{{ url_for('news.detail', news_id=featured_news.id) }}"
-          class="text-decoration-none text-dark"
-          >{{ featured_news.title }}</a
-        >
-        {% endif %}
-      </h2>
-      <p>
-        {{ featured_news.content[:200] }}{% if featured_news.content|length >
-        200 %}...{% endif %}
-      </p>
-      <div class="d-flex justify-content-between align-items-center">
-        <span class="news-date"
-          ><i class="bi bi-calendar3"></i> {{ featured_news.date }}</span
-        >
-        {% if featured_news.url %}
-        <a
-          href="{{ featured_news.url }}"
-          target="_blank"
-          class="btn btn-sm btn-primary"
-          >阅读全文 <i class="bi bi-box-arrow-up-right"></i
-        ></a>
-        {% else %}
-        <a
-          href="{{ url_for('news.detail', news_id=featured_news.id) }}"
-          class="btn btn-sm btn-primary"
-          >阅读全文</a
-        >
-        {% endif %}
+  <!-- 主推商品 -->
+  {% if featured_product %}
+  <div class="card mb-4 shadow-lg">
+    <div class="row g-4">
+      <div class="col-md-5">
+        <img src="https://via.placeholder.com/400x300?text=Featured+Product" 
+             class="img-fluid rounded-3" alt="主推商品">
+      </div>
+      <div class="col-md-7">
+        <div class="card-body">
+          <h2 class="text-primary mb-3">{{ featured_product.name }}</h2>
+          <div class="row g-3">
+            <div class="col-6">
+              <p class="mb-1"><i class="bi bi-star-fill text-warning"></i> 推荐指数：{{ featured_product.recommend_score }}</p>
+              <p class="mb-1"><i class="bi bi-currency-exchange"></i> 价格：¥{{ "%.2f"|format(featured_product.price) }}</p>
+            </div>
+            <div class="col-6">
+              <p class="mb-1"><i class="bi bi-box-seam"></i> 库存：{{ featured_product.total_selected - featured_product.unsold_count }}</p>
+              <p class="mb-1"><i class="bi bi-shop"></i> {{ featured_product.supplier }}</p>
+            </div>
+          </div>
+          <hr>
+          <p class="card-text">{{ featured_product.description }}</p>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn btn-primary btn-lg"><i class="bi bi-cart-plus"></i> 加入选品库</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
   {% endif %}
 
-  <!-- 新闻列表 -->
+  <!-- 其余代码保持不变 -->
+  ...
+
   <div class="row">
-    <div class="col-md-8 news-list-container">
-      <!-- 新闻卡片 -->
-      {% for news in news_list %}
-      <div class="card news-card">
-        <div class="row g-0">
-          <div class="col-md-12">
-            <div class="card-body">
-              <h5 class="card-title mt-2">
-                {% if news.url %}
-                <a
-                  href="{{ news.url }}"
-                  target="_blank"
-                  class="text-decoration-none"
-                  >{{ news.title }}
-                  <i class="bi bi-box-arrow-up-right small"></i
-                ></a>
-                {% else %}
-                <a
-                  href="{{ url_for('news.detail', news_id=news.id) }}"
-                  class="text-decoration-none"
-                  >{{ news.title }}</a
-                >
-                {% endif %}
-              </h5>
-              <p class="card-text">
-                {{ news.content[:150] }}{% if news.content|length > 150 %}...{%
-                endif %}
-              </p>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="news-date"
-                  ><i class="bi bi-calendar3"></i> {{ news.date }}</span
-                >
-                {% if news.url %}
-                <a
-                  href="{{ news.url }}"
-                  target="_blank"
-                  class="btn btn-sm btn-outline-primary"
-                  >阅读全文 <i class="bi bi-box-arrow-up-right"></i
-                ></a>
-                {% else %}
-                <a
-                  href="{{ url_for('news.detail', news_id=news.id) }}"
-                  class="btn btn-sm btn-outline-primary"
-                  >阅读全文</a
-                >
-                {% endif %}
+    <!-- 精选推荐 -->
+    <div class="col-lg-8">
+      <h4 class="mb-3"><i class="bi bi-stars"></i> 智能推荐选品</h4>
+      {% for product in recommended_products %}
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-md-3 text-center">
+              <span class="badge bg-primary fs-6">
+                ￥{{ "%.2f"|format(product.price) }}
+              </span>
+            </div>
+            <div class="col-md-6">
+              <h5 class="card-title">{{ product.name }}</h5>
+              <div class="d-flex gap-2 small mb-2">
+                <span class="badge bg-secondary">{{ product.category }}</span>
+                <span class="text-muted">{{ product.supplier }}</span>
               </div>
+              <p class="card-text text-muted">{{ product.description[:50] }}...</p>
+            </div>
+            <div class="col-md-3 text-end">
+              <div class="mb-2">
+                <span class="text-success">{{ product.total_selected }}次选品</span>
+              </div>
+              <button class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-eye"></i> 查看详情
+              </button>
             </div>
           </div>
         </div>
       </div>
       {% endfor %}
-
-      <!-- 分页 -->
-      <div class="d-flex justify-content-between align-items-center mt-4">
-        <div>
-          <span class="text-muted news-pagination-info"
-            >显示 1-5 条，共 15 条</span
-          >
-        </div>
-        <nav>
-          <ul class="pagination pagination-sm news-pagination">
-            <!-- 分页按钮将由JavaScript动态生成 -->
-          </ul>
-        </nav>
-      </div>
     </div>
 
-    <div class="col-md-4">
-      <!-- 热门新闻 -->
-      <div class="card mb-4">
+    <!-- 右侧边栏 -->
+    <div class="col-lg-4">
+      <!-- 热销榜单 -->
+      <div class="card shadow mb-4">
         <div class="card-header bg-primary text-white">
-          <h5 class="mb-0"><i class="bi bi-fire"></i> 热门新闻</h5>
+          <h5 class="mb-0"><i class="bi bi-fire"></i> 实时热销榜</h5>
         </div>
         <div class="card-body">
-          <ul class="list-group list-group-flush">
-            {% for news in popular_news %}
-            <li class="list-group-item px-0">
-              {% if news.url %}
-              <a
-                href="{{ news.url }}"
-                target="_blank"
-                class="text-decoration-none"
-                >{{ news.title }} <i class="bi bi-box-arrow-up-right small"></i
-              ></a>
-              {% else %}
-              <a
-                href="{{ url_for('news.detail', news_id=news.id) }}"
-                class="text-decoration-none"
-                >{{ news.title }}</a
-              >
-              {% endif %}
-              <div class="small text-muted mt-1">
-                <i class="bi bi-eye"></i> {{ news.views }} 阅读 ·
-                <i class="bi bi-calendar3"></i> {{ news.date }}
+          <ol class="list-group list-group-numbered">
+            {% for product in hot_products %}
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+              <div class="ms-2 me-auto">
+                <div>{{ product.name }}</div>
+                <small class="text-muted">{{ product.supplier }}</small>
               </div>
+              <span class="badge bg-primary rounded-pill">{{ product.total_selected }}</span>
             </li>
             {% endfor %}
-          </ul>
+          </ol>
         </div>
       </div>
 
-      <!-- 订阅新闻 -->
-      <div class="card mb-4">
+      <!-- 选品统计 -->
+      <div class="card shadow">
         <div class="card-header bg-primary text-white">
-          <h5 class="mb-0"><i class="bi bi-envelope"></i> 订阅资讯</h5>
+          <h5 class="mb-0"><i class="bi bi-graph-up"></i> 选品数据</h5>
         </div>
         <div class="card-body">
-          <p>订阅我们的新闻通讯，获取最新的豆粕期货市场资讯和分析报告。</p>
-          <form>
-            <div class="mb-3">
-              <input
-                type="email"
-                class="form-control"
-                placeholder="您的邮箱地址"
-              />
+          <div class="row text-center">
+            <div class="col-6">
+              <div class="h4 text-primary">58</div>
+              <small class="text-muted">本周新增选品</small>
             </div>
-            <div class="d-grid">
-              <button type="submit" class="btn btn-primary">
-                <i class="bi bi-send"></i> 立即订阅
-              </button>
+            <div class="col-6">
+              <div class="h4 text-success">82%</div>
+              <small class="text-muted">平均转化率</small>
             </div>
-          </form>
-        </div>
-      </div>
-
-      <!-- 市场日历 -->
-      <div class="card">
-        <div class="card-header bg-primary text-white">
-          <h5 class="mb-0"><i class="bi bi-calendar-event"></i> 市场日历</h5>
-        </div>
-        <div class="card-body">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item px-0">
-              <div class="d-flex justify-content-between">
-                <div>
-                  <strong>USDA大豆产量报告</strong>
-                  <div class="small text-muted">美国农业部</div>
-                </div>
-                <span class="badge bg-primary">05-10</span>
-              </div>
-            </li>
-            <li class="list-group-item px-0">
-              <div class="d-flex justify-content-between">
-                <div>
-                  <strong>豆粕期货交割日</strong>
-                  <div class="small text-muted">大连商品交易所</div>
-                </div>
-                <span class="badge bg-primary">05-15</span>
-              </div>
-            </li>
-            <li class="list-group-item px-0">
-              <div class="d-flex justify-content-between">
-                <div>
-                  <strong>全球油脂油料峰会</strong>
-                  <div class="small text-muted">北京</div>
-                </div>
-                <span class="badge bg-primary">05-20</span>
-              </div>
-            </li>
-          </ul>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-{% endblock %} {% block scripts %}
-<!-- 引入分页功能脚本 -->
-<script src="{{ url_for('static', filename='js/pagination.js') }}"></script>
-<script>
-  // 这里可以添加新闻页面特定的JavaScript代码
-  // 例如新闻搜索、过滤等功能
-
-  document.addEventListener("DOMContentLoaded", function () {
-    // 搜索功能
-    const searchInput = document.querySelector(
-      'input[placeholder="搜索新闻..."]',
-    );
-    const searchButton = searchInput.nextElementSibling;
-
-    if (searchInput && searchButton) {
-      // 点击搜索按钮时执行搜索
-      searchButton.addEventListener("click", function () {
-        performSearch();
-      });
-
-      // 按回车键时执行搜索
-      searchInput.addEventListener("keypress", function (e) {
-        if (e.key === "Enter") {
-          performSearch();
-        }
-      });
-
-      function performSearch() {
-        const keyword = searchInput.value.trim();
-        if (keyword) {
-          window.location.href = `/news/search?keyword=${encodeURIComponent(keyword)}`;
-        }
-      }
-    }
-
-    // 更新分页信息
-    const newsCards = document.querySelectorAll(".news-card");
-    const paginationInfo = document.querySelector(".news-pagination-info");
-
-    if (paginationInfo && newsCards.length > 0) {
-      paginationInfo.textContent = `显示 1-${newsCards.length} 条，共 ${newsCards.length} 条`;
-    }
-  });
-</script>
 {% endblock %}

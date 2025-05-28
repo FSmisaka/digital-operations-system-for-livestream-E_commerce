@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify, redirect, url_for
+from flask import Blueprint, render_template, request, jsonify, redirect, url_for, session
 from views.auth import login_required
 import os
 import json
@@ -12,163 +12,126 @@ logger = logging.getLogger(__name__)
 # 创建一个名为 'news' 的 Blueprint
 bp = Blueprint('news', __name__)
 
-# 新闻数据文件路径 (相对于当前文件)
-NEWS_FILE_PATH = '../data/news.json'
-
-# 新闻分类
-NEWS_CATEGORIES = [
-    {"id": "all", "name": "全部", "active": True},
-    {"id": "market", "name": "市场动态", "active": False},
-    {"id": "policy", "name": "政策法规", "active": False},
-    {"id": "industry", "name": "行业分析", "active": False},
-    {"id": "international", "name": "国际资讯", "active": False},
-    {"id": "company", "name": "企业新闻", "active": False}
-]
-
-# 默认空新闻列表，实际数据从文件加载
-SAMPLE_NEWS = []
-
-# 市场日历数据
-MARKET_CALENDAR = [
-    {
-        "id": 1,
-        "title": "USDA大豆产量报告",
-        "organization": "美国农业部",
-        "date": "2023-05-10"
-    },
-    {
-        "id": 2,
-        "title": "豆粕期货交割日",
-        "organization": "大连商品交易所",
-        "date": "2023-05-15"
-    },
-    {
-        "id": 3,
-        "title": "全球油脂油料峰会",
-        "organization": "北京",
-        "date": "2023-05-20"
-    }
-]
-
-def get_views(x):
-    return x.get('views', 0)
+# 商品数据文件路径
+PRODUCTS_FILE = '../data/news.json'
 
 def load_news_data():
     try:
-        # 获取当前文件所在目录
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        news_file_path = os.path.join(current_dir, NEWS_FILE_PATH)
-
-        # 检查文件是否存在
-        if os.path.exists(news_file_path):
-            with open(news_file_path, 'r', encoding='utf-8') as f:
+        products_path = os.path.join(current_dir, PRODUCTS_FILE)
+        
+        if os.path.exists(products_path):
+            with open(products_path, 'r', encoding='utf-8') as f:
                 return json.load(f)
         else:
-            logger.warning(f"新闻数据文件不存在: {news_file_path}，使用示例数据")
-            return SAMPLE_NEWS
+            logger.warning(f"商品数据文件不存在: {products_path}")
+            return []
     except Exception as e:
-        logger.error(f"加载新闻数据时出错: {e}")
-        return SAMPLE_NEWS
+        logger.error(f"加载商品数据时出错: {str(e)}")
+        return []
 
-def save_news_data(news_data):
-    try:
-        # 获取当前文件所在目录
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        news_file_path = os.path.join(current_dir, NEWS_FILE_PATH)
-
-        # 确保目录存在
-        os.makedirs(os.path.dirname(news_file_path), exist_ok=True)
-
-        with open(news_file_path, 'w', encoding='utf-8') as f:
-            json.dump(news_data, f, ensure_ascii=False, indent=4)
-
-        logger.info(f"新闻数据已保存到: {news_file_path}")
-        return True
-    except Exception as e:
-        logger.error(f"保存新闻数据时出错: {e}")
-        return False
+def calculate_recommendations(user_id):
+    products = load_news_data()
+    
+    # 模拟用户数据（实际应从数据库获取）
+    user_selections = {
+        "22377002": [1001, 1003, 1005],  # 老用户
+        "22377005": [1002, 1004],       # 老用户
+        "0": []                          # 新用户
+    }
+    
+    # 判断是否为新用户
+    is_new_user = str(user_id) not in user_selections
+    user_product_ids = user_selections.get(str(user_id), [])
+    
+    # 计算推荐分数
+    for product in products:
+        # 用户历史选品次数
+        user_count = user_product_ids.count(product['id'])
+        
+        # 全体用户选品次数
+        total_selected = product['total_selected']
+        
+        # 滞销情况（滞销次数越多，分数越低）
+        unsold_penalty = product['unsold_count']
+        
+        # 计算最终推荐分数
+        if is_new_user:
+            # 新用户: 全体选品次数 - 滞销惩罚
+            product['recommend_score'] = total_selected - unsold_penalty
+        else:
+            # 老用户: 用户选品次数 + 全体选品次数 - 滞销惩罚
+            # 可以调整权重，例如 user_count * 0.5 降低历史选品的影响
+            product['recommend_score'] = user_count + total_selected - unsold_penalty
+        
+        # 记录用户是否已选过此商品
+        product['user_selected'] = user_count > 0
+    
+    # 按推荐分数排序，分数相同则按总选品次数排序
+    sorted_products = sorted(
+        products, 
+        key=lambda x: (x['recommend_score'], x['total_selected']), 
+        reverse=True
+    )
+    
+    return sorted_products
 
 @bp.route('/')
 @login_required
 def index():
-    # 重置数据文件路径为默认值
-    reset_data_file_path()
-
-    # 加载新闻数据
-    news_data = load_news_data()
-
-    # 获取头条新闻（标记为featured的新闻）
-    featured_news = next((news for news in news_data if news.get('is_featured')), news_data[0] if news_data else None)
-
-    # 获取热门新闻（按浏览量排序）
-    popular_news = sorted(news_data, key=get_views, reverse=True)[:5]
-
+    # 获取用户ID
+    user_id = session.get('user_id', '0')
+    
+    # 获取推荐商品
+    recommended_products = calculate_recommendations(user_id)
+    
+    # 获取热门商品（按全体选择次数排序）
+    hot_products = sorted(load_news_data(), key=lambda x: x['total_selected'], reverse=True)[:5]
+    
     return render_template(
         'news/index.html',
-        news_list=news_data,
-        featured_news=featured_news,
-        popular_news=popular_news,
-        market_calendar=MARKET_CALENDAR
+        featured_product=recommended_products[0] if recommended_products else None,
+        recommended_products=recommended_products[1:6],
+        hot_products=hot_products
     )
 
-@bp.route('/detail/<int:news_id>')
+# 修改路由参数名从 <int:product_id> 改为 <int:news_id>
+@bp.route('/detail/<int:news_id>')  # 修改这里，与模板保持一致
 @login_required
-def detail(news_id):
-    news_data = load_news_data()
-    news_item = next((news for news in news_data if news['id'] == news_id), None)
-
-    if not news_item:
+def detail(news_id):  # 函数参数名也改为 news_id
+    """商品详情页（需修改模板）"""
+    products = load_news_data()
+    # 在查询商品时仍然使用 'id' 字段，因为数据文件中使用的是 'id'
+    product = next((p for p in products if p['id'] == news_id), None)
+    
+    if not product:
         return render_template('404.html'), 404
-
-    news_item['views'] = news_item.get('views', 0) + 1
-    save_news_data(news_data)
-
-    related_news = [
-        news for news in news_data
-        if news.get('category') == news_item.get('category') and news['id'] != news_id
-    ][:3]
-
-    if 'url' in news_item and news_item['url']:
-        news_item['external_url'] = news_item['url']
-
+    
+    # 模拟相关商品（按分类筛选）
+    related_products = [p for p in products if p['category'] == product['category'] and p['id'] != news_id][:3]
+    
     return render_template(
         'news/detail.html',
-        news=news_item,
-        related_news=related_news
+        product=product,  # 传递给模板的变量名仍为 product
+        related_products=related_products
     )
 
 @bp.route('/search')
 def search():
-    # 获取搜索关键词
+    """商品搜索功能（需修改模板）"""
     keyword = request.args.get('keyword', '')
-
     if not keyword:
         return jsonify({'error': '请输入搜索关键词'}), 400
-
-    # 加载新闻数据
-    news_data = load_news_data()
-
-    # 搜索标题和内容中包含关键词的新闻
+    
+    products = load_news_data()
     search_results = [
-        news for news in news_data
-        if keyword.lower() in news.get('title', '').lower() or keyword.lower() in news.get('content', '').lower()
+        p for p in products
+        if keyword.lower() in p['name'].lower() or keyword.lower() in p['description'].lower()
     ]
-
+    
     return render_template(
         'news/search.html',
-        news_list=search_results,
+        products=search_results,
         keyword=keyword,
         count=len(search_results)
     )
-
-@bp.route('/api/subscribe', methods=['POST'])
-def subscribe():
-    email = request.form.get('email')
-
-    if not email:
-        return jsonify({'success': False, 'message': '请输入有效的邮箱地址'}), 400
-
-    return jsonify({
-        'success': True,
-        'message': f'感谢订阅！我们会将最新资讯发送到 {email}'
-    })

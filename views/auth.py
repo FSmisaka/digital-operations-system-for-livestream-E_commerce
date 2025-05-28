@@ -77,8 +77,14 @@ def user_center():
     user_id = session['user_id']
     users = load_users()
     user = next((u for u in users if u['id'] == user_id), None)
-    return render_template('404.html')
-
+    if not user:
+        return render_template('404.html')
+    join_date = datetime.strptime(user['join_date'], '%Y-%m-%d').strftime('%Y年%m月%d日')
+    return render_template('auth/user_center.html',
+                           user_id=user['id'],
+                           username=user['username'],
+                           join_date=join_date,
+                           avatar=user['avatar'])
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
