@@ -80,6 +80,18 @@ def detail(inv_id):
             for item in inv['inventory']:
                 if item['id'] == inv_id:
                     inv_data = item
+
+                    # 历史
+                    history_data = inv_data.get('history', [])
+                    history_data.sort(key=lambda x: x['date'])
+                    inv_data['chart_labels'] = [h['date'] for h in history_data][:5]
+                    inv_data['chart_data'] = [h['quantity'] for h in history_data][:5]
+
+                    # 操作
+                    inv_data['operations'] = inv_data['operations'][:5]
+
+                    # 备注
+                    inv_data['notes'] = inv_data['notes'][:2]
                     break
             break
     
@@ -92,12 +104,47 @@ def detail(inv_id):
     
     return render_template('inv/detail.html', inv=inv_data)
 
+@bp.route('/note/<int:inv_id>', methods=['POST'])
+@login_required
+def add_note(inv_id):
+    data = request.get_json()
+    content = data.get('content')
+    
+    if not content:
+        return jsonify({'success': False, 'message': '备注内容不能为空'}), 400
+
+    user_id = session.get('user_id')
+    inventory = load_data(INV_FILE)
+    
+    for inv in inventory:
+        if inv['user_id'] == user_id:
+            for item in inv['inventory']:
+                if item['id'] == inv_id:
+                    # 新备注
+                    new_note = {
+                        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                        "content": content
+                    }
+                    
+                    item['notes'].insert(0, new_note)
+                    
+                    save_data(INV_FILE, inventory)
+                    
+                    return jsonify({
+                        'success': True,
+                        'message': '备注添加成功',
+                        'note': new_note
+                    })
+    
+    return jsonify({'success': False, 'message': '仓库不存在'}), 404
+
 @bp.route('/stock/<int:inv_id>', methods=['POST'])
 @login_required
 def update_stock(inv_id):
     data = request.get_json()
     operation = data.get('operation')  # 'in' or 'out'
     quantity = int(data.get('quantity', 0))
+    remark = data.get('remark', '')
     
     if not operation or quantity <= 0:
         return jsonify({'success': False, 'message': '无效的操作参数'}), 400
@@ -120,7 +167,25 @@ def update_stock(inv_id):
                     else:
                         item['quantity'] -= quantity
                     
-                    # 可以在这里添加记录操作历史的代码
+                    # 操作记录
+                    new_operation = {
+                        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                        "type": operation,
+                        "amount": quantity if operation == 'in' else -quantity,
+                        "operator": session.get('username'),
+                        "remark": remark
+                    }
+                    item['operations'].insert(0, new_operation)
+                    
+                    today = date.today().strftime("%Y-%m-%d")
+                    if item['history'] and item['history'][0]["date"] == today:
+                        item['history'][0]["quantity"] = item['quantity']
+                    else:
+                        history_entry = {
+                            "date": today,
+                            "quantity": item['quantity']
+                        }
+                        item['history'].insert(0, history_entry)
                     
                     save_data(INV_FILE, inventory)
                     return jsonify({
@@ -139,13 +204,13 @@ def create_inventory():
     title = request.form.get('title')
     capacity = request.form.get('capacity')
     expiration = request.form.get('expiration', None)
+    location = request.form.get('location')
+    manager = request.form.get('manager')
 
-    # 验证数据
-    if not category or not title or not capacity:
+    if not all([category, title, capacity, location, manager]):
         return jsonify({'success': False, 'message': '请填写完整信息'}), 400
     
-    try:
-        capacity = int(capacity)
+    try: capacity = int(capacity)
     except:
         return jsonify({'success': False, 'message': '仓库上限只能为整数'}), 400
 
@@ -153,19 +218,24 @@ def create_inventory():
     inventory = load_data(INV_FILE)
     user_id = session.get('user_id')  # 默认用户ID为1
 
-    # 生成新ID
+    # 新ID
     for inv in inventory:
         if not inv['user_id'] == user_id: continue
         new_id = max([i['id'] for i in inv['inventory']], default=0) + 1
 
-    # 创建新仓库
+    # 新仓库
     new_inv = {
         "id": new_id,
         "name": title,
         "category": category,
         "capacity": int(capacity),
         "quantity": 0,
-        "expiration_date": expiration
+        "expiration_date": expiration,
+        "location": location,
+        "manager": manager,
+        "history": [],
+        "operations": [],
+        "notes": []
     }
 
     # 添加新仓库
@@ -174,8 +244,5 @@ def create_inventory():
             inv['inventory'].append(new_inv)
             break
 
-    # 保存数据
     save_data(INV_FILE, inventory)
-
-    # 返回成功消息
     return jsonify({'success': True, 'message': '仓库创建成功', 'user_id': user_id, 'id': new_id})

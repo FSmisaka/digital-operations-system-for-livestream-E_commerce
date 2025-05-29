@@ -8,7 +8,45 @@
                 "category": "化妆品",
                 "capacity": 10000,
                 "quantity": 1000,
-                "expiration_date": "2024-12-31"
+                "expiration_date": "2024-12-31",
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             },
             {
                 "id": 2,
@@ -16,7 +54,45 @@
                 "category": "服装",
                 "capacity": 10000,
                 "quantity": 500,
-                "expiration_date": null
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             },
             {
                 "id": 3,
@@ -24,7 +100,45 @@
                 "category": "食品",
                 "capacity": 10000,
                 "quantity": 2000,
-                "expiration_date": null
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             },
             {
                 "id": 4,
@@ -32,7 +146,45 @@
                 "category": "电子产品",
                 "capacity": 10000,
                 "quantity": 300,
-                "expiration_date": null
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             }
         ]
     },
@@ -45,7 +197,45 @@
                 "category": "家居用品",
                 "capacity": 10000,
                 "quantity": 1500,
-                "expiration_date": null
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             },
             {
                 "id": 2,
@@ -53,7 +243,45 @@
                 "category": "运动器材",
                 "capacity": 10000,
                 "quantity": 8800,
-                "expiration_date": null
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             }
         ]
     },
@@ -66,7 +294,45 @@
                 "category": "办公用品",
                 "capacity": 10000,
                 "quantity": 8000,
-                "expiration_date": null
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             },
             {
                 "id": 2,
@@ -74,7 +340,45 @@
                 "category": "玩具",
                 "capacity": 10000,
                 "quantity": 500,
-                "expiration_date": null
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             }
         ]
     },
@@ -87,7 +391,45 @@
                 "category": "汽车配件",
                 "capacity": 10000,
                 "quantity": 100,
-                "expiration_date": null
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             },
             {
                 "id": 2,
@@ -95,7 +437,45 @@
                 "category": "珠宝首饰",
                 "capacity": 10000,
                 "quantity": 50,
-                "expiration_date": null
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             }
         ]
     },
@@ -108,7 +488,45 @@
                 "category": "乐器",
                 "capacity": 10000,
                 "quantity": 200,
-                "expiration_date": null
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             },
             {
                 "id": 3,
@@ -116,7 +534,45 @@
                 "category": "化妆品",
                 "capacity": 1000,
                 "quantity": 1000,
-                "expiration_date": null
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             },
             {
                 "id": 4,
@@ -124,7 +580,45 @@
                 "category": "食品",
                 "capacity": 1000,
                 "quantity": 500,
-                "expiration_date": null
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             },
             {
                 "id": 5,
@@ -132,7 +626,45 @@
                 "category": "食品",
                 "capacity": 1000,
                 "quantity": 1000,
-                "expiration_date": null
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             },
             {
                 "id": 6,
@@ -140,7 +672,45 @@
                 "category": "食品",
                 "capacity": 1000,
                 "quantity": 50,
-                "expiration_date": null
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             },
             {
                 "id": 7,
@@ -148,23 +718,236 @@
                 "category": "食品",
                 "capacity": 100,
                 "quantity": 10,
-                "expiration_date": null
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             },
             {
                 "id": 8,
                 "name": "阿端上来的卡上了",
                 "category": "化妆品",
                 "capacity": 1000,
-                "quantity": 900,
-                "expiration_date": null
+                "quantity": 902,
+                "expiration_date": null,
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-29",
+                        "quantity": 902
+                    },
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2025-05-29 21:24",
+                        "type": "in",
+                        "amount": 2,
+                        "operator": "22377218",
+                        "remark": "测试测试"
+                    },
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
             },
             {
                 "id": 9,
                 "name": "我是电子产品",
                 "category": "电子产品",
                 "capacity": 99999,
-                "quantity": 9999,
-                "expiration_date": "2003-12-12"
+                "quantity": 10001,
+                "expiration_date": "2003-12-12",
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-29",
+                        "quantity": 10001
+                    },
+                    {
+                        "date": "2025-05-25",
+                        "quantity": 1000
+                    },
+                    {
+                        "date": "2025-05-24",
+                        "quantity": 900
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2025-05-29 21:08",
+                        "type": "out",
+                        "amount": -1,
+                        "operator": "22377218",
+                        "remark": "chuchcuhcuc"
+                    },
+                    {
+                        "timestamp": "2025-05-29 21:08",
+                        "type": "in",
+                        "amount": 2,
+                        "operator": "22377218",
+                        "remark": ""
+                    },
+                    {
+                        "timestamp": "2025-05-29 21:07",
+                        "type": "in",
+                        "amount": 1,
+                        "operator": "22377218",
+                        "remark": ""
+                    },
+                    {
+                        "timestamp": "2024-05-25 14:30",
+                        "type": "in",
+                        "amount": 100,
+                        "operator": "管理员",
+                        "remark": "常规补货"
+                    },
+                    {
+                        "timestamp": "2024-05-24 16:20",
+                        "type": "out",
+                        "amount": -50,
+                        "operator": "销售部",
+                        "remark": "订单发货"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2025-05-29 21:15",
+                        "content": "耶耶耶备注备注"
+                    },
+                    {
+                        "timestamp": "2025-05-29 21:15",
+                        "content": "备注"
+                    },
+                    {
+                        "timestamp": "2025-05-29 21:15",
+                        "content": "备注"
+                    },
+                    {
+                        "timestamp": "2024-05-25",
+                        "content": "需要注意温度控制在20度以下"
+                    },
+                    {
+                        "timestamp": "2024-05-24",
+                        "content": "已完成月度盘点"
+                    }
+                ]
+            },
+            {
+                "id": 10,
+                "name": "测试仓库",
+                "category": "食品",
+                "capacity": 10000,
+                "quantity": 3002,
+                "expiration_date": "2026-07-01",
+                "location": "A区-01货架",
+                "manager": "张三",
+                "history": [
+                    {
+                        "date": "2025-05-29",
+                        "quantity": 3002
+                    }
+                ],
+                "operations": [
+                    {
+                        "timestamp": "2025-05-29 21:26",
+                        "type": "in",
+                        "amount": 3000,
+                        "operator": "22377218",
+                        "remark": "rukuruku"
+                    },
+                    {
+                        "timestamp": "2025-05-29 21:26",
+                        "type": "in",
+                        "amount": 2,
+                        "operator": "22377218",
+                        "remark": "测试测试"
+                    }
+                ],
+                "notes": [
+                    {
+                        "timestamp": "2025-05-29 21:22",
+                        "content": "你好"
+                    }
+                ]
+            },
+            {
+                "id": 11,
+                "name": "仓库负责人",
+                "category": "食品",
+                "capacity": 1000,
+                "quantity": 0,
+                "expiration_date": "",
+                "location": "你猜",
+                "manager": "wyy",
+                "history": [],
+                "operations": [],
+                "notes": []
             }
         ]
     }

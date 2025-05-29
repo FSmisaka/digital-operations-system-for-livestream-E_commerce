@@ -107,21 +107,20 @@
                 </tr>
               </thead>
               <tbody>
-                <!-- 示例数据 -->
+                <!-- 数据 -->
+                {% for op in inv.operations %}
                 <tr>
-                  <td>2024-05-25 14:30</td>
-                  <td><span class="badge bg-success">入库</span></td>
-                  <td>+100</td>
-                  <td>管理员</td>
-                  <td>常规补货</td>
+                  <td>{{ op.timestamp }}</td>
+                  <td>
+                    <span class="badge {% if op.type == 'in' %}bg-success{% else %}bg-danger{% endif %}">
+                      {{ '入库' if op.type == 'in' else '出库' }}
+                    </span>
+                  </td>
+                  <td>{{ op.amount }}</td>
+                  <td>{{ op.operator }}</td>
+                  <td>{{ op.remark }}</td>
                 </tr>
-                <tr>
-                  <td>2024-05-24 16:20</td>
-                  <td><span class="badge bg-danger">出库</span></td>
-                  <td>-50</td>
-                  <td>销售部</td>
-                  <td>订单发货</td>
-                </tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>
@@ -136,22 +135,21 @@
           <h5 class="mb-0"><i class="bi bi-sticky"></i> 仓库备注</h5>
         </div>
         <div class="card-body">
-          <form>
+          <form id="noteForm" onsubmit="submitNote(event)">
+            <input type="hidden" name="inv_id" value="{{ inv.id }}">
             <div class="mb-3">
-              <textarea class="form-control" rows="3" placeholder="添加备注..."></textarea>
+              <textarea class="form-control" name="content" rows="3" placeholder="添加备注..." required></textarea>
             </div>
             <button type="submit" class="btn btn-primary btn-sm">保存备注</button>
           </form>
           <hr>
           <div class="notes-list">
+            {% for note in inv.notes %}
             <div class="note-item mb-2">
-              <small class="text-muted">2024-05-25</small>
-              <p class="mb-1">需要注意温度控制在20度以下</p>
+              <small class="text-muted">{{ note.timestamp }}</small>
+              <p class="mb-1">{{ note.content }}</p>
             </div>
-            <div class="note-item mb-2">
-              <small class="text-muted">2024-05-24</small>
-              <p class="mb-1">已完成月度盘点</p>
-            </div>
+            {% endfor %}
           </div>
         </div>
       </div>
@@ -163,16 +161,49 @@
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+
+// 添加备注
+function submitNote(event) {
+  event.preventDefault();
+  const form = event.target;
+  const formData = new FormData(form);
+
+  fetch(`/inv/note/${formData.get('inv_id')}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      content: formData.get('content')
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // 清空输入框
+      form.reset();
+      // 刷新页面显示新备注
+      window.location.reload();
+    } else {
+      alert(data.message || '添加备注失败，请重试');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('添加备注失败，请重试');
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   // 库存趋势图表
   const ctx = document.getElementById('stockChart').getContext('2d');
   new Chart(ctx, {
     type: 'line',
     data: {
-      labels: ['1月', '2月', '3月', '4月', '5月'],
+      labels: {{inv.chart_labels|tojson}} ,
       datasets: [{
         label: '库存量',
-        data: [650, 590, 800, 810, 560],
+        data: {{ inv.chart_data|tojson }} ,
         borderColor: 'rgb(75, 192, 192)',
         tension: 0.1
       }]

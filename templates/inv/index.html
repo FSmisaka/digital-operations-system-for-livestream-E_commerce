@@ -302,6 +302,32 @@ endblock %} {% block head %}
               如果未计划销毁仓库，请在日历中【清除】日期
             </div>
           </div>
+          <div class="mb-3">
+            <label for="inventoryLocation" class="form-label">
+              存放位置 <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="inventoryLocation"
+              name="location"
+              placeholder="例如：A区-01货架"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="inventoryManager" class="form-label">
+              负责人 <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="inventoryManager"
+              name="manager"
+              placeholder="请输入负责人姓名"
+              required
+            />
+          </div>
         </form>
       </div>
       <div class="modal-footer">
@@ -335,6 +361,10 @@ endblock %} {% block head %}
             <label class="form-label">入库数量 <span class="text-danger">*</span></label>
             <input type="number" class="form-control" name="quantity" required min="1">
           </div>
+          <div class="mb-3">
+            <label class="form-label">备注</label>
+            <textarea class="form-control" name="remark" rows="2" placeholder="请输入操作备注..."></textarea>
+          </div>
         </form>
       </div>
       <div class="modal-footer">
@@ -363,6 +393,10 @@ endblock %} {% block head %}
           <div class="mb-3">
             <label class="form-label">出库数量 <span class="text-danger">*</span></label>
             <input type="number" class="form-control" name="quantity" required min="1">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">备注</label>
+            <textarea class="form-control" name="remark" rows="2" placeholder="请输入操作备注..."></textarea>
           </div>
         </form>
       </div>
@@ -465,29 +499,29 @@ endblock %} {% block head %}
 
 // 删除仓库
 function deleteInventory(invId) {
-if (!confirm(`确定要删除仓库${invId}？此操作不可恢复。`)) {
-  return;
-}
+  if (!confirm(`确定要删除仓库${invId}？此操作不可恢复。`)) {
+    return;
+  }
 
-fetch(`/inv/delete/${invId}`, {
-  method: 'DELETE',
-  headers: {
-    'Content-Type': 'application/json',
-  }
-})
-.then(response => response.json())
-.then(data => {
-  if (data.success) {
-    alert('删除成功！');
-    window.location.reload();
-  } else {
-    alert(data.message || '删除失败，请稍后重试');
-  }
-})
-.catch(error => {
-  console.error('Error:', error);
-  alert('删除失败，请稍后重试');
-});
+  fetch(`/inv/delete/${invId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('删除成功！');
+      window.location.reload();
+    } else {
+      alert(data.message || '删除失败，请稍后重试');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('删除失败，请稍后重试');
+  });
 }
 
 function openStockInModal(invId, invName) {
@@ -507,7 +541,8 @@ function submitStockIn() {
     },
     body: JSON.stringify({
       operation: 'in',
-      quantity: parseInt(formData.get('quantity'))
+      quantity: parseInt(formData.get('quantity')), 
+      remark: formData.get('remark')
     })
   })
   .then(response => response.json())
@@ -542,7 +577,8 @@ function submitStockOut() {
     },
     body: JSON.stringify({
       operation: 'out',
-      quantity: parseInt(formData.get('quantity'))
+      quantity: parseInt(formData.get('quantity')),
+      remark: formData.get('remark')
     })
   })
   .then(response => response.json())

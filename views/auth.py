@@ -85,6 +85,7 @@ def user_center():
                            username=user['username'],
                            join_date=join_date,
                            avatar=user['avatar'])
+
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
