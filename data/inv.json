@@ -5,7 +5,7 @@
             {
                 "id": 1,
                 "name": "美妆产品",
-                "category": "化妆品",
+                "category": "美妆产品",
                 "capacity": 10000,
                 "quantity": 1000,
                 "expiration_date": "2024-12-31",

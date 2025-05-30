@@ -205,7 +205,7 @@ endblock %} {% block head %}
               {% if inv.quantity < 0.2*inv.capacity and ns.cnt < 5 %}
                 <li class="list-group-item">
                   <a
-                    href="#"
+                    href="{{ url_for('forum.topic', topic_id=inv.recommended_product_id) }}"
                     target="_blank"
                     class="text-decoration-none"
                   > {{ inv.name }} <i class="bi bi-box-arrow-up-right small"></i>

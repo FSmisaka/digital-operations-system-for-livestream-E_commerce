@@ -12,15 +12,34 @@ logger = logging.getLogger(__name__)
 bp = Blueprint('inv', __name__)
 
 INV_FILE = f'../data/inv.json'
+PRODUCT_FILE = f'../data/forum/topics.json'
 
 @bp.route('/')
 @login_required
 def index():
+    # 导入产品数据 之后修改为从数据库中取
+    products = load_data(PRODUCT_FILE)
+    category_products_map = {}
+    for product in products:
+        category = product['category_name']
+        if category not in category_products_map:
+            category_products_map[category] = []
+        category_products_map[category].append(product)
+
     user_id = session.get('user_id')
     inv_list = []
     for inv in load_data(INV_FILE):
         if inv['user_id'] == user_id:
             inv_list = inv['inventory']
+            # 为每个仓库设置一个推荐产品
+            for item in inv_list:
+                category = item['category']
+                if category in category_products_map:
+                    matching_products = category_products_map[category]
+                    if matching_products:
+                        item['recommended_product_id'] = matching_products[0]['id']
+                item['recommended_product_id'] = 2
+            
             break
     
     for i in inv_list:
