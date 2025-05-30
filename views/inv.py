@@ -234,7 +234,14 @@ def create_inventory():
         "location": location,
         "manager": manager,
         "history": [],
-        "operations": [],
+        "operations": [
+            {
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                "type": "create",
+                "operator": session.get('username'),
+                "remark": "创建仓库"
+            }
+        ],
         "notes": []
     }
 
@@ -246,3 +253,53 @@ def create_inventory():
 
     save_data(INV_FILE, inventory)
     return jsonify({'success': True, 'message': '仓库创建成功', 'user_id': user_id, 'id': new_id})
+
+@bp.route('/edit/<int:inv_id>', methods=['POST'])
+@login_required
+def edit_inventory(inv_id):
+    data = request.get_json()
+    
+    try:
+        capacity = int(data.get('capacity', 0))
+        if capacity <= 0:
+            return jsonify({'success': False, 'message': '容量必须大于0'}), 400
+            
+        user_id = session.get('user_id')
+        inventory = load_data(INV_FILE)
+        
+        for inv in inventory:
+            if inv['user_id'] == user_id:
+                for item in inv['inventory']:
+                    if item['id'] == inv_id:
+                        # 验证容量
+                        if capacity < item['quantity']:
+                            return jsonify({
+                                'success': False, 
+                                'message': f'容量不能小于当前库存量({item["quantity"]})'
+                            }), 400
+                        
+                        # 更新信息
+                        item['name'] = data.get('name', item['name'])
+                        item['category'] = data.get('category', item['category'])
+                        item['capacity'] = capacity
+                        item['expiration_date'] = data.get('expiration_date') or None
+                        item['location'] = data.get('location', item['location'])
+                        item['manager'] = data.get('manager', item['manager'])
+                        
+                        # 添加修改记录
+                        new_operation = {
+                            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                            "type": "edit",
+                            "operator": session.get('username'),
+                            "remark": "修改仓库"
+                        }
+                        item['operations'].insert(0, new_operation)
+                        
+                        save_data(INV_FILE, inventory)
+                        return jsonify({'success': True, 'message': '修改成功'})
+                        
+        return jsonify({'success': False, 'message': '仓库不存在'}), 404
+        
+    except Exception as e:
+        logger.error(f"Error editing inventory: {str(e)}")
+        return jsonify({'success': False, 'message': '修改失败，请稍后重试'}), 500

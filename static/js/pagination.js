@@ -62,7 +62,7 @@ function initInvPagination() {
   const invCards = invContainer.querySelectorAll(".inv-card");
   if (invCards.length === 0) return;
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 4;
   const totalPages = Math.ceil(invCards.length / itemsPerPage);
   let currentPage = 1;
 
@@ -212,9 +212,9 @@ function updatePagination(pagination, currentPage, totalPages, type) {
       infoElement.textContent = `显示 ${startItem}-${endItem} 条，共 ${totalItems} 条`;
     }
     else if (type === "inv") {
-      const startItem = (currentPage - 1) * (5) + 1;
+      const startItem = (currentPage - 1) * (4) + 1;
       const endItem = Math.min(
-        currentPage * (5), 
+        currentPage * (4), 
         document.querySelectorAll(".inv-card").length
       );
       const totalItems = document.querySelectorAll(".inv-card").length;

@@ -109,17 +109,19 @@
               <tbody>
                 <!-- 数据 -->
                 {% for op in inv.operations %}
-                <tr>
-                  <td>{{ op.timestamp }}</td>
-                  <td>
-                    <span class="badge {% if op.type == 'in' %}bg-success{% else %}bg-danger{% endif %}">
-                      {{ '入库' if op.type == 'in' else '出库' }}
-                    </span>
-                  </td>
-                  <td>{{ op.amount }}</td>
-                  <td>{{ op.operator }}</td>
-                  <td>{{ op.remark }}</td>
-                </tr>
+                  {% if op.type == 'in' or op.type == 'out' %}
+                  <tr>
+                    <td>{{ op.timestamp }}</td>
+                    <td>
+                      <span class="badge {% if op.type == 'in' %}bg-success{% else %}bg-danger{% endif %}">
+                        {{ '入库' if op.type == 'in' else '出库' }}
+                      </span>
+                    </td>
+                    <td>{{ op.amount }}</td>
+                    <td>{{ op.operator }}</td>
+                    <td>{{ op.remark }}</td>
+                  </tr>
+                  {% endif %}
                 {% endfor %}
               </tbody>
             </table>

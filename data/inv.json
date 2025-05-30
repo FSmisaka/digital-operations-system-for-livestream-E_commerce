@@ -819,7 +819,7 @@
                 "id": 9,
                 "name": "我是电子产品",
                 "category": "电子产品",
-                "capacity": 99999,
+                "capacity": 11111,
                 "quantity": 10001,
                 "expiration_date": "2003-12-12",
                 "location": "A区-01货架",
@@ -839,6 +839,12 @@
                     }
                 ],
                 "operations": [
+                    {
+                        "timestamp": "2025-05-30 09:22",
+                        "type": "edit",
+                        "operator": "22377218",
+                        "remark": "修改仓库"
+                    },
                     {
                         "timestamp": "2025-05-29 21:08",
                         "type": "out",
@@ -942,11 +948,18 @@
                 "category": "食品",
                 "capacity": 1000,
                 "quantity": 0,
-                "expiration_date": "",
+                "expiration_date": null,
                 "location": "你猜",
-                "manager": "wyy",
+                "manager": "王羿珧",
                 "history": [],
-                "operations": [],
+                "operations": [
+                    {
+                        "timestamp": "2025-05-30 09:24",
+                        "type": "edit",
+                        "operator": "22377218",
+                        "remark": "修改仓库"
+                    }
+                ],
                 "notes": []
             }
         ]

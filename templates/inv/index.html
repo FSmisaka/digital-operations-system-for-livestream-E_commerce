@@ -94,8 +94,63 @@ endblock %} {% block head %}
             </div>
             <!-- 右侧操作区 -->
             <div class="col-md-9 p-3 d-flex flex-column justify-content-between">
-              <div>
-                <p class="mb-0"> 其它信息</p>
+              <div class="mb-3">
+                <!-- 存储信息行 -->
+                <div class="row mb-2">
+                  <div class="col-md-5">
+                    <p class="mb-1">
+                      <i class="bi bi-geo-alt text-primary"></i> 
+                      <strong>存放位置:</strong> {{ inv.location }}
+                    </p>
+                    <p class="mb-1">
+                      <i class="bi bi-person text-success"></i> 
+                      <strong>负责人:</strong> {{ inv.manager }}
+                    </p>
+                  </div>
+                  <div class="col-md-7">
+                    <p class="mb-1">
+                      <i class="bi bi-clock-history text-info"></i>
+                      <strong>最近操作:</strong> 
+                      {% set latest_op = inv.operations[0] %}
+                      {{ latest_op.timestamp }} ({{ '入库' if latest_op.type == 'in' else '出库' if latest_op.type == 'out' else '编辑' }})
+                    </p>
+                    <p class="mb-1">
+                      <i class="bi bi-chat-left-text text-warning"></i>
+                      <strong>最新备注:</strong>
+                      {% if inv.notes %}
+                        {{ inv.notes[0].content[:10] }}...
+                      {% else %}
+                        暂无备注
+                      {% endif %}
+                    </p>
+                  </div>
+                </div>
+
+                <!-- 库存状态进度条 -->
+                <div class="mb-2">
+                  {% set percentage = (inv.quantity / inv.capacity * 100) %}
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <small>库存使用率</small>
+                    <small>{{ percentage|round(1) }}%</small>
+                  </div>
+                  <div class="progress" style="height: 0.5rem;">
+                    <div class="progress-bar 
+                      {% if percentage < 33 %}
+                        bg-danger
+                      {% elif percentage < 66 %}
+                        bg-warning
+                      {% else %}
+                        bg-success
+                      {% endif %}"
+                      role="progressbar"
+                      style="width: {{ percentage }}%"
+                      aria-valuenow="{{ inv.quantity }}"
+                      aria-valuemin="0"
+                      aria-valuemax="{{ inv.capacity }}">
+                    </div>
+                  </div>
+                </div>
+
               </div>
               <div class="btn-group gap-2" role="group">
                 <a href="{{ url_for('inv.detail', inv_id=inv.id) }}" class="btn btn-sm btn-primary">
@@ -109,6 +164,9 @@ endblock %} {% block head %}
                 </button>
                 <button class="btn btn-sm btn-danger" onclick="deleteInventory('{{ inv.id }}')">
                   <i class="bi bi-trash"></i> 删除仓库
+                </button>
+                <button class="btn btn-sm btn-info" onclick='openEditModal("{{ inv.id }}", {{ inv|tojson }})'>
+                  <i class="bi bi-pencil"></i> 修改仓库
                 </button>
               </div>
             </div>
@@ -342,6 +400,66 @@ endblock %} {% block head %}
   </div>
 </div>
 
+<!-- 修改仓库模态框 -->
+<div class="modal fade" id="editInventoryModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-pencil"></i> 修改仓库信息</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editInventoryForm">
+          <input type="hidden" id="editInvId" name="inv_id">
+          <div class="mb-3">
+            <label for="editName" class="form-label">仓库名称</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="editName" 
+              name="name" 
+              placeholder="请输入仓库名称（1-8个字）" 
+              maxlength="8"
+            >
+          </div>
+          <div class="mb-3">
+            <label for="editCategory" class="form-label">仓库类别</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="editCategory" 
+              name="category"
+              placeholder="食品、化妆品、电子产品、..."
+              maxlength="10"
+            >
+          </div>
+          <div class="mb-3">
+            <label for="editCapacity" class="form-label">数量上限</label>
+            <input type="number" class="form-control" id="editCapacity" name="capacity" placeholder="例如：10000" min="0">
+            <div class="form-text" id="capacityHint"></div>
+          </div>
+          <div class="mb-3">
+            <label for="editExpiration" class="form-label">销毁日期</label>
+            <input type="date" class="form-control" id="editExpiration" name="expiration_date">
+          </div>
+          <div class="mb-3">
+            <label for="editLocation" class="form-label">存放位置</label>
+            <input type="text" class="form-control" id="editLocation" name="location" placeholder="例如：A区-01货架">
+          </div>
+          <div class="mb-3">
+            <label for="editManager" class="form-label">负责人</label>
+            <input type="text" class="form-control" id="editManager" name="manager" placeholder="修改负责人姓名">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" onclick="submitEdit()">保存修改</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 入库模态框 -->
 <div class="modal fade" id="stockInModal" tabindex="-1">
   <div class="modal-dialog">
@@ -496,6 +614,98 @@ endblock %} {% block head %}
     }
 
   });
+
+// 修改仓库
+function openEditModal(invId, inv) {
+  try {
+    console.log('Opening edit modal for inventory:', inv);
+    
+    // 验证数据
+    if (!inv || !invId) {
+      console.error('Invalid inventory data');
+      return;
+    }
+
+    // 设置表单值
+    document.getElementById('editInvId').value = invId;
+    document.getElementById('editName').value = inv.name || '';
+    document.getElementById('editCategory').value = inv.category || '';
+    document.getElementById('editCapacity').value = inv.capacity || 0;
+    document.getElementById('editLocation').value = inv.location || '';
+    document.getElementById('editManager').value = inv.manager || '';
+
+    // 处理日期
+    if (inv.expiration_date) {
+      const date = new Date(inv.expiration_date);
+      if (!isNaN(date.getTime())) {
+        const formattedDate = date.toISOString().split('T')[0];
+        document.getElementById('editExpiration').value = formattedDate;
+      } else {
+        document.getElementById('editExpiration').value = '';
+      }
+    } else {
+      document.getElementById('editExpiration').value = '';
+    }
+
+    // 设置capacity最小值
+    const minCapacity = Math.max(inv.quantity || 0, 0);
+    document.getElementById('editCapacity').min = minCapacity;
+    document.getElementById('capacityHint').textContent = 
+      `最小容量不能小于当前库存量(${minCapacity})`;
+
+    // 显示模态框
+    const modal = new bootstrap.Modal(document.getElementById('editInventoryModal'));
+    modal.show();
+  } catch (error) {
+    console.error('Error in openEditModal:', error);
+    alert('打开编辑窗口失败，请重试');
+  }
+}
+
+function submitEdit() {
+  const form = document.getElementById('editInventoryForm');
+  const formData = new FormData(form);
+  const invId = formData.get('inv_id');
+
+  // 构建提交的数据对象
+  const submitData = {
+    name: formData.get('name'),
+    category: formData.get('category'),
+    capacity: parseInt(formData.get('capacity')),
+    expiration_date: formData.get('expiration_date') || null,
+    location: formData.get('location'),
+    manager: formData.get('manager')
+  };
+
+  // 验证数据
+  if (!submitData.name || !submitData.category || !submitData.capacity) {
+    alert('请填写必要信息');
+    return;
+  }
+
+  console.log('Submitting edit data:', submitData); // 添加调试日志
+
+  fetch(`/inv/edit/${invId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(submitData)
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('修改成功！');
+      window.location.reload();
+    } else {
+      alert(data.message || '修改失败，请重试');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('修改失败，请重试');
+  });
+}
 
 // 删除仓库
 function deleteInventory(invId) {
