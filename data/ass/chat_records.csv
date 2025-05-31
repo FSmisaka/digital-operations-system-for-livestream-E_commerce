@@ -15,3 +15,4 @@ user_id,message,is_customer,timestamp
 1,你好,False,2025-05-25 20:49:09
 1,hello,False,2025-05-25 20:51:11
 2,您好,False,2025-05-28 15:50:19
+3,货还满意吗,False,2025-05-31 20:10:59
