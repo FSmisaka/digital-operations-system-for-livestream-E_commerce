@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, current_app, jsonify, request
 import json
 import os
 import logging
-from views.auth import login_required
+from views.auth import login_required, user_required
 import requests
 from config import DEEPSEEK_API_KEY
 from openai import OpenAI
@@ -21,12 +21,12 @@ client = OpenAI(
 )
 
 @bp.route('/')
-@login_required
+@user_required
 def view_data():
     return render_template('visualization/view_data.html')
 
 @bp.route('/api/generate-transcript', methods=['POST'])
-@login_required
+@user_required
 def generate_transcript():
     try:
         data = request.get_json()
@@ -51,7 +51,7 @@ def generate_transcript():
         return jsonify({'error': str(e)}), 500
 
 @bp.route('/api/streamer-data')
-@login_required
+@user_required
 def get_streamer_data():
     try:
         data_file = os.path.join(current_app.root_path, 'data', 'streamer_data.json')
@@ -66,7 +66,7 @@ def get_streamer_data():
         return jsonify({'error': str(e)}), 500
 
 @bp.route('/api/streamer-stats')
-@login_required
+@user_required
 def get_streamer_stats():
     try:
         import pandas as pd

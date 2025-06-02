@@ -1,41 +1,181 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <h2><i class="bi bi-telephone"></i> 售后管理</h2>
-            <p class="lead">轻松记录库存，自动采购提醒</p>
+<div class="container py-4">
+    <!-- 顶部欢迎区域 -->
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <div class="welcome-card card bg-gradient-primary text-white shadow-lg">
+                <div class="card-body p-5">
+                    <div class="d-flex align-items-center">
+                        <div class="welcome-icon me-4">
+                            <i class="bi bi-headset"></i>
+                        </div>
+                        <div>
+                            <h1 class="display-4 mb-3">售后服务中心</h1>
+                            <p class="lead mb-0">一站式售后解决方案，提供专业的客服支持、高效的退货处理和实时物流跟踪服务</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row">
+
+    <!-- 功能卡片区域 -->
+    <div class="row g-4">
+        <!-- 客服聊天卡片 -->
         <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">客服聊天</h5>
-                    <p class="card-text">与客户进行在线沟通，查看历史对话记录。</p>
-                    <a href="{{ url_for('ass.customer_service') }}" class="btn btn-primary">进入客服聊天</a>
+            <div class="card h-100 shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3 pulse-animation">
+                        <i class="bi bi-chat-dots fs-2"></i>
+                    </div>
+                    <h3 class="card-title h4 mb-3">客服聊天</h3>
+                    <p class="card-text text-muted mb-4">专业的在线客服支持，实时解答客户疑问，提供优质服务体验</p>
+                    <a href="{{ url_for('ass.customer_service') }}" class="btn btn-primary btn-lg w-100 btn-hover-effect">
+                        <i class="bi bi-arrow-right-circle me-2"></i>进入客服系统
+                    </a>
                 </div>
             </div>
         </div>
+
+        <!-- 退货处理卡片 -->
         <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">退货处理</h5>
-                    <p class="card-text">管理和处理客户的退货申请，支持筛选和回复。</p>
-                    <a href="{{ url_for('ass.return_processing') }}" class="btn btn-warning">进入退货处理</a>
+            <div class="card h-100 shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-warning bg-gradient text-white rounded-circle mb-3 pulse-animation">
+                        <i class="bi bi-arrow-return-left fs-2"></i>
+                    </div>
+                    <h3 class="card-title h4 mb-3">退货处理</h3>
+                    <p class="card-text text-muted mb-4">高效的退货申请处理流程，快速响应客户需求，提升客户满意度</p>
+                    <a href="{{ url_for('ass.return_processing') }}" class="btn btn-warning btn-lg w-100 btn-hover-effect">
+                        <i class="bi bi-arrow-right-circle me-2"></i>处理退货申请
+                    </a>
                 </div>
             </div>
         </div>
+
+        <!-- 物流管理卡片 -->
         <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">物流管理</h5>
-                    <p class="card-text">查看订单物流状态，支持分类筛选。</p>
-                    <a href="{{ url_for('ass.logistics') }}" class="btn btn-info">进入物流管理</a>
+            <div class="card h-100 shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-info bg-gradient text-white rounded-circle mb-3 pulse-animation">
+                        <i class="bi bi-truck fs-2"></i>
+                    </div>
+                    <h3 class="card-title h4 mb-3">物流管理</h3>
+                    <p class="card-text text-muted mb-4">实时物流状态跟踪，订单配送全程监控，确保物流服务品质</p>
+                    <a href="{{ url_for('ass.logistics') }}" class="btn btn-info btn-lg w-100 btn-hover-effect">
+                        <i class="bi bi-arrow-right-circle me-2"></i>查看物流状态
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+/* 基础样式 */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+}
+
+.welcome-card {
+    border: none;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.welcome-icon {
+    font-size: 3rem;
+    background: rgba(255, 255, 255, 0.2);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 卡片悬停效果 */
+.hover-card {
+    transition: all 0.3s ease-in-out;
+    border: none;
+    border-radius: 1rem;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 图标样式 */
+.feature-icon {
+    width: 4.5rem;
+    height: 4.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+/* 脉冲动画 */
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(78, 115, 223, 0.4);
+    }
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(78, 115, 223, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(78, 115, 223, 0);
+    }
+}
+
+/* 按钮样式 */
+.btn {
+    border-radius: 0.5rem;
+    font-weight: 500;
+    padding: 0.8rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-hover-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-hover-effect:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn-hover-effect:hover:after {
+    width: 300px;
+    height: 300px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .welcome-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+}
+</style>
 {% endblock %} 

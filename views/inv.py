@@ -1,6 +1,6 @@
 import logging
 import json
-from views.auth import login_required
+from views.auth import login_required, user_required
 from views.data_utils import load_data, save_data
 from flask import Blueprint, render_template, jsonify, request, session
 from datetime import date, datetime
@@ -15,7 +15,7 @@ INV_FILE = f'../data/inv.json'
 PRODUCT_FILE = f'../data/forum/topics.json'
 
 @bp.route('/')
-@login_required
+@user_required
 def index():
     # 导入产品数据 之后修改为从数据库中取
     products = load_data(PRODUCT_FILE)
@@ -61,7 +61,7 @@ def index():
     )
 
 @bp.route('/delete/<int:inv_id>', methods=['DELETE'])
-@login_required
+@user_required
 def delete_inventory(inv_id):
     user_id = session.get('user_id')
     inventory = load_data(INV_FILE)
@@ -89,7 +89,7 @@ def delete_inventory(inv_id):
         return jsonify({'success': False, 'message': str(e)}), 500
 
 @bp.route('/detail/<int:inv_id>')
-@login_required
+@user_required
 def detail(inv_id):
     user_id = session.get('user_id')
     inv_data = None
@@ -124,7 +124,7 @@ def detail(inv_id):
     return render_template('inv/detail.html', inv=inv_data)
 
 @bp.route('/note/<int:inv_id>', methods=['POST'])
-@login_required
+@user_required
 def add_note(inv_id):
     data = request.get_json()
     content = data.get('content')
@@ -158,7 +158,7 @@ def add_note(inv_id):
     return jsonify({'success': False, 'message': '仓库不存在'}), 404
 
 @bp.route('/stock/<int:inv_id>', methods=['POST'])
-@login_required
+@user_required
 def update_stock(inv_id):
     data = request.get_json()
     operation = data.get('operation')  # 'in' or 'out'
@@ -216,7 +216,7 @@ def update_stock(inv_id):
     return jsonify({'success': False, 'message': '仓库不存在'}), 404
 
 @bp.route('/create_inventory', methods=['POST'])
-@login_required
+@user_required
 def create_inventory():
     # 获取表单数据
     category = request.form.get('category')
@@ -274,7 +274,7 @@ def create_inventory():
     return jsonify({'success': True, 'message': '仓库创建成功', 'user_id': user_id, 'id': new_id})
 
 @bp.route('/edit/<int:inv_id>', methods=['POST'])
-@login_required
+@user_required
 def edit_inventory(inv_id):
     data = request.get_json()
     

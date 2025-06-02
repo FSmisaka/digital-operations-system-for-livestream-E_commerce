@@ -39,11 +39,20 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
+            {% if session.user_role == 'supplier' %}
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="bi bi-house-door-fill"></i> 首页
+              </a>
+            </li>
+            {% else %}
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('main.index') }}">
                 <i class="bi bi-house-door-fill"></i> 首页
               </a>
             </li>
+            {% endif %}
+            {% if session.user_role == 'user' %}
             <li class="nav-item">
               <a
                 class="nav-link"
@@ -57,23 +66,24 @@
                 <i class="bi bi-basket-fill"></i> 选品建议
               </a>
             </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('forum.index') }}">
                 <i class="bi bi-cart-check-fill"></i> 采购中心
               </a>
             </li>
-            </li>
+            {% if session.user_role == 'user' %}
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('inv.index') }}">
                 <i class="bi bi-box-seam-fill"></i> 库存记录
               </a>
-            </li>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('ass.index') }}">
                 <i class="bi bi-telephone-fill"></i> 售后管理
               </a>
             </li>
+            {% endif %}
 
             {% if session.user_role == 'admin' %}
             <li class="nav-item">

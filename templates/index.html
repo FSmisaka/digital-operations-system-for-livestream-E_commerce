@@ -138,6 +138,50 @@ endblock %} {% block content %}
     </div>
   </div>
 </div>
+
+<div class="row mt-4">
+  <div class="col-md-12">
+    <div class="card mb-4 shadow-sm home-card">
+      <div class="card-header bg-primary text-white">
+        <i class="bi bi-headset"></i> 售后管理
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card mb-3">
+              <div class="card-body text-center">
+                <i class="bi bi-chat-dots fs-1 text-primary mb-3"></i>
+                <h5 class="card-title">客服聊天</h5>
+                <p class="card-text">处理客户咨询和问题反馈</p>
+                <a href="{{ url_for('ass.customer_service') }}" class="btn btn-primary">进入客服系统</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card mb-3">
+              <div class="card-body text-center">
+                <i class="bi bi-arrow-return-left fs-1 text-primary mb-3"></i>
+                <h5 class="card-title">退货处理</h5>
+                <p class="card-text">管理退货申请和处理流程</p>
+                <a href="{{ url_for('ass.return_processing') }}" class="btn btn-primary">处理退货</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card mb-3">
+              <div class="card-body text-center">
+                <i class="bi bi-truck fs-1 text-primary mb-3"></i>
+                <h5 class="card-title">物流管理</h5>
+                <p class="card-text">跟踪订单物流状态</p>
+                <a href="{{ url_for('ass.logistics') }}" class="btn btn-primary">查看物流</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %} {% block scripts %}
 <script>
   // 页面加载完成后获取最新行情数据

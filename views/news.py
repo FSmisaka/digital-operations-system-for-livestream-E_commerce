@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for, session
-from views.auth import login_required
+from views.auth import login_required, user_required
 import os
 import json
 import logging
@@ -77,7 +77,7 @@ def calculate_recommendations(user_id):
     return sorted_products
 
 @bp.route('/')
-@login_required
+@user_required
 def index():
     # 获取用户ID
     user_id = session.get('user_id', '0')
@@ -126,6 +126,7 @@ def detail(product_id):  # 函数参数名也修改
     )
 
 @bp.route('/search')
+@user_required
 def search():
     """商品搜索功能（需修改模板）"""
     keyword = request.args.get('keyword', '')

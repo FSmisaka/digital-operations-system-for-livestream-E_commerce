@@ -58,6 +58,35 @@ def login_required(view):
         return view(*args, **kwargs)
     return wrapped_view
 
+# 直播电商
+def user_required(view):
+    @wraps(view)
+    def wrapped_view(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for('auth.login'))
+
+        if session.get('user_role') != 'user':
+            flash('您没有权限访问该页面', 'danger')
+            return redirect(url_for('main.index'))
+
+        return view(*args, **kwargs)
+    return wrapped_view
+
+# 供应商
+def supplier_required(view):
+    @wraps(view)
+    def wrapped_view(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for('auth.login'))
+
+        if session.get('user_role') != 'supplier':
+            flash('您没有权限访问该页面', 'danger')
+            return redirect(url_for('main.index'))
+
+        return view(*args, **kwargs)
+    return wrapped_view
+
+# 管理员
 def admin_required(view):
     @wraps(view)
     def wrapped_view(*args, **kwargs):
@@ -174,6 +203,7 @@ def login():
     return render_template('auth/login.html')
 
 @bp.route('/logout')
+@login_required
 def logout():
     session.clear()
     flash('您已成功登出', 'success')

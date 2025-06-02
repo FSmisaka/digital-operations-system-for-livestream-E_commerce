@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, session, jsonif
 import os
 import pandas as pd
 import logging
+from views.auth import user_required
 from views.data_utils import reset_data_file_path, get_full_data_path
 from views.news import load_news_data
 

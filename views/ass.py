@@ -4,6 +4,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 import pandas as pd
 import os
 from datetime import datetime
+from views.auth import login_required, user_required
 
 # 设置日志记录
 logging.basicConfig(level=logging.INFO)
@@ -12,6 +13,7 @@ logger = logging.getLogger(__name__)
 bp = Blueprint('ass', __name__)
 
 # 模拟数据库操作
+@user_required
 def read_csv(file_path):
     try:
         # 确保文件存在
@@ -26,6 +28,7 @@ def read_csv(file_path):
         logger.error(f"读取文件出错: {file_path}, 错误: {str(e)}")
         return pd.DataFrame()
 
+@user_required
 def write_csv(df, file_path):
     try:
         # 确保目录存在
@@ -37,11 +40,13 @@ def write_csv(df, file_path):
         logger.error(f"写入文件出错: {file_path}, 错误: {str(e)}")
 
 @bp.route('/')
+@user_required
 def index():
     return render_template('ass/index.html')
 
 # 客服聊天功能
 @bp.route('/customer_service')
+@user_required
 def customer_service():
     user_id = request.args.get('user_id')
     chat_records = read_csv('data/ass/chat_records.csv')
@@ -68,6 +73,7 @@ def customer_service():
 
 # 发送客服消息
 @bp.route('/api/send_message', methods=['POST'])
+@user_required
 def send_message():
     user_id = request.form.get('user_id')
     message = request.form.get('message')
@@ -101,6 +107,7 @@ def send_message():
 
 # 退货处理功能
 @bp.route('/return_processing')
+@user_required
 def return_processing():
     search = request.args.get('search', '')
     return_records = read_csv('data/ass/return_records.csv')
@@ -119,6 +126,7 @@ def return_processing():
 
 # 处理退货申请
 @bp.route('/api/process_return', methods=['POST'])
+@user_required
 def process_return():
     try:
         data = request.get_json()
@@ -154,6 +162,7 @@ def process_return():
 
 # 物流管理功能
 @bp.route('/logistics')
+@user_required
 def logistics():
     search = request.args.get('search', '')
     # 每次访问页面时都重新读取数据库
@@ -179,6 +188,7 @@ def logistics():
 
 # 更新物流状态
 @bp.route('/api/update_logistics', methods=['POST'])
+@user_required
 def update_logistics():
     try:
         # 重新读取数据库获取最新状态

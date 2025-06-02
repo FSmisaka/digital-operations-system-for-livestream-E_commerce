@@ -3,17 +3,28 @@
 {% block title %}客服聊天{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container-fluid py-4">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">首页</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('ass.index') }}">售后管理</a></li>
+                <li class="breadcrumb-item active">客服聊天</li>
+            </ol>
+        </nav>
+    </div>
     <div class="row">
         <!-- 用户列表 -->
         <div class="col-md-3">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">用户列表</h5>
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-people-fill me-2"></i>用户列表</h5>
                 </div>
-                <div class="list-group list-group-flush">
+                <div class="list-group list-group-flush user-list">
                     {% for user_id in chat_records['user_id'].unique() %}
-                    <a href="?user_id={{ user_id }}" class="list-group-item list-group-item-action {% if request.args.get('user_id')|int == user_id %}active{% endif %}">
+                    <a href="?user_id={{ user_id }}" 
+                       class="list-group-item list-group-item-action {% if request.args.get('user_id')|int == user_id %}active{% endif %}">
+                        <i class="bi bi-person-circle me-2"></i>
                         用户 {{ user_id }}
                     </a>
                     {% endfor %}
@@ -23,22 +34,44 @@
         
         <!-- 聊天区域 -->
         <div class="col-md-9">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">客服聊天记录</h5>
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-chat-dots me-2"></i>
+                            客服聊天记录
+                            {% if request.args.get('user_id') %}
+                            <span class="text-muted">- 用户 {{ request.args.get('user_id') }}</span>
+                            {% endif %}
+                        </h5>
+                        <div class="header-actions">
+                            <button class="btn btn-outline-primary btn-sm" onclick="refreshChat()">
+                                <i class="bi bi-arrow-clockwise"></i> 刷新
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-0">
                     <!-- 聊天记录显示区域 -->
-                    <div class="chat-messages" id="chatMessages" style="height: 500px; overflow-y: auto;">
+                    <div class="chat-messages" id="chatMessages">
                         {% for _, record in chat_records.iterrows() %}
                         {% if not request.args.get('user_id') or record.user_id|int == request.args.get('user_id')|int %}
                         <div class="message-wrapper {% if record.is_customer %}customer{% else %}service{% endif %}">
                             <div class="message">
+                                <div class="message-header">
+                                    <span class="message-sender">
+                                        {% if record.is_customer %}
+                                        <i class="bi bi-person"></i> 用户
+                                        {% else %}
+                                        <i class="bi bi-headset"></i> 客服
+                                        {% endif %}
+                                    </span>
+                                </div>
                                 <div class="message-content">
                                     {{ record.message }}
                                 </div>
                                 <div class="message-time">
-                                    {{ record.timestamp }}
+                                    <i class="bi bi-clock"></i> {{ record.timestamp }}
                                 </div>
                             </div>
                         </div>
@@ -47,12 +80,15 @@
                     </div>
                     
                     <!-- 消息输入区域 -->
-                    <div class="chat-input mt-3">
+                    <div class="chat-input">
                         <form id="messageForm" onsubmit="sendMessage(event)">
                             <input type="hidden" name="user_id" id="userId" value="{{ request.args.get('user_id', '') }}">
                             <div class="input-group">
-                                <input type="text" class="form-control" name="message" id="messageInput" placeholder="输入消息..." required>
-                                <button class="btn btn-primary" type="submit">发送</button>
+                                <input type="text" class="form-control" name="message" id="messageInput" 
+                                       placeholder="输入消息..." required>
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="bi bi-send"></i> 发送
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -63,9 +99,40 @@
 </div>
 
 <style>
+/* 用户列表样式 */
+.user-list {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.user-list .list-group-item {
+    border-left: none;
+    border-right: none;
+    transition: all 0.3s ease;
+}
+
+.user-list .list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+.user-list .list-group-item.active {
+    background-color: #e9ecef;
+    color: #000;
+    border-color: #dee2e6;
+}
+
+/* 聊天区域样式 */
+.chat-messages {
+    height: calc(100vh - 300px);
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
 .message-wrapper {
     display: flex;
     margin: 10px 0;
+    animation: fadeIn 0.3s ease;
 }
 
 .message-wrapper.customer {
@@ -78,41 +145,105 @@
 
 .message {
     max-width: 70%;
-    padding: 10px;
-    border-radius: 10px;
+    padding: 12px;
+    border-radius: 15px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.message-header {
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+.message-sender {
+    color: #6c757d;
 }
 
 .customer .message {
     background-color: #007bff;
     color: white;
+    border-bottom-right-radius: 5px;
 }
 
 .service .message {
-    background-color: #e9ecef;
+    background-color: white;
+    border-bottom-left-radius: 5px;
+}
+
+.message-content {
+    word-wrap: break-word;
 }
 
 .message-time {
     font-size: 0.8em;
-    color: #6c757d;
     margin-top: 5px;
+    opacity: 0.8;
 }
 
 .customer .message-time {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.9);
 }
 
-.chat-messages {
-    display: flex;
-    flex-direction: column;
+/* 输入区域样式 */
+.chat-input {
+    padding: 15px;
+    background-color: white;
+    border-top: 1px solid #dee2e6;
+}
+
+.chat-input .form-control {
+    border-radius: 20px;
+    padding: 10px 20px;
+}
+
+.chat-input .btn {
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin-left: 10px;
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 滚动条样式 */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 </style>
 
 <script>
 // 页面加载完成后滚动到底部
 document.addEventListener('DOMContentLoaded', function() {
+    scrollToBottom();
+});
+
+// 滚动到底部
+function scrollToBottom() {
     const chatMessages = document.getElementById('chatMessages');
     chatMessages.scrollTop = chatMessages.scrollHeight;
-});
+}
 
 // 发送消息
 function sendMessage(event) {
@@ -153,6 +284,11 @@ function sendMessage(event) {
         console.error('Error:', error);
         alert('发送失败，请重试');
     });
+}
+
+// 刷新聊天记录
+function refreshChat() {
+    location.reload();
 }
 </script>
 {% endblock %} 
