@@ -4,6 +4,15 @@
 
 {% block content %}
 <div class="container mt-4">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">首页</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('ass.index') }}">售后管理</a></li>
+                <li class="breadcrumb-item active">售后管理</li>
+            </ol>
+        </nav>
+    </div>
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">物流管理</h5>
@@ -17,9 +26,9 @@
             <!-- 搜索区域 -->
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <form class="form-inline" method="GET">
-                        <input type="text" class="form-control mr-2" name="search" placeholder="输入订单号或运单号" value="{{ request.args.get('search', '') }}">
-                        <button type="submit" class="btn btn-primary">搜索</button>
+                    <form class="d-flex gap-2" method="GET">
+                        <input type="text" class="form-control" name="search" placeholder="输入订单号或运单号" value="{{ request.args.get('search', '') }}">
+                        <button type="submit" class="btn btn-primary text-nowrap">搜索</button>
                     </form>
                 </div>
             </div>

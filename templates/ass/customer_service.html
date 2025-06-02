@@ -5,6 +5,15 @@
 {% block content %}
 <div class="container-fluid py-4">
     <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">首页</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('ass.index') }}">售后管理</a></li>
+                <li class="breadcrumb-item active">客服聊天</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
         <!-- 用户列表 -->
         <div class="col-md-3">
             <div class="card shadow-sm">
