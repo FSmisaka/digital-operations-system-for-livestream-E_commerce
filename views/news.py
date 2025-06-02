@@ -95,24 +95,33 @@ def index():
         hot_products=hot_products
     )
 
-# 修改路由参数名从 <int:product_id> 改为 <int:news_id>
-@bp.route('/detail/<int:news_id>')  # 修改这里，与模板保持一致
+# 修改路由参数名从 <int:news_id> 改为 <int:product_id>
+@bp.route('/detail/<int:product_id>')  # 修改这里
 @login_required
-def detail(news_id):  # 函数参数名也改为 news_id
-    """商品详情页（需修改模板）"""
+def detail(product_id):  # 函数参数名也修改
     products = load_news_data()
-    # 在查询商品时仍然使用 'id' 字段，因为数据文件中使用的是 'id'
-    product = next((p for p in products if p['id'] == news_id), None)
+    product = next((p for p in products if p['id'] == product_id), None)
     
     if not product:
         return render_template('404.html'), 404
     
-    # 模拟相关商品（按分类筛选）
-    related_products = [p for p in products if p['category'] == product['category'] and p['id'] != news_id][:3]
+    # 获取当前用户的推荐商品（排除当前商品）
+    user_id = session.get('user_id', '0')
+    recommended_products = [
+        p for p in calculate_recommendations(user_id) 
+        if p['id'] != product_id
+    ][:4]  # 取前4个推荐
+    
+    # 获取相关商品（同分类）
+    related_products = [
+        p for p in products 
+        if p['category'] == product['category'] and p['id'] != product_id
+    ][:5]
     
     return render_template(
         'news/detail.html',
-        product=product,  # 传递给模板的变量名仍为 product
+        product=product,
+        recommended_products=recommended_products,  # 新增推荐商品
         related_products=related_products
     )
 

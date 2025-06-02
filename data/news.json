@@ -1,102 +1,242 @@
 [
   {
-      "id": 1001,
-      "name": "无线蓝牙耳机",
-      "category": "电子产品",
-      "total_selected": 156,
-      "unsold_count": 12,
-      "price": 299.00,
-      "supplier": "声籁科技",
-      "description": "主动降噪，Hi-Fi音质，长续航"
+    "id": 1001,
+    "name": "无线蓝牙耳机",
+    "category": "电子产品",
+    "total_selected": 156,
+    "unsold_count": 12,
+    "price": 299.00,
+    "supplier": "声籁科技",
+    "description": "主动降噪，Hi-Fi音质，长续航",
+    "details": {
+      "specs": ["蓝牙5.2", "续航40小时", "IPX5防水", "触控操作"],
+      "features": [
+        "主动降噪技术，有效消除环境噪音",
+        "Hi-Fi级音质，高保真音频体验",
+        "单次充电可使用8小时，充电盒提供额外32小时续航",
+        "轻量化设计，舒适佩戴体验"
+      ],
+      "sale_points": [
+        "30天无理由退换",
+        "2年质保",
+        "直播专享价立减50元"
+      ]
+    }
   },
   {
-      "id": 1002,
-      "name": "智能保温杯",
-      "category": "生活用品",
-      "total_selected": 234,
-      "unsold_count": 5,
-      "price": 159.00,
-      "supplier": "杯具熊",
-      "description": "温度显示，长效保温"
+    "id": 1002,
+    "name": "智能保温杯",
+    "category": "生活用品",
+    "total_selected": 234,
+    "unsold_count": 5,
+    "price": 159.00,
+    "supplier": "杯具熊",
+    "description": "温度显示，长效保温",
+    "details": {
+      "specs": ["容量480ml", "316不锈钢", "智能显温", "12小时保温"],
+      "features": [
+        "LED智能显温，实时掌握水温",
+        "316医疗级不锈钢内胆，安全耐用",
+        "12小时保温保冷，满足全天需求",
+        "一键开盖设计，操作便捷"
+      ],
+      "sale_points": [
+        "买一送一（同款杯套）",
+        "7天无理由退换",
+        "直播专属刻字服务"
+      ]
+    }
   },
   {
-      "id": 1003,
-      "name": "瑜伽健身套装",
-      "category": "运动健身",
-      "total_selected": 89,
-      "unsold_count": 15,
-      "price": 399.00,
-      "supplier": "Keep官方",
-      "description": "环保材质，全套装备"
+    "id": 1003,
+    "name": "瑜伽健身套装",
+    "category": "运动健身",
+    "total_selected": 89,
+    "unsold_count": 15,
+    "price": 399.00,
+    "supplier": "Keep官方",
+    "description": "环保材质，全套装备",
+    "details": {
+      "specs": ["瑜伽垫183cm×61cm", "弹力带3件套", "防滑设计", "环保TPE材质"],
+      "features": [
+        "加厚瑜伽垫提供关节保护",
+        "弹力带多种阻力级别可选",
+        "防滑表面确保运动稳定性",
+        "材质无异味，通过环保认证"
+      ],
+      "sale_points": [
+        "套装购买立省80元",
+        "赠送健身指导课程",
+        "15天质量问题包退"
+      ]
+    }
   },
   {
-      "id": 1004,
-      "name": "便携榨汁杯",
-      "category": "厨房电器",
-      "total_selected": 187,
-      "unsold_count": 8,
-      "price": 199.00,
-      "supplier": "美的",
-      "description": "无线便携，快速榨汁"
+    "id": 1004,
+    "name": "便携榨汁杯",
+    "category": "厨房电器",
+    "total_selected": 187,
+    "unsold_count": 8,
+    "price": 199.00,
+    "supplier": "美的",
+    "description": "无线便携，快速榨汁",
+    "details": {
+      "specs": ["300ml容量", "Type-C充电", "6叶不锈钢刀头", "10秒快速出汁"],
+      "features": [
+        "无线设计，随时随地榨汁",
+        "食品级材质，安全放心",
+        "一键清洗功能，方便快捷",
+        "支持车载充电，适合户外使用"
+      ],
+      "sale_points": [
+        "限时折扣立减30元",
+        "赠送3款果汁食谱",
+        "全国联保1年"
+      ]
+    }
   },
   {
-      "id": 1005,
-      "name": "颈部按摩仪",
-      "category": "健康护理",
-      "total_selected": 302,
-      "unsold_count": 3,
-      "price": 259.00,
-      "supplier": "SKG",
-      "description": "3D揉捏，恒温热敷"
+    "id": 1005,
+    "name": "颈部按摩仪",
+    "category": "健康护理",
+    "total_selected": 302,
+    "unsold_count": 3,
+    "price": 259.00,
+    "supplier": "SKG",
+    "description": "3D揉捏，恒温热敷",
+    "details": {
+      "specs": ["42℃恒温热敷", "3档力度调节", "USB充电", "智能语音提示"],
+      "features": [
+        "仿真人手揉捏，缓解颈部疲劳",
+        "恒温热敷促进血液循环",
+        "轻量化机身，佩戴无负担",
+        "15分钟智能定时关机"
+      ],
+      "sale_points": [
+        "直播间专属赠品（按摩精油）",
+        "30天试用不满意包退",
+        "5年核心部件质保"
+      ]
+    }
   },
   {
-      "id": 1006,
-      "name": "电动牙刷",
-      "category": "个护健康",
-      "total_selected": 432,
-      "unsold_count": 7,
-      "price": 169.00,
-      "supplier": "飞利浦",
-      "description": "声波震动，多模式选择"
+    "id": 1006,
+    "name": "电动牙刷",
+    "category": "个护健康",
+    "total_selected": 432,
+    "unsold_count": 7,
+    "price": 169.00,
+    "supplier": "飞利浦",
+    "description": "声波震动，多模式选择",
+    "details": {
+      "specs": ["31000次/分钟震动", "4种清洁模式", "2分钟智能定时", "IPX7防水"],
+      "features": [
+        "声波震动技术，深层清洁齿缝",
+        "敏感模式适合牙龈脆弱人群",
+        "续航长达3周（每天2次使用）",
+        "附赠2支原装刷头"
+      ],
+      "sale_points": [
+        "第二件半价",
+        "买就送旅行充电盒",
+        "2年以换代修"
+      ]
+    }
   },
   {
-      "id": 1007,
-      "name": "空气炸锅",
-      "category": "厨房电器",
-      "total_selected": 345,
-      "unsold_count": 9,
-      "price": 399.00,
-      "supplier": "苏泊尔",
-      "description": "智能触控，无油健康"
+    "id": 1007,
+    "name": "空气炸锅",
+    "category": "厨房电器",
+    "total_selected": 345,
+    "unsold_count": 9,
+    "price": 399.00,
+    "supplier": "苏泊尔",
+    "description": "智能触控，无油健康",
+    "details": {
+      "specs": ["5L大容量", "1400W功率", "智能触控屏", "8大预设菜单"],
+      "features": [
+        "无油烹饪，减少90%脂肪摄入",
+        "360°热风循环，食材均匀受热",
+        "可拆卸炸篮，清洗方便",
+        "中途断电记忆功能"
+      ],
+      "sale_points": [
+        "前100名下单送烘焙礼包",
+        "直播间抽奖送食材大礼包",
+        "全国服务网点免费安装"
+      ]
+    }
   },
   {
-      "id": 1008,
-      "name": "无线麦克风",
-      "category": "直播设备",
-      "total_selected": 278,
-      "unsold_count": 4,
-      "price": 599.00,
-      "supplier": "唱吧",
-      "description": "专业级收音，双人合唱"
+    "id": 1008,
+    "name": "无线麦克风",
+    "category": "直播设备",
+    "total_selected": 278,
+    "unsold_count": 4,
+    "price": 599.00,
+    "supplier": "唱吧",
+    "description": "专业级收音，双人合唱",
+    "details": {
+      "specs": ["U段无线传输", "有效距离50米", "双麦克风设计", "内置声卡"],
+      "features": [
+        "智能降噪，清晰捕捉人声",
+        "支持实时耳返，演唱零延迟",
+        "兼容手机/平板/电脑多平台",
+        "可调节混响音效，增强演唱效果"
+      ],
+      "sale_points": [
+        "买麦克风送唱吧会员月卡",
+        "7×24小时技术支持",
+        "1年免费换新服务"
+      ]
+    }
   },
   {
-      "id": 1009,
-      "name": "补光灯套装",
-      "category": "直播设备",
-      "total_selected": 413,
-      "unsold_count": 2,
-      "price": 299.00,
-      "supplier": "神牛",
-      "description": "三色温调节，便携支架"
+    "id": 1009,
+    "name": "补光灯套装",
+    "category": "直播设备",
+    "total_selected": 413,
+    "unsold_count": 2,
+    "price": 299.00,
+    "supplier": "神牛",
+    "description": "三色温调节，便携支架",
+    "details": {
+      "specs": ["2000-6500K色温调节", "95+高显指", "1.8米可伸缩支架", "USB供电"],
+      "features": [
+        "旋钮式调光，操作简单便捷",
+        "柔光罩设计，光线均匀不刺眼",
+        "折叠收纳，携带方便",
+        "支持手机/相机/三脚架多场景使用"
+      ],
+      "sale_points": [
+        "加1元换购手机支架",
+        "直播间专享价立减40元",
+        "3年保修服务"
+      ]
+    }
   },
   {
-      "id": 1010,
-      "name": "手机云台",
-      "category": "拍摄器材",
-      "total_selected": 176,
-      "unsold_count": 11,
-      "price": 699.00,
-      "supplier": "大疆",
-      "description": "智能跟随，超长续航"
+    "id": 1010,
+    "name": "手机云台",
+    "category": "拍摄器材",
+    "total_selected": 176,
+    "unsold_count": 11,
+    "price": 699.00,
+    "supplier": "大疆",
+    "description": "智能跟随，超长续航",
+    "details": {
+      "specs": ["三轴机械防抖", "智能跟随模式", "12小时续航", "支持60fps 4K拍摄"],
+      "features": [
+        "AI智能追踪，自动锁定拍摄主体",
+        "手势控制拍照，解放双手",
+        "延时摄影模式，捕捉精彩瞬间",
+        "兼容大部分智能手机型号"
+      ],
+      "sale_points": [
+        "购买即赠专用收纳包",
+        "24期免息分期",
+        "大疆官方授权售后"
+      ]
+    }
   }
 ]

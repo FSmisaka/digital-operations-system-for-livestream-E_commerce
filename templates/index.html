@@ -72,7 +72,7 @@ endblock %} {% block content %}
             ></a>
             {% else %}
             <a
-              href="{{ url_for('news.detail', news_id=news.id) }}"
+              href="{{ url_for('news.detail', product_id=news.id) }}"
               class="text-decoration-none"
               >{{ news.title }}</a
             >

@@ -1,20 +1,28 @@
-<!-- templates/news/detail.html -->
 {% extends 'base.html' %}
 {% block title %}{{ product.name }} - 商品详情{% endblock %}
 
 {% block content %}
 <div class="container">
-  <div class="row">
-    <!-- 主内容区 -->
-    <div class="col-lg-8">
-      <nav aria-label="breadcrumb" class="mb-4">
+  <!-- 顶部大图标和标题 -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex align-items-center mb-3">
+        <i class="bi bi-basket-fill display-4 text-primary me-3"></i>
+        <h1 class="mb-0">选品建议</h1>
+      </div>
+      <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="/">首页</a></li>
+          <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">首页</a></li>
           <li class="breadcrumb-item"><a href="{{ url_for('news.index') }}">选品推荐</a></li>
           <li class="breadcrumb-item active">{{ product.name }}</li>
         </ol>
       </nav>
+    </div>
+  </div>
 
+  <div class="row">
+    <!-- 主内容区 -->
+    <div class="col-lg-8">
       <!-- 商品主图 -->
       <div class="card shadow mb-4">
         <img src="https://via.placeholder.com/800x500?text=Product+Detail" 
@@ -36,24 +44,58 @@
             </div>
           </div>
           
-          <h5 class="mb-3">商品描述</h5>
+          <h5 class="mb-3"><i class="bi bi-card-text"></i> 商品描述</h5>
           <p class="card-text">{{ product.description }}</p>
           
-          <div class="d-grid gap-2 d-md-block mt-4">
-            <button class="btn btn-primary btn-lg"><i class="bi bi-cart-plus"></i> 加入直播选品</button>
-            <button class="btn btn-outline-secondary btn-lg ms-2"><i class="bi bi-heart"></i> 收藏商品</button>
+          <!-- 商品详情扩展 -->
+          <div class="mt-4">
+            <h5><i class="bi bi-list-check"></i> 规格参数</h5>
+            <ul class="list-group list-group-flush">
+              {% for spec in product.details.specs %}
+              <li class="list-group-item">{{ spec }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          
+          <div class="mt-4">
+            <h5><i class="bi bi-stars"></i> 核心卖点</h5>
+            <ul>
+              {% for feature in product.details.features %}
+              <li>{{ feature }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          
+          <div class="mt-4 alert alert-success">
+            <h5><i class="bi bi-gift"></i> 促销信息</h5>
+            <ul class="mb-0">
+              {% for point in product.details.sale_points %}
+              <li>{{ point }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          
+          <div class="d-grid gap-2 d-md-flex mt-4">
+            <button class="btn btn-primary btn-lg">
+              <i class="bi bi-cart-plus"></i> 采购
+            </button>
+            <button class="btn btn-outline-secondary btn-lg ms-2">
+              <i class="bi bi-heart"></i> 收藏商品
+            </button>
           </div>
         </div>
       </div>
 
       <!-- 推荐商品 -->
-      <h4 class="mt-5 mb-3"><i class="bi bi-lightning-charge"></i> 同类推荐</h4>
+      {% if recommended_products %}
+      <h4 class="mt-5 mb-3"><i class="bi bi-lightning-charge"></i> 为您推荐</h4>
       <div class="row">
         {% for p in recommended_products %}
         <div class="col-md-6 mb-3">
           <div class="card h-100 shadow-sm">
             <div class="card-body">
               <h6>{{ p.name }}</h6>
+              <p class="small text-muted mb-2">{{ p.description|truncate(40) }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <span class="text-primary">¥{{ "%.2f"|format(p.price) }}</span>
                 <a href="{{ url_for('news.detail', product_id=p.id) }}" 
@@ -64,6 +106,7 @@
         </div>
         {% endfor %}
       </div>
+      {% endif %}
     </div>
 
     <!-- 侧边栏 -->
@@ -82,28 +125,56 @@
             <dd class="col-6 text-end">{{ product.unsold_count }}</dd>
             
             <dt class="col-6">转化率</dt>
-            <dd class="col-6 text-end">{{ ((1 - product.unsold_count/product.total_selected)*100)|round(1) }}%</dd>
+            <dd class="col-6 text-end">
+              {% if product.total_selected > 0 %}
+                {{ ((1 - product.unsold_count/product.total_selected)*100)|round(1) }}%
+              {% else %}
+                暂无数据
+              {% endif %}
+            </dd>
           </dl>
         </div>
       </div>
 
       <!-- 相关商品 -->
-      <div class="card shadow">
+      {% if related_products %}
+      <div class="card shadow mb-4">
         <div class="card-header bg-primary text-white">
-          <h5 class="mb-0"><i class="bi bi-link-45deg"></i> 相关商品</h5>
+          <h5 class="mb-0"><i class="bi bi-link-45deg"></i> 同类商品</h5>
         </div>
         <div class="card-body">
           <div class="list-group">
             {% for p in related_products %}
             <a href="{{ url_for('news.detail', product_id=p.id) }}" 
                class="list-group-item list-group-item-action">
-              <div class="d-flex justify-content-between">
-                <span>{{ p.name }}</span>
-                <span class="text-primary">¥{{ "%.2f"|format(p.price) }}</span>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div>{{ p.name }}</div>
+                  <small class="text-muted">{{ p.supplier }}</small>
+                </div>
+                <span class="badge bg-primary rounded-pill">¥{{ "%.2f"|format(p.price) }}</span>
               </div>
             </a>
             {% endfor %}
           </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- 供应商信息 -->
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-building"></i> 供应商信息</h5>
+        </div>
+        <div class="card-body">
+          <h6>{{ product.supplier }}</h6>
+          <ul class="list-unstyled small">
+            <li><i class="bi bi-check-circle me-2 text-success"></i> 平台认证供应商</li>
+            <li><i class="bi bi-star-fill me-2 text-warning"></i> 供应商评分：4.8/5.0</li>
+            <li><i class="bi bi-truck me-2"></i> 平均发货：24小时内</li>
+            
+          </ul>
+          
         </div>
       </div>
     </div>

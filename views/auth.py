@@ -79,7 +79,10 @@ def user_center():
     user = next((u for u in users if u['id'] == user_id), None)
     if not user:
         return render_template('404.html')
+    
+    # 转换注册时间为更友好的格式
     join_date = datetime.strptime(user['join_date'], '%Y-%m-%d').strftime('%Y年%m月%d日')
+    
     return render_template('auth/user_center.html',
                            user_id=user['id'],
                            username=user['username'],
@@ -300,6 +303,57 @@ def delete_user(user_id):
         flash('删除用户失败，请稍后再试', 'danger')
         
     return redirect(url_for('auth.manage_users'))
+
+# 在auth.py中添加以下路由
+
+@bp.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'POST':
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        
+        # 验证输入
+        if not current_password or not new_password or not confirm_password:
+            flash('请填写所有字段', 'danger')
+            return render_template('auth/change_key.html')
+        
+        if new_password != confirm_password:
+            flash('两次输入的新密码不一致', 'danger')
+            return render_template('auth/change_key.html')
+        
+        if len(new_password) < 8:
+            flash('密码长度至少需要8位', 'danger')
+            return render_template('auth/change_key.html')
+        
+        # 加载用户数据
+        users = load_users()
+        user_id = session['user_id']
+        user = next((u for u in users if u['id'] == user_id), None)
+        
+        if not user:
+            flash('用户不存在', 'danger')
+            return redirect(url_for('auth.user_center'))
+        
+        # 验证当前密码
+        if user['password'] != current_password:
+            flash('当前密码不正确', 'danger')
+            return render_template('auth/change_key.html')
+        
+        # 更新密码
+        user['password'] = new_password
+        
+        # 保存用户数据
+        if save_users(users):
+            flash('密码修改成功，请重新登录', 'success')
+            # 清除会话并重定向到登录页
+            session.clear()
+            return redirect(url_for('auth.login'))
+        else:
+            flash('密码修改失败，请稍后再试', 'danger')
+    
+    return render_template('auth/change_key.html')
 
 @bp.route('/api/users')
 @admin_required
