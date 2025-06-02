@@ -4,7 +4,7 @@ import logging
 from datetime import datetime
 import time
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash, session
-from views.auth import login_required
+from views.auth import login_required, supplier_required
 from views.data_utils import reset_data_file_path, load_data, save_data
 
 # 设置日志记录
@@ -343,12 +343,12 @@ def topic(topic_id):
     )
 
 @bp.route('/new')
-@login_required
+@supplier_required
 def new_topic():
     return render_template('forum/new_topic.html')
 
 @bp.route('/create_topic', methods=['POST'])
-@login_required
+@supplier_required
 def create_topic():
     # 获取表单数据
     category = request.form.get('category')
@@ -416,6 +416,7 @@ def create_topic():
     return jsonify({'success': True, 'message': '主题发布成功', 'topic_id': new_id})
 
 @bp.route('/reply/<int:topic_id>', methods=['POST'])
+@login_required
 def reply(topic_id):
     # 获取表单数据
     content = request.form.get('content')
@@ -477,6 +478,7 @@ def reply(topic_id):
     return jsonify({'success': True, 'message': '回复成功', 'reply_id': new_id})
 
 @bp.route('/search')
+@login_required
 def search():
     keyword = request.args.get('keyword', '')
 

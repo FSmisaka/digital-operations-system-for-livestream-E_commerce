@@ -1,11 +1,11 @@
-{% extends 'base.html' %} {% block title %}注册 - 豆粕期货价格预测系统{%
+{% extends 'base.html' %} {% block title %}注册 - 电商数据分析平台{%
 endblock %} {% block content %}
 <div class="row justify-content-center">
   <div class="col-md-6">
     <div class="card shadow-sm">
       <div class="card-header bg-primary text-white text-center">
         <h4 class="mb-0">
-          <i class="bi bi-person-plus"></i> 豆粕期货价格预测系统
+          <i class="bi bi-person-plus"></i> 电商数据分析平台
         </h4>
         <p class="mt-2 mb-0">创建新账户</p>
       </div>
@@ -74,7 +74,19 @@ endblock %} {% block content %}
                   checked
                 />
                 <label class="btn btn-outline-primary" for="role-user"
-                  >普通用户</label
+                  >直播电商</label
+                >
+
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="role"
+                  id="role-supplier"
+                  value="supplier"
+                  autocomplete="off"
+                />
+                <label class="btn btn-outline-primary" for="role-supplier"
+                  >供应商</label
                 >
 
                 <input

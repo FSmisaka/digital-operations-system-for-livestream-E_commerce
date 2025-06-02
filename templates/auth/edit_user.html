@@ -41,7 +41,8 @@
             <div class="mb-3">
               <label for="role" class="form-label">用户角色</label>
               <select class="form-select" id="role" name="role">
-                <option value="user" {% if user.role == 'user' %}selected{% endif %}>普通用户</option>
+                <option value="user" {% if user.role == 'user' %}selected{% endif %}>直播电商</option>
+                <option value="supplier" {% if user.role == 'supplier' %}selected{% endif %}>供应商</option>
                 <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>管理员</option>
               </select>
               <div class="form-text">

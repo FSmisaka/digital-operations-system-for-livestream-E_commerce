@@ -55,14 +55,20 @@
 <div class="container">
   <div class="row mb-4">
     <div class="col-md-8">
-      <h2><i class="bi bi-chat-square-text"></i> 论坛讨论</h2>
-      <p class="lead">与交易者交流经验，分享市场见解</p>
+      <h2><i class="bi bi-cart-check"></i> 采购中心</h2>
+      {% if session.user_role == 'supplier' %}
+      <p class="lead">与直播电商交流、合作</p>
+      {% else %}
+      <p class="lead">与供应商交流、合作</p>
+      {% endif %}
     </div>
+    {% if session.user_role == 'supplier' %}
     <div class="col-md-4 text-end">
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newTopicModal">
         <i class="bi bi-plus-circle"></i> 发布新产品
       </button>
     </div>
+    {% endif %}
   </div>
 
   <!-- 论坛导航和搜索 -->
@@ -71,7 +77,7 @@
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a class="nav-link {{ 'active' if current_category == 'all' }}" 
-             href="{{ url_for('forum.index', category='all') }}">全部主题</a>
+             href="{{ url_for('forum.index', category='all') }}">全部产品</a>
         </li>
         {% for category in categories %}
         <li class="nav-item">
@@ -83,7 +89,7 @@
     </div>
     <div class="col-md-4">
       <form action="{{ url_for('forum.search') }}" method="get" class="input-group">
-        <input type="text" name="keyword" class="form-control" placeholder="搜索主题..." aria-label="搜索主题" required>
+        <input type="text" name="keyword" class="form-control" placeholder="搜索产品..." aria-label="搜索产品" required>
         <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
       </form>
     </div>
@@ -99,7 +105,7 @@
              style="font-size: 2rem"></i>
           <h5 class="mt-2">{{ category.name }}</h5>
           <div class="small text-muted">
-            {{ category.topics }} 主题 · {{ category.replies }} 回复
+            {{ category.topics }} 产品 · {{ category.replies }} 回复
           </div>
         </div>
       </div>
@@ -107,7 +113,7 @@
     {% endfor %}
   </div>
 
-  <!-- 主题列表 -->
+  <!-- 产品列表 -->
   <div class="row">
     <div class="col-md-9">
       <!-- 公告 -->
@@ -129,12 +135,12 @@
                   <small class="text-muted">{{ topic.created_at }}</small>
                 </div>
                 <div class="small text-muted mt-1">
-                  <span class="fw-bold">{{ topic.username }}</span> · 最后回复：{{ topic.last_reply_at }}
+                  <span class="fw-bold">{{ topic.username }}</span> · 最后评价：{{ topic.last_reply_at }}
                 </div>
               </div>
               <div class="ms-3 topic-stats">
                 <div class="fw-bold">{{ topic.replies }}</div>
-                <small class="text-muted">回复</small>
+                <small class="text-muted">评价</small>
               </div>
             </div>
             {% else %}
@@ -144,10 +150,10 @@
         </div>
       </div>
 
-      <!-- 热门主题 -->
+      <!-- 热门产品 -->
       <div class="card mb-4">
         <div class="card-header bg-danger text-white">
-          <h5 class="mb-0"><i class="bi bi-fire"></i> 热门主题</h5>
+          <h5 class="mb-0"><i class="bi bi-fire"></i> 热门产品</h5>
         </div>
         <div class="card-body p-0">
           <div class="list-group list-group-flush">
@@ -172,25 +178,25 @@
                   <small class="text-muted">{{ topic.created_at }}</small>
                 </div>
                 <div class="small text-muted mt-1">
-                  <span class="fw-bold">{{ topic.username }}</span> · 最后回复：{{ topic.last_reply_at }}
+                  <span class="fw-bold">{{ topic.username }}</span> · 最后评价：{{ topic.last_reply_at }}
                 </div>
               </div>
               <div class="ms-3 topic-stats">
                 <div class="fw-bold">{{ topic.replies }}</div>
-                <small class="text-muted">回复</small>
+                <small class="text-muted">评价</small>
               </div>
             </div>
             {% else %}
-            <div class="list-group-item p-3 text-center text-muted">暂无热门主题</div>
+            <div class="list-group-item p-3 text-center text-muted">暂无热门产品</div>
             {% endfor %}
           </div>
         </div>
       </div>
 
-      <!-- 最新主题 -->
+      <!-- 最新产品 -->
       <div class="card">
         <div class="card-header bg-primary text-white">
-          <h5 class="mb-0"><i class="bi bi-clock-history"></i> 最新主题</h5>
+          <h5 class="mb-0"><i class="bi bi-clock-history"></i> 最新产品</h5>
         </div>
         <div class="card-body p-0">
           <div class="list-group list-group-flush topic-list-container">
@@ -214,16 +220,16 @@
                   <small class="text-muted">{{ topic.created_at }}</small>
                 </div>
                 <div class="small text-muted mt-1">
-                  <span class="fw-bold">{{ topic.username }}</span> · 最后回复：{{ topic.last_reply_at }}
+                  <span class="fw-bold">{{ topic.username }}</span> · 最后评价：{{ topic.last_reply_at }}
                 </div>
               </div>
               <div class="ms-3 topic-stats">
                 <div class="fw-bold">{{ topic.replies }}</div>
-                <small class="text-muted">回复</small>
+                <small class="text-muted">评价</small>
               </div>
             </div>
             {% else %}
-            <div class="list-group-item p-3 text-center text-muted">暂无主题</div>
+            <div class="list-group-item p-3 text-center text-muted">暂无产品</div>
             {% endfor %}
           </div>
         </div>
@@ -246,27 +252,27 @@
 
     <!-- 右侧边栏 -->
     <div class="col-md-3">
-      <!-- 论坛统计 -->
+      <!-- 统计中心 -->
       <div class="card mb-4">
         <div class="card-header bg-primary text-white">
-          <h5 class="mb-0"><i class="bi bi-bar-chart"></i> 论坛统计</h5>
+          <h5 class="mb-0"><i class="bi bi-bar-chart"></i> 统计中心</h5>
         </div>
         <div class="card-body">
           <ul class="list-group list-group-flush">
             <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-              主题总数
+              产品总数
               <span class="badge bg-primary rounded-pill">{{ forum_stats.topics }}</span>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-              回复总数
+              评价总数
               <span class="badge bg-primary rounded-pill">{{ forum_stats.replies }}</span>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-              会员总数
+              用户总数
               <span class="badge bg-primary rounded-pill">{{ forum_stats.users }}</span>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-              最新会员
+              最新用户
               <span>{{ forum_stats.latest_user }}</span>
             </li>
           </ul>
@@ -291,16 +297,16 @@
         </div>
       </div>
 
-      <!-- 论坛指南 -->
+      <!-- 指南 -->
       <div class="card">
         <div class="card-header bg-primary text-white">
-          <h5 class="mb-0"><i class="bi bi-info-circle"></i> 论坛指南</h5>
+          <h5 class="mb-0"><i class="bi bi-info-circle"></i> 采购中心指南</h5>
         </div>
         <div class="card-body">
           <ul class="list-unstyled mb-0">
             <li class="mb-2">
               <i class="bi bi-check-circle text-success me-2"></i>
-              <a href="#">论坛使用指南</a>
+              <a href="#">使用指南</a>
             </li>
             <li class="mb-2">
               <i class="bi bi-check-circle text-success me-2"></i>
@@ -321,12 +327,12 @@
   </div>
 </div>
 
-<!-- 发布新主题模态框 -->
+<!-- 发布新产品模态框 -->
 <div class="modal fade" id="newTopicModal" tabindex="-1" aria-labelledby="newTopicModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="newTopicModalLabel">发布新主题</h5>
+        <h5 class="modal-title" id="newTopicModalLabel">发布新产品</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -342,29 +348,29 @@
             </select>
           </div>
           <div class="mb-3">
-            <label for="topicTitle" class="form-label">主题标题 <span class="text-danger">*</span></label>
+            <label for="topicTitle" class="form-label">产品名称 <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="topicTitle" name="title" 
                    placeholder="请输入主题标题（5-50字）" minlength="5" maxlength="50" required>
-            <div class="form-text">标题应简明扼要，清晰表达主题内容</div>
+            <div class="form-text">名称应简明扼要，清晰表达产品内涵</div>
           </div>
           <div class="mb-3">
-            <label for="topicContent" class="form-label">主题内容 <span class="text-danger">*</span></label>
+            <label for="topicContent" class="form-label">产品描述 <span class="text-danger">*</span></label>
             <textarea class="form-control" id="topicContent" name="content" rows="6" 
-                      placeholder="请输入主题内容（至少20字）" minlength="20" required></textarea>
-            <div class="form-text">详细描述您的观点、问题或分享的内容</div>
+                      placeholder="请输入产品描述（至少20字）" minlength="20" required></textarea>
+            <div class="form-text">详细描述产品的用途、价格或优点等</div>
           </div>
           <div class="mb-3">
             <label for="topicTags" class="form-label">标签 (可选，用逗号分隔)</label>
             <input type="text" class="form-control" id="topicTags" name="topicTags" 
                    placeholder="例如：电子产品的对比分析、美妆产品安利">
-            <div class="form-text">添加相关标签，有助于其他用户找到您的主题</div>
+            <div class="form-text">添加相关标签，有助于其他用户找到您的产品</div>
             <input type="hidden" id="tagsJson" name="tags" value="[]">
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary" id="submitNewTopic">发布主题</button>
+        <button type="button" class="btn btn-primary" id="submitNewTopic">发布产品</button>
       </div>
     </div>
   </div>
@@ -409,7 +415,7 @@
         return;
       }
       if (!title || title.length < 5) {
-        alert("标题不能为空，且至少5个字符");
+        alert("名称不能为空，且至少5个字符");
         return;
       }
       if (!content || content.length < 20) {
@@ -437,7 +443,7 @@
       .then(response => response.json())
       .then(data => {
         submitNewTopicBtn.disabled = false;
-        submitNewTopicBtn.innerHTML = "发布主题";
+        submitNewTopicBtn.innerHTML = "发布产品";
         
         if (data.success) {
           alert(data.message);
@@ -454,7 +460,7 @@
       })
       .catch(error => {
         submitNewTopicBtn.disabled = false;
-        submitNewTopicBtn.innerHTML = "发布主题";
+        submitNewTopicBtn.innerHTML = "发布产品";
         alert("发布失败，请稍后重试");
         console.error("Error:", error);
       });
