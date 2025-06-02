@@ -1,112 +1,134 @@
 [
-  {
-    "id": 1,
-    "topic_id": 2,
-    "user_id": 5,
-    "username": "市场分析师",
-    "avatar": "https://via.placeholder.com/40",
-    "content": "iPhone 14 Pro 的新设计和 A16 Bionic 处理器确实让它在性能上超越了大多数同类产品，尤其是拍照表现非常强大。你们认为其价格是否值得？",
-    "created_at": "2023-04-21 10:30",
-    "updated_at": "2023-04-21 10:30",
-    "likes": 10
-  },
-  {
-    "id": 2,
-    "topic_id": 2,
-    "user_id": 7,
-    "username": "技术派",
-    "avatar": "https://via.placeholder.com/40",
-    "content": "从技术角度来看，iPhone 14 Pro 的显示效果和摄像头改进很明显，不过在续航上似乎有些短板。如果电池更强的话，完全可以更完美。",
-    "created_at": "2023-04-21 11:00",
-    "updated_at": "2023-04-21 11:00",
-    "likes": 6
-  },
-  {
-    "id": 3,
-    "topic_id": 3,
-    "user_id": 4,
-    "username": "期货老手",
-    "avatar": "https://via.placeholder.com/40",
-    "content": "Galaxy S23 的 200MP 摄像头让我印象深刻，特别是在拍摄细节方面比以前的型号有了大幅度的提升。我认为它是安卓阵营中的一款旗舰之选。",
-    "created_at": "2023-04-21 15:20",
-    "updated_at": "2023-04-21 15:20",
-    "likes": 8
-  },
-  {
-    "id": 4,
-    "topic_id": 3,
-    "user_id": 2,
-    "username": "交易达人",
-    "avatar": "https://via.placeholder.com/40",
-    "content": "三星 Galaxy S23 让我有些犹豫，虽然它的屏幕和摄像头很强，但价格相比其他安卓手机高出不少，是否值得升级呢？",
-    "created_at": "2023-04-21 17:30",
-    "updated_at": "2023-04-21 17:30",
-    "likes": 5
-  },
-  {
-    "id": 5,
-    "topic_id": 4,
-    "user_id": 6,
-    "username": "基本面研究",
-    "avatar": "https://via.placeholder.com/40",
-    "content": "海尔 X6 空气净化器在去除 PM2.5 和甲醛方面表现很好，适合有小孩的家庭使用。不过它的噪音稍大，在安静的环境中使用时需要注意。",
-    "created_at": "2023-05-02 09:00",
-    "updated_at": "2023-05-02 09:00",
-    "likes": 7
-  },
-  {
-    "id": 6,
-    "topic_id": 4,
-    "user_id": 8,
-    "username": "技术派",
-    "avatar": "https://via.placeholder.com/40",
-    "content": "X6 空气净化器的价格相对亲民，滤芯更换也很方便。如果考虑日常的空气质量，真的是个不错的选择，尤其是在秋冬季节。",
-    "created_at": "2023-05-02 11:30",
-    "updated_at": "2023-05-02 11:30",
-    "likes": 5
-  },
-  {
-    "id": 7,
-    "topic_id": 5,
-    "user_id": 7,
-    "username": "AI研究者",
-    "avatar": "https://via.placeholder.com/40",
-    "content": "我最近也在关注一些新兴美妆品牌，有些品牌的包装和市场定位都很创新，但我想知道是否在成分和效果上有保证？",
-    "created_at": "2023-05-03 14:00",
-    "updated_at": "2023-05-03 14:00",
-    "likes": 4
-  },
-  {
-    "id": 8,
-    "topic_id": 5,
-    "user_id": 6,
-    "username": "期货新手",
-    "avatar": "https://via.placeholder.com/40",
-    "content": "有些美妆品牌的营销很成功，但我总觉得产品的性价比不高。希望这些新兴品牌能给我带来一些突破，至少在成分和效果上能给我一些惊喜。",
-    "created_at": "2023-05-03 14:45",
-    "updated_at": "2023-05-03 14:45",
-    "likes": 6
-  },
-  {
-    "id": 9,
-    "topic_id": 6,
-    "user_id": 2,
-    "username": "市场分析师",
+    {
+        "id": 1,
+        "topic_id": 2,
+        "user_id": 5,
+        "username": "市场分析师",
+        "avatar": "https://via.placeholder.com/40",
+        "content": "iPhone 14 Pro 的新设计和 A16 Bionic 处理器确实让它在性能上超越了大多数同类产品，尤其是拍照表现非常强大。你们认为其价格是否值得？",
+        "created_at": "2023-04-21 10:30",
+        "updated_at": "2023-04-21 10:30",
+        "likes": 10
+    },
+    {
+        "id": 2,
+        "topic_id": 2,
+        "user_id": 7,
+        "username": "技术派",
+        "avatar": "https://via.placeholder.com/40",
+        "content": "从技术角度来看，iPhone 14 Pro 的显示效果和摄像头改进很明显，不过在续航上似乎有些短板。如果电池更强的话，完全可以更完美。",
+        "created_at": "2023-04-21 11:00",
+        "updated_at": "2023-04-21 11:00",
+        "likes": 6
+    },
+    {
+        "id": 3,
+        "topic_id": 3,
+        "user_id": 4,
+        "username": "期货老手",
+        "avatar": "https://via.placeholder.com/40",
+        "content": "Galaxy S23 的 200MP 摄像头让我印象深刻，特别是在拍摄细节方面比以前的型号有了大幅度的提升。我认为它是安卓阵营中的一款旗舰之选。",
+        "created_at": "2023-04-21 15:20",
+        "updated_at": "2023-04-21 15:20",
+        "likes": 8
+    },
+    {
+        "id": 4,
+        "topic_id": 3,
+        "user_id": 2,
+        "username": "交易达人",
+        "avatar": "https://via.placeholder.com/40",
+        "content": "三星 Galaxy S23 让我有些犹豫，虽然它的屏幕和摄像头很强，但价格相比其他安卓手机高出不少，是否值得升级呢？",
+        "created_at": "2023-04-21 17:30",
+        "updated_at": "2023-04-21 17:30",
+        "likes": 5
+    },
+    {
+        "id": 5,
+        "topic_id": 4,
+        "user_id": 6,
+        "username": "基本面研究",
+        "avatar": "https://via.placeholder.com/40",
+        "content": "海尔 X6 空气净化器在去除 PM2.5 和甲醛方面表现很好，适合有小孩的家庭使用。不过它的噪音稍大，在安静的环境中使用时需要注意。",
+        "created_at": "2023-05-02 09:00",
+        "updated_at": "2023-05-02 09:00",
+        "likes": 7
+    },
+    {
+        "id": 6,
+        "topic_id": 4,
+        "user_id": 8,
+        "username": "技术派",
+        "avatar": "https://via.placeholder.com/40",
+        "content": "X6 空气净化器的价格相对亲民，滤芯更换也很方便。如果考虑日常的空气质量，真的是个不错的选择，尤其是在秋冬季节。",
+        "created_at": "2023-05-02 11:30",
+        "updated_at": "2023-05-02 11:30",
+        "likes": 5
+    },
+    {
+        "id": 7,
+        "topic_id": 5,
+        "user_id": 7,
+        "username": "AI研究者",
+        "avatar": "https://via.placeholder.com/40",
+        "content": "我最近也在关注一些新兴美妆品牌，有些品牌的包装和市场定位都很创新，但我想知道是否在成分和效果上有保证？",
+        "created_at": "2023-05-03 14:00",
+        "updated_at": "2023-05-03 14:00",
+        "likes": 4
+    },
+    {
+        "id": 8,
+        "topic_id": 5,
+        "user_id": 6,
+        "username": "期货新手",
+        "avatar": "https://via.placeholder.com/40",
+        "content": "有些美妆品牌的营销很成功，但我总觉得产品的性价比不高。希望这些新兴品牌能给我带来一些突破，至少在成分和效果上能给我一些惊喜。",
+        "created_at": "2023-05-03 14:45",
+        "updated_at": "2023-05-03 14:45",
+        "likes": 6
+    },
+    {
+        "id": 9,
+        "topic_id": 6,
+        "user_id": 2,
+        "username": "市场分析师",
         "avatar": "https://via.placeholder.com/40",
         "content": "米家扫地机器人是我家最近刚买的，性价比很高，清扫效果也很不错。唯一的问题是它的噪音有些大，夜间运行可能会影响休息。",
         "created_at": "2023-05-03 15:00",
         "updated_at": "2023-05-03 15:00",
         "likes": 10
-  },
-  {
-    "id": 10,
-    "topic_id": 6,
-    "user_id": 5,
-    "username": "基本面研究",
+    },
+    {
+        "id": 10,
+        "topic_id": 6,
+        "user_id": 5,
+        "username": "基本面研究",
         "avatar": "https://via.placeholder.com/40",
         "content": "米家扫地机器人在价格上确实非常实惠，特别适合那些预算有限但想要体验智能家居的人。它的清洁效果也让我很满意，尤其是在宠物毛发清理方面。",
         "created_at": "2023-05-03 16:15",
         "updated_at": "2023-05-03 16:15",
         "likes": 8
-  }
+    },
+    {
+        "id": 11,
+        "topic_id": 7,
+        "user_id": 2,
+        "username": "交易达人",
+        "avatar": "https://via.placeholder.com/40",
+        "content": "回复回复",
+        "created_at": "2025-06-02 10:23",
+        "updated_at": "2025-06-02 10:23",
+        "likes": 0
+    },
+    {
+        "id": 12,
+        "topic_id": 7,
+        "user_id": 2,
+        "username": "交易达人",
+        "avatar": "https://via.placeholder.com/40",
+        "content": "> 引用 交易达人 的发言：\r\n> 回复回复\r\n\r\n回复回复回复",
+        "created_at": "2025-06-02 10:23",
+        "updated_at": "2025-06-02 10:23",
+        "likes": 0
+    }
 ]
