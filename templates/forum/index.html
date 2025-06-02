@@ -57,9 +57,9 @@
     <div class="col-md-8">
       <h2><i class="bi bi-cart-check"></i> 采购中心</h2>
       {% if session.user_role == 'supplier' %}
-      <p class="lead">与直播电商交流、合作</p>
+      <p class="lead">发布新产品，与直播电商交流、合作</p>
       {% else %}
-      <p class="lead">与供应商交流、合作</p>
+      <p class="lead">发表产品评价，与供应商交流、合作</p>
       {% endif %}
     </div>
     {% if session.user_role == 'supplier' %}
