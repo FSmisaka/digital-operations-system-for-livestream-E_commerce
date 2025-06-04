@@ -86,5 +86,16 @@
         "replies": 0,
         "join_date": "2025-05-31",
         "last_active": "2025-05-31"
+    },
+    {
+        "id": 9,
+        "username": "我是供应商",
+        "password": "admin",
+        "avatar": "https://via.placeholder.com/40",
+        "role": "supplier",
+        "posts": 0,
+        "replies": 0,
+        "join_date": "2025-06-04",
+        "last_active": "2025-06-04"
     }
 ]
