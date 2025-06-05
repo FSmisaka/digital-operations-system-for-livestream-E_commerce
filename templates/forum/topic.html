@@ -324,10 +324,12 @@
         <div class="card-body text-center">
           <h5>{{ topic.username }}</h5>
           <div class="user-info mb-3">
-            {% if topic.user_id == 1 %}
+            {% if topic.role_id == 1 %}
             <span class="badge bg-danger">管理员</span>
-            {% else %}
-            <span class="badge bg-primary">会员</span>
+            {% elif topic.role_id==2 %}
+            <span class="badge bg-primary">供应商</span>
+            {% else%}
+            <span class="badge bg-primary">直播电商</span>
             {% endif %}
           </div>
           <div class="user-stats d-flex justify-content-around">
@@ -342,6 +344,11 @@
             <div>
               <div class="fw-bold">{{ user.join_date }}</div>
               <div>注册</div>
+            </div>
+            <div>
+              <a href="{{ url_for('forum.private_message', receiver_id=topic.user_id, receiver_name=topic.username) }}" class="btn btn-sm btn-outline-primary">
+                私聊
+              </a>                         
             </div>
           </div>
         </div>
@@ -379,39 +386,9 @@
         <div class="card-body">
           <div class="d-flex flex-wrap gap-2">
             <a
-              href="{{ url_for('forum.search', keyword='豆粕') }}"
+              href="{{ url_for('forum.search', keyword='电子产品') }}"
               class="badge bg-secondary text-decoration-none"
-              >豆粕</a
-            >
-            <a
-              href="{{ url_for('forum.search', keyword='技术分析') }}"
-              class="badge bg-secondary text-decoration-none"
-              >技术分析</a
-            >
-            <a
-              href="{{ url_for('forum.search', keyword='交易策略') }}"
-              class="badge bg-secondary text-decoration-none"
-              >交易策略</a
-            >
-            <a
-              href="{{ url_for('forum.search', keyword='基本面') }}"
-              class="badge bg-secondary text-decoration-none"
-              >基本面</a
-            >
-            <a
-              href="{{ url_for('forum.search', keyword='价格预测') }}"
-              class="badge bg-secondary text-decoration-none"
-              >价格预测</a
-            >
-            <a
-              href="{{ url_for('forum.search', keyword='深度学习') }}"
-              class="badge bg-secondary text-decoration-none"
-              >深度学习</a
-            >
-            <a
-              href="{{ url_for('forum.search', keyword='风险控制') }}"
-              class="badge bg-secondary text-decoration-none"
-              >风险控制</a
+              >电子产品</a
             >
             <a
               href="{{ url_for('forum.search', keyword='新手入门') }}"

@@ -17,16 +17,16 @@ def index():
     if 'user_id' not in session:
         return redirect(url_for('auth.login'))
 
-    # 加载新闻数据
-    news_data = load_news_data()
+    # 加载产品数据
+    product_data = load_news_data()
 
-    # 获取最新的3条新闻（按日期排序）
-    def get_date(x):
-        return x.get('date', '')
+    # 获取最新的3条产品（按日期排序）
+    def get_views(x):
+        return x.get('views', 0)
 
-    latest_news = sorted(news_data, key=get_date, reverse=True)[:3]
+    product_data = sorted(product_data, key=get_views, reverse=True)[:5]
 
-    return render_template('index.html', latest_news=latest_news)
+    return render_template('index.html', latest_news=product_data)
 
 @bp.route('/api/latest-market-data')
 def get_latest_market_data():
