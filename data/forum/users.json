@@ -17,9 +17,9 @@
         "avatar": "https://via.placeholder.com/40",
         "role": "user",
         "posts": 5,
-        "replies": 10,
+        "replies": 8,
         "join_date": "2023-01-15",
-        "last_active": "2025-06-02"
+        "last_active": "2025-05-27"
     },
     {
         "id": 3,
@@ -78,24 +78,24 @@
     },
     {
         "id": 8,
-        "username": "22377001",
-        "password": "xinxi123456",
+        "username": "Gomez",
+        "password": "123",
         "avatar": "https://via.placeholder.com/40",
         "role": "user",
         "posts": 0,
         "replies": 0,
-        "join_date": "2025-05-31",
-        "last_active": "2025-05-31"
-    },
+        "join_date": "2025-06-05",
+        "last_active": "2025-06-05"
+    }
     {
-        "id": 9,
-        "username": "我是供应商",
-        "password": "admin",
+        "id": 8,
+        "username": "Supplier1",
+        "password": "123456",
         "avatar": "https://via.placeholder.com/40",
         "role": "supplier",
         "posts": 0,
         "replies": 0,
-        "join_date": "2025-06-04",
-        "last_active": "2025-06-04"
+        "join_date": "2025-06-05",
+        "last_active": "2025-06-05"
     }
 ]
