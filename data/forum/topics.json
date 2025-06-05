@@ -10,7 +10,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2023-04-20",
         "updated_at": "2023-04-20",
-        "views": 1260,
+        "views": 1261,
         "replies": 24,
         "last_reply_at": "2023-05-01",
         "last_reply_user": "交易达人",
@@ -24,8 +24,8 @@
     },
     {
         "id": 2,
-        "title": "iPhone 14 Pro - 新一代智能手机",
-        "content": "iPhone 14 Pro 是苹果公司推出的最新旗舰智能手机，配备 A16 Bionic 处理器、超视网膜 XDR 显示屏和 48MP 主摄像头。凭借强大的性能和精致的设计，iPhone 14 Pro 提供无与伦比的用户体验。",
+        "title": "无线蓝牙耳机",
+        "content": "主动降噪，Hi-Fi音质，长续航",
         "category": "electronics",
         "category_name": "电子产品",
         "user_id": 1,
@@ -45,14 +45,38 @@
             "iPhone 14 Pro",
             "苹果",
             "A16 Bionic"
-        ]
+        ],
+        "total_selected": 156,
+        "unsold_count": 12,
+        "price": 299.0,
+        "supplier": "声籁科技",
+        "description": "主动降噪，Hi-Fi音质，长续航",
+        "details": {
+            "specs": [
+                "蓝牙5.2",
+                "续航40小时",
+                "IPX5防水",
+                "触控操作"
+            ],
+            "features": [
+                "主动降噪技术，有效消除环境噪音",
+                "Hi-Fi级音质，高保真音频体验",
+                "单次充电可使用8小时，充电盒提供额外32小时续航",
+                "轻量化设计，舒适佩戴体验"
+            ],
+            "sale_points": [
+                "30天无理由退换",
+                "2年质保",
+                "直播专享价立减50元"
+            ]
+        }
     },
     {
         "id": 3,
-        "title": "三星 Galaxy S23 - 高端安卓手机",
-        "content": "三星 Galaxy S23 是三星公司推出的一款高端安卓智能手机，配备 200MP 旗舰摄像头、超快的 Snapdragon 8 Gen 2 处理器以及 120Hz 刷新率的 Dynamic AMOLED 屏幕。Galaxy S23 提供强大的性能和创新的功能，适合追求高性能的用户。",
-        "category": "electronics",
-        "category_name": "电子产品",
+        "title": "智能保温杯",
+        "content": "温度显示，长效保温",
+        "category": "daily_necessities",
+        "category_name": "生活用品",
         "user_id": 1,
         "username": "管理员",
         "avatar": "https://via.placeholder.com/40",
@@ -70,14 +94,38 @@
             "Galaxy S23",
             "三星",
             "Snapdragon 8 Gen 2"
-        ]
+        ],
+        "total_selected": 234,
+        "unsold_count": 5,
+        "price": 159.0,
+        "supplier": "杯具熊",
+        "description": "温度显示，长效保温",
+        "details": {
+            "specs": [
+                "容量480ml",
+                "316不锈钢",
+                "智能显温",
+                "12小时保温"
+            ],
+            "features": [
+                "LED智能显温，实时掌握水温",
+                "316医疗级不锈钢内胆，安全耐用",
+                "12小时保温保冷，满足全天需求",
+                "一键开盖设计，操作便捷"
+            ],
+            "sale_points": [
+                "买一送一（同款杯套）",
+                "7天无理由退换",
+                "直播专属刻字服务"
+            ]
+        }
     },
     {
         "id": 4,
-        "title": "海尔 X6 空气净化器",
-        "content": "海尔 X6 空气净化器是一款高效能空气净化设备，专为家庭和办公环境设计。采用高效 HEPA 滤芯，能够去除 99.97% 的细颗粒物，包括 PM2.5 和空气中的有害气体，让你的室内空气始终保持清新。",
-        "category": "electronics",
-        "category_name": "电子产品",
+        "title": "瑜伽健身套装",
+        "content": "环保材质，全套装备",
+        "category": "sports",
+        "category_name": "运动健身",
         "user_id": 2,
         "username": "交易达人",
         "avatar": "https://via.placeholder.com/40",
@@ -94,14 +142,38 @@
             "空气净化器",
             "HEPA滤芯",
             "海尔"
-        ]
+        ],
+        "total_selected": 89,
+        "unsold_count": 15,
+        "price": 399.0,
+        "supplier": "Keep官方",
+        "description": "环保材质，全套装备",
+        "details": {
+            "specs": [
+                "瑜伽垫183cm×61cm",
+                "弹力带3件套",
+                "防滑设计",
+                "环保TPE材质"
+            ],
+            "features": [
+                "加厚瑜伽垫提供关节保护",
+                "弹力带多种阻力级别可选",
+                "防滑表面确保运动稳定性",
+                "材质无异味，通过环保认证"
+            ],
+            "sale_points": [
+                "套装购买立省80元",
+                "赠送健身指导课程",
+                "15天质量问题包退"
+            ]
+        }
     },
     {
         "id": 5,
-        "title": "美妆行业新兴品牌推荐",
-        "content": "近期美妆行业的某些新兴品牌发展势头强劲，大家对这些品牌的前景怎么看？这些品牌在创新产品、改善用户体验方面有哪些突出表现？欢迎大家分享意见。",
-        "category": "cosmetics",
-        "category_name": "美妆产品",
+        "title": "便携榨汁杯",
+        "content": "无线便携，快速榨汁",
+        "category": "kitchen_appliances",
+        "category_name": "厨房电器",
         "user_id": 3,
         "username": "AI研究者",
         "avatar": "https://via.placeholder.com/40",
@@ -118,20 +190,44 @@
             "美妆品牌",
             "创新产品",
             "用户体验"
-        ]
+        ],
+        "total_selected": 187,
+        "unsold_count": 8,
+        "price": 199.0,
+        "supplier": "美的",
+        "description": "无线便携，快速榨汁",
+        "details": {
+            "specs": [
+                "300ml容量",
+                "Type-C充电",
+                "6叶不锈钢刀头",
+                "10秒快速出汁"
+            ],
+            "features": [
+                "无线设计，随时随地榨汁",
+                "食品级材质，安全放心",
+                "一键清洗功能，方便快捷",
+                "支持车载充电，适合户外使用"
+            ],
+            "sale_points": [
+                "限时折扣立减30元",
+                "赠送3款果汁食谱",
+                "全国联保1年"
+            ]
+        }
     },
     {
         "id": 6,
-        "title": "小米米家扫地机器人",
-        "content": "小米米家扫地机器人采用智能导航和强力吸尘技术，能够高效清洁家庭环境。其多种清洁模式、强劲的吸力以及长达 120 分钟的续航时间，让你轻松应对各类清洁任务。",
-        "category": "electronics",
-        "category_name": "电子产品",
+        "title": "颈部按摩仪",
+        "content": "3D揉捏，恒温热敷",
+        "category": "health_care",
+        "category_name": "健康护理",
         "user_id": 4,
         "username": "期货老手",
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2023-05-03",
         "updated_at": "2023-05-03",
-        "views": 352,
+        "views": 353,
         "replies": 12,
         "last_reply_at": "2023-05-03 13:15",
         "last_reply_user": "基本面研究",
@@ -142,20 +238,44 @@
             "扫地机器人",
             "米家",
             "智能家居"
-        ]
+        ],
+        "total_selected": 302,
+        "unsold_count": 3,
+        "price": 259.0,
+        "supplier": "SKG",
+        "description": "3D揉捏，恒温热敷",
+        "details": {
+            "specs": [
+                "42℃恒温热敷",
+                "3档力度调节",
+                "USB充电",
+                "智能语音提示"
+            ],
+            "features": [
+                "仿真人手揉捏，缓解颈部疲劳",
+                "恒温热敷促进血液循环",
+                "轻量化机身，佩戴无负担",
+                "15分钟智能定时关机"
+            ],
+            "sale_points": [
+                "直播间专属赠品（按摩精油）",
+                "30天试用不满意包退",
+                "5年核心部件质保"
+            ]
+        }
     },
     {
         "id": 7,
-        "title": "可调节性弹性窗帘",
-        "content": "1232338228378192738192739213123",
-        "category": "daily_necessities",
-        "category_name": "生活用品",
+        "title": "电动牙刷",
+        "content": "声波震动，多模式选择",
+        "category": "personal_care",
+        "category_name": "个护健康",
         "user_id": 2,
         "username": "交易达人",
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2025-05-27",
         "updated_at": "2025-05-27",
-        "views": 2,
+        "views": 7,
         "replies": 0,
         "last_reply_at": "2025-05-27",
         "last_reply_user": "交易达人",
@@ -164,6 +284,168 @@
         "is_hot": false,
         "tags": [
             "生活用品安利"
-        ]
+        ],
+        "total_selected": 432,
+        "unsold_count": 7,
+        "price": 169.0,
+        "supplier": "飞利浦",
+        "description": "声波震动，多模式选择",
+        "details": {
+            "specs": [
+                "31000次/分钟震动",
+                "4种清洁模式",
+                "2分钟智能定时",
+                "IPX7防水"
+            ],
+            "features": [
+                "声波震动技术，深层清洁齿缝",
+                "敏感模式适合牙龈脆弱人群",
+                "续航长达3周（每天2次使用）",
+                "附赠2支原装刷头"
+            ],
+            "sale_points": [
+                "第二件半价",
+                "买就送旅行充电盒",
+                "2年以换代修"
+            ]
+        }
+    },
+    {
+        "id": 8,
+        "title": "空气炸锅",
+        "content": "智能触控，无油健康",
+        "category": "kitchen_appliances",
+        "category_name": "厨房电器",
+        "user_id": 2,
+        "username": "交易达人",
+        "avatar": "https://via.placeholder.com/40",
+        "created_at": "2025-05-27",
+        "updated_at": "2025-05-27",
+        "views": 4,
+        "replies": 0,
+        "last_reply_at": "2025-05-27",
+        "last_reply_user": "交易达人",
+        "is_sticky": false,
+        "is_announcement": false,
+        "is_hot": false,
+        "tags": [
+            "生活用品安利"
+        ],
+        "total_selected": 345,
+        "unsold_count": 9,
+        "price": 399.0,
+        "supplier": "苏泊尔",
+        "description": "智能触控，无油健康",
+        "details": {
+            "specs": [
+                "5L大容量",
+                "1400W功率",
+                "智能触控屏",
+                "8大预设菜单"
+            ],
+            "features": [
+                "无油烹饪，减少90%脂肪摄入",
+                "360°热风循环，食材均匀受热",
+                "可拆卸炸篮，清洗方便",
+                "中途断电记忆功能"
+            ],
+            "sale_points": [
+                "前100名下单送烘焙礼包",
+                "直播间抽奖送食材大礼包",
+                "全国服务网点免费安装"
+            ]
+        }
+    },
+    {
+        "id": 9,
+        "title": "无线麦克风",
+        "content": "专业级收音，双人合唱",
+        "category": "live_equipment",
+        "category_name": "生活设备",
+        "user_id": 2,
+        "username": "交易达人",
+        "avatar": "https://via.placeholder.com/40",
+        "created_at": "2025-05-27",
+        "updated_at": "2025-05-27",
+        "views": 4,
+        "replies": 0,
+        "last_reply_at": "2025-05-27",
+        "last_reply_user": "交易达人",
+        "is_sticky": false,
+        "is_announcement": false,
+        "is_hot": false,
+        "tags": [
+            "生活用品安利"
+        ],
+        "total_selected": 278,
+        "unsold_count": 4,
+        "price": 599.0,
+        "supplier": "唱吧",
+        "description": "专业级收音，双人合唱",
+        "details": {
+            "specs": [
+                "U段无线传输",
+                "有效距离50米",
+                "双麦克风设计",
+                "内置声卡"
+            ],
+            "features": [
+                "智能降噪，清晰捕捉人声",
+                "支持实时耳返，演唱零延迟",
+                "兼容手机/平板/电脑多平台",
+                "可调节混响音效，增强演唱效果"
+            ],
+            "sale_points": [
+                "买麦克风送唱吧会员月卡",
+                "7×24小时技术支持",
+                "1年免费换新服务"
+            ]
+        }
+    },
+    {
+        "id": 10,
+        "title": "补光灯套装",
+        "content": "三色温调节，便携支架",
+        "category": "live_equipment",
+        "category_name": "直播设备",
+        "user_id": 2,
+        "username": "交易达人",
+        "avatar": "https://via.placeholder.com/40",
+        "created_at": "2025-05-27",
+        "updated_at": "2025-05-27",
+        "views": 6,
+        "replies": 0,
+        "last_reply_at": "2025-05-27",
+        "last_reply_user": "交易达人",
+        "is_sticky": false,
+        "is_announcement": false,
+        "is_hot": false,
+        "tags": [
+            "生活用品安利"
+        ],
+        "total_selected": 413,
+        "unsold_count": 2,
+        "price": 299.0,
+        "supplier": "神牛",
+        "description": "三色温调节，便携支架",
+        "details": {
+            "specs": [
+                "2000-6500K色温调节",
+                "95+高显指",
+                "1.8米可伸缩支架",
+                "USB供电"
+            ],
+            "features": [
+                "旋钮式调光，操作简单便捷",
+                "柔光罩设计，光线均匀不刺眼",
+                "折叠收纳，携带方便",
+                "支持手机/相机/三脚架多场景使用"
+            ],
+            "sale_points": [
+                "加1元换购手机支架",
+                "直播间专享价立减40元",
+                "3年保修服务"
+            ]
+        }
     }
 ]

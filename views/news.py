@@ -13,16 +13,17 @@ logger = logging.getLogger(__name__)
 bp = Blueprint('news', __name__)
 
 # 商品数据文件路径
-PRODUCTS_FILE = '../data/news.json'
+PRODUCTS_FILE = '../data/forum/topics.json'
 
 def load_news_data():
     try:
         current_dir = os.path.dirname(os.path.abspath(__file__))
         products_path = os.path.join(current_dir, PRODUCTS_FILE)
-        
         if os.path.exists(products_path):
             with open(products_path, 'r', encoding='utf-8') as f:
-                return json.load(f)
+                data = json.load(f)
+                # 只保留 id>=2 的商品
+                return [item for item in data if isinstance(item.get('id'), int) and item['id'] >= 2]
         else:
             logger.warning(f"商品数据文件不存在: {products_path}")
             return []

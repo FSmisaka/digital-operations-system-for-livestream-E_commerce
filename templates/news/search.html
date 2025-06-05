@@ -31,14 +31,14 @@
             <div class="row align-items-center">
               <div class="col-md-3">
                 <img src="https://via.placeholder.com/150x100?text=Product" 
-                     class="img-fluid rounded" alt="{{ product.name }}">
+                     class="img-fluid rounded" alt="{{ product.title }}">
               </div>
               <div class="col-md-6">
                 <h5 class="card-title">
-                  {{ product.name|replace(keyword, '<span class="text-danger">' + keyword + '</span>')|safe }}
+                  {{ product.title|replace(keyword, '<span class="text-danger">' + keyword + '</span>')|safe }}
                 </h5>
                 <p class="card-text text-muted small">
-                  {{ product.description|replace(keyword, '<span class="text-danger">' + keyword + '</span>')|safe }}
+                  {{ product.content|replace(keyword, '<span class="text-danger">' + keyword + '</span>')|safe }}
                 </p>
                 <div class="d-flex gap-2 small">
                   <span class="badge bg-primary">{{ product.category }}</span>

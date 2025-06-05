@@ -21,42 +21,35 @@
   </div>
 
   <!-- 主推商品 -->
-  {% if featured_product %}
-  <div class="card mb-4 shadow-lg">
-    <div class="row g-4">
-      <div class="col-md-5">
-        <img src="https://via.placeholder.com/400x300?text=Featured+Product" 
-             class="img-fluid rounded-3" alt="主推商品">
-      </div>
-      <div class="col-md-7">
-        <div class="card-body">
-          <h2 class="text-primary mb-3">{{ featured_product.name }}</h2>
-          <div class="row g-3">
-            <div class="col-6">
-              <p class="mb-1"><i class="bi bi-star-fill text-warning"></i> 推荐指数：{{ featured_product.recommend_score }}</p>
-              <p class="mb-1"><i class="bi bi-currency-exchange"></i> 价格：¥{{ "%.2f"|format(featured_product.price) }}</p>
-            </div>
-            <div class="col-6">
-              <p class="mb-1"><i class="bi bi-box-seam"></i> 库存：{{ featured_product.total_selected - featured_product.unsold_count }}</p>
-              <p class="mb-1"><i class="bi bi-shop"></i> {{ featured_product.supplier }}</p>
-            </div>
+{% if featured_product %}
+<div class="card mb-4 shadow-lg">
+  <div class="row g-4">
+    <div class="col-md-12">
+      <div class="card-body">
+        <h2 class="text-primary mb-3">{{ featured_product.title }}</h2>
+        <div class="row g-3">
+          <div class="col-6">
+            <p class="mb-1"><i class="bi bi-star-fill text-warning"></i> 推荐指数：{{ featured_product.recommend_score }}</p>
+            <p class="mb-1"><i class="bi bi-currency-exchange"></i> 价格：¥{{ "%.2f"|format(featured_product.price) }}</p>
           </div>
-          <hr>
-          <p class="card-text">{{ featured_product.description }}</p>
-          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <a href="{{ url_for('news.detail', product_id=featured_product.id) }}" 
-              class="btn btn-primary btn-lg">
-              <i class="bi bi-eye"></i> 查看详情
-            </a>
-            <a href="#" class="btn btn-outline-primary btn-lg ms-2">
-              <i class="bi bi-cart-plus"></i> 前去采购
-            </a>
+          <div class="col-6">
+            <p class="mb-1"><i class="bi bi-box-seam"></i> 库存：{{ featured_product.total_selected - featured_product.unsold_count }}</p>
+            <p class="mb-1"><i class="bi bi-shop"></i> {{ featured_product.supplier }}</p>
           </div>
+        </div>
+        <hr>
+        <p class="card-text">{{ featured_product.content }}</p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <a href="{{ url_for('forum.topic', topic_id=featured_product.id) }}" 
+            class="btn btn-primary btn-lg">
+            <i class="bi bi-eye"></i> 查看详情
+          </a>
         </div>
       </div>
     </div>
   </div>
-  {% endif %}
+</div>
+{% endif %}
 
   <div class="row">
     <!-- 精选推荐 -->
@@ -72,18 +65,18 @@
               </span>
             </div>
             <div class="col-md-6">
-              <h5 class="card-title">{{ product.name }}</h5>
+              <h5 class="card-title">{{ product.title }}</h5>
               <div class="d-flex gap-2 small mb-2">
-                <span class="badge bg-secondary">{{ product.category }}</span>
+                <span class="badge bg-secondary">{{ product.category_name }}</span>
                 <span class="text-muted">{{ product.supplier }}</span>
               </div>
-              <p class="card-text text-muted">{{ product.description[:50] }}...</p>
+              <p class="card-text text-muted">{{ product.content[:50] }}...</p>
             </div>
             <div class="col-md-3 text-end">
               <div class="mb-2">
                 <span class="text-success">{{ product.total_selected }}次选品</span>
               </div>
-              <a href="{{ url_for('news.detail', product_id=product.id) }}" 
+              <a href="{{ url_for('forum.topic', topic_id=product.id) }}" 
                 class="btn btn-outline-primary btn-sm">
                 <i class="bi bi-eye"></i> 查看详情
               </a>
@@ -106,7 +99,7 @@
             {% for product in hot_products %}
             <li class="list-group-item d-flex justify-content-between align-items-start">
               <div class="ms-2 me-auto">
-                <div>{{ product.name }}</div>
+                <div>{{ product.title }}</div>
                 <small class="text-muted">{{ product.supplier }}</small>
               </div>
               <span class="badge bg-primary rounded-pill">{{ product.total_selected }}</span>
