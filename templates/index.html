@@ -8,14 +8,14 @@ endblock %} {% block content %}
         <p class="lead">基于机器学习算法，为您提供 选品 采购 直播辅助 库存记录 售后 一站式服务</p>
         <hr class="my-4" />
         <p>
-          本系统利用先进的深度学习算法，结合历史数据和市场因素，为您提供豆粕期货价格的预测分析。
+          接入DeepSeek v3，结合商品信息与直播数据，为您提供定制化直播逐字稿和数据分析。
         </p>
         <div class="d-grid gap-2 d-md-flex justify-content-md-center">
           <a
             href="{{ url_for('visualization.view_data') }}"
             class="btn btn-primary btn-lg px-4"
           >
-            <i class="bi bi-bar-chart"></i> 查看数据分析
+            <i class="bi bi-bar-chart"></i> 进入直播辅助
           </a>
         </div>
       </div>
@@ -57,35 +57,28 @@ endblock %} {% block content %}
   <div class="col-md-6">
     <div class="card mb-4 shadow-sm home-card">
       <div class="card-header bg-primary text-white">
-        <i class="bi bi-basket-fill"></i> 产品动态
+        <i class="bi bi-basket-fill"></i> 选品动态
       </div>
       <div class="card-body">
         <ul class="list-unstyled">
           {% for news in latest_news %}
           <li class="mb-2">
-            {% if news.url %}
             <a
-              href="{{ news.url }}"
-              target="_blank"
-              class="text-decoration-none"
-              >{{ news.title }} <i class="bi bi-box-arrow-up-right small"></i
-            ></a>
-            {% else %}
-            <a
-              href="{{ url_for('news.detail', product_id=news.id) }}"
+              href="{{ url_for('forum.topic', topic_id=news.id) }}"
               class="text-decoration-none"
               >{{ news.title }}</a
             >
-            {% endif %}
             <div class="small text-muted">{{ news.date }}</div>
           </li>
           {% endfor %}
         </ul>
-        <a
-          href="{{ url_for('news.index') }}"
-          class="btn btn-sm btn-outline-primary"
-          >查看更多</a
-        >
+        <div class="d-flex justify-content-between">
+          <a
+            href="{{ url_for('news.index') }}"
+            class="btn btn-sm btn-outline-primary"
+            >查看更多</a
+          >
+        </div>
       </div>
     </div>
   </div>
@@ -97,41 +90,22 @@ endblock %} {% block content %}
       </div>
       <div class="card-body">
         <ul class="list-unstyled">
+          {% for news in latest_news[:3] %}
           <li class="mb-2">
             <a
-              href="{{ url_for('forum.topic', topic_id=2) }}"
+              href="{{ url_for('forum.topic', topic_id=news.id) }}"
               class="text-decoration-none"
-              >产品1</a
+              >{{ news.title }}</a
             >
-            <div class="small text-muted">32 评价 · 2 小时前</div>
+            <div class="small text-muted">{{ news.replies }} 评价 · {{ news.updated_at }}</div>
           </li>
-          <li class="mb-2">
-            <a
-              href="{{ url_for('forum.topic', topic_id=3) }}"
-              class="text-decoration-none"
-              >产品2</a
-            >
-            <div class="small text-muted">18 评价 · 5 小时前</div>
-          </li>
-          <li class="mb-2">
-            <a
-              href="{{ url_for('forum.topic', topic_id=4) }}"
-              class="text-decoration-none"
-              >产品3</a
-            >
-            <div class="small text-muted">45 评价 · 1 天前</div>
-          </li>
+          {% endfor %}
         </ul>
         <div class="d-flex justify-content-between">
           <a
             href="{{ url_for('forum.index') }}"
             class="btn btn-sm btn-outline-primary"
             >进入采购中心</a
-          >
-          <a
-            href="{{ url_for('forum.new_topic') }}"
-            class="btn btn-sm btn-primary"
-            >发布产品</a
           >
         </div>
       </div>

@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 bp = Blueprint('news', __name__)
 
 # 商品数据文件路径
-PRODUCTS_FILE = '../data/news.json'
+PRODUCTS_FILE = '../data/forum/topics.json'
 
 def load_news_data():
     try:
