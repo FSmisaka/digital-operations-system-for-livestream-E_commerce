@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% block title %}直播详情 - 第{{ live_number }}场{% endblock %}
+
+{% block head %}
+<style>
+    .plot-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+    .plot-title {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #333;
+    }
+    .plot-image {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+    }
+    .loading {
+        text-align: center;
+        padding: 20px;
+    }
+    .error-message {
+        color: #dc3545;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        background-color: #f8d7da;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2><i class="bi bi-graph-up"></i> 第{{ live_number }}场直播详情分析</h2>
+            <p class="lead">展示直播过程中的各项数据指标和趋势</p>
+        </div>
+    </div>
+
+    <div id="loading" class="loading">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">加载中...</span>
+        </div>
+        <p class="mt-2">正在加载直播数据...</p>
+    </div>
+
+    <div id="error" class="error-message" style="display: none;"></div>
+
+
+    <div id="plots" style="display: none;">
+        <!-- 实时活动趋势 -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="plot-container">
+                    <div class="plot-title">直播间实时活动趋势</div>
+                    <img id="activity-trend" class="plot-image" alt="实时活动趋势">
+                </div>
+            </div>
+        </div>
+
+        <!-- 商品销量和销售额 -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="plot-container">
+                    <div class="plot-title">商品销量</div>
+                    <img id="product-sales" class="plot-image" alt="商品销量">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="plot-container">
+                    <div class="plot-title">商品销售额占比</div>
+                    <img id="sales-pie" class="plot-image" alt="销售额占比">
+                </div>
+            </div>
+        </div>
+
+        <!-- 用户留存和转化 -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="plot-container">
+                    <div class="plot-title">用户留存曲线</div>
+                    <img id="retention-curve" class="plot-image" alt="用户留存曲线">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="plot-container">
+                    <div class="plot-title">用户转化漏斗</div>
+                    <img id="conversion-funnel" class="plot-image" alt="转化漏斗">
+                </div>
+            </div>
+        </div>
+    </div>    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const liveNumber = "{{ live_number }}";
+    
+    // 加载数据并更新UI
+    fetch(`/viz/api/live-analysis/${liveNumber}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('loading').style.display = 'none';
+            
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            // 显示所有图表
+            document.getElementById('plots').style.display = 'block';
+            
+            // 更新图表
+            const plots = ['activity-trend', 'product-sales', 'sales-pie', 'retention-curve', 'conversion-funnel'];
+            plots.forEach(plotId => {
+                const plotData = data.plots?.[plotId.replace('-', '_')];
+                if (plotData) {
+                    document.getElementById(plotId).src = 'data:image/png;base64,' + plotData;
+                } else {
+                    console.warn(`未找到图表数据: ${plotId}`);
+                }
+            });            // 更新直播基本信息
+            if (data.live_info) {
+                document.getElementById('viewer-count').textContent = 
+                    data.live_info.viewer_count ? data.live_info.viewer_count.toLocaleString() : '-';
+                
+                document.getElementById('live-duration').textContent = 
+                    data.live_info.duration ? `${Math.round(data.live_info.duration / 60)}分钟` : '-';
+                
+                document.getElementById('total-revenue').textContent = 
+                    data.live_info.total_revenue ? `¥${parseFloat(data.live_info.total_revenue).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : '-';
+            }
+        })
+        .catch(error => {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').textContent = '加载数据失败: ' + error;
+            document.getElementById('error').style.display = 'block';
+            console.error('Error:', error);
+        });
+});
+</script>
+{% endblock %}

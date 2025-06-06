@@ -146,6 +146,7 @@
                   <th>平均观看人数</th>
                   <th>点赞数</th>
                   <th>收入(元)</th>
+                  <th>直播详情</th>
                 </tr>
               </thead>
               <tbody>
@@ -339,7 +340,11 @@
             <td>${Math.round(stream.duration / 60) || 0}</td>
             <td>${Math.round(stream.viewers) || 0}</td>
             <td>${Math.round(stream.likes) || 0}</td>
-            <td>¥${Math.round(stream.revenue) || 0}</td>
+            <td>¥${Math.round(stream.revenue) || 0}</td>              <td>
+                <a href="/viz/live-detail/${stream.id || stream.date}" class="btn btn-primary btn-sm">
+                  <i class="bi bi-graph-up"></i> 查看详情
+                </a>
+              </td>
           </tr>
         `).join('');
       } else {
