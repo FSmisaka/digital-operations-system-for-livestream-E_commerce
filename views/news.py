@@ -125,7 +125,7 @@ def search():
         flag = False
         keyword_.append('')
         for keyword in keywords.split():
-            if keyword.lower() in product['title'].lower() + product['description'].lower():
+            if keyword.lower() in product['title'].lower() + product['content'].lower():
                 flag = True
                 keyword_[-1] = keyword.lower()
         if flag: search_results.append(product)
