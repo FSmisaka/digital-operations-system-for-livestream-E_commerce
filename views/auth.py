@@ -4,7 +4,7 @@ import json
 import logging
 from functools import wraps
 from datetime import datetime
-from views.data_utils import reset_data_file_path
+from views.data_utils import reset_data_file_path, load_data, save_data
 
 # 设置日志记录
 logging.basicConfig(level=logging.INFO)
@@ -15,6 +15,7 @@ bp = Blueprint('auth', __name__)
 
 # 用户数据文件路径 (相对于当前文件)
 USERS_FILE = '../data/forum/users.json'
+SELECTED = '../data/selected.json'
 
 def get_users_file_path():
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -141,9 +142,11 @@ def register():
             flash('用户名已存在，请选择其他用户名', 'danger')
             return render_template('auth/register.html')
 
+        new_id = max([u['id'] for u in users], default=0) + 1
+
         # 创建新用户
         new_user = {
-            "id": max([u['id'] for u in users], default=0) + 1,
+            "id": new_id,
             "username": username,
             "password": password,
             "avatar": "https://via.placeholder.com/40",
@@ -153,6 +156,12 @@ def register():
             "join_date": datetime.now().strftime('%Y-%m-%d'),
             "last_active": datetime.now().strftime('%Y-%m-%d')
         }
+
+        selected = load_data(SELECTED)
+        selected.append({
+            "user_id": new_id,
+            "selected": {}
+        })
 
         # 添加新用户并保存
         users.append(new_user)

@@ -149,16 +149,21 @@ def batch_select():
     try:
         # 加载topics.json
         products = load_data(PRODUCTS_FILE)
-        print(products)
+        selected = load_data(SELECTED)
         
         # 更新选品次数
         for topic in products:
             if topic['id'] in product_ids:
-                print(topic['id'])
                 topic['total_selected'] = topic.get('total_selected', 0) + 1
         
-        # 保存更新后的数据
+        for s in selected:
+            if s['user_id'] == session.get('user_id'):
+                for pid in product_ids:
+                    cnt = s['selected'].get(str(pid), 0)
+                    s['selected'][str(pid)] = cnt+1
+        
         save_data(PRODUCTS_FILE, products)
+        save_data(SELECTED, selected)
         
         return jsonify({
             'success': True,

@@ -184,7 +184,7 @@ h4 {
               <i class="bi bi-check-circle-fill text-success me-2"></i>商品特点
             </h6>
             <div class="row g-2">
-              {% for feature in featured_product.details.features %}
+              {% for feature in featured_product.details.features[:3] %}
               <div class="col-12">
                 <div class="d-flex align-items-center">
                   <i class="bi bi-dot text-primary me-2"></i>
@@ -201,7 +201,7 @@ h4 {
               <i class="bi bi-gift-fill text-danger me-2"></i>促销活动
             </h6>
             <div class="row g-2">
-              {% for point in featured_product.details.sale_points %}
+              {% for point in featured_product.details.sale_points[:3] %}
               <div class="col-12">
                 <div class="d-flex align-items-center">
                   <i class="bi bi-tag-fill text-warning me-2"></i>
@@ -243,7 +243,7 @@ h4 {
             <div class="col-md-3">
               <div class="price-badge text-center mb-3 mb-md-0">
                 <span class="h4 mb-0 d-block text-primary">￥{{ "%.2f"|format(product.price) }}</span>
-                <small class="text-muted">市场价</small>
+                <small class="text-muted">市场参考价</small>
               </div>
             </div>
             <div class="col-md-6">
