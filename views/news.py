@@ -49,7 +49,7 @@ def calculate_recommendations(user_id):
         # 全体用户选品次数
         total_selected = product['total_selected']
         
-        # 计算最终推荐分数: 用户选品次数 + 全体选品次数 - 滞销惩罚
+        # 计算最终推荐分数: 用户选品次数 + 全体选品次数/用户总数
         # 可以调整权重，例如 user_count * 0.5 降低历史选品的影响
         product['recommend_score'] = user_count + total_selected//l
     
