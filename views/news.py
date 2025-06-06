@@ -72,12 +72,12 @@ def index():
     recommended_products = calculate_recommendations(user_id)
     
     # 获取热门商品（按全体选择次数排序）
-    hot_products = sorted(load_data(PRODUCTS_FILE)[1:], key=lambda x: x['total_selected'], reverse=True)[:5]
+    hot_products = sorted(load_data(PRODUCTS_FILE)[1:], key=lambda x: x['total_selected'], reverse=True)[:6]
     
     return render_template(
         'news/index.html',
         featured_product=recommended_products[0] if recommended_products else None,
-        recommended_products=recommended_products[1:4],
+        recommended_products=recommended_products[1:5],
         hot_products=hot_products
     )
 
