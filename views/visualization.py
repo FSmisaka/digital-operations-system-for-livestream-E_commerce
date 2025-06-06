@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, current_app, jsonify, request
 import json
 import os
 import logging
-from views.auth import login_required, user_required
+from views.auth import login_required, user_required, load_data
 import requests
 from config import DEEPSEEK_API_KEY
 from openai import OpenAI
@@ -45,13 +45,25 @@ def view_data():
 @user_required
 def get_products():
     try:
-        data_file = os.path.join(current_app.root_path, 'data', 'news.json')
-        if not os.path.exists(data_file):
-            return jsonify({'error': '商品数据文件不存在'}), 404
-            
-        with open(data_file, 'r', encoding='utf-8') as f:
-            products = json.load(f)
-        return jsonify(products)
+        topics_file = os.path.join(current_app.root_path, 'data', 'forum', 'topics.json')
+        
+        with open(topics_file, 'r', encoding='utf-8') as f:
+            topics = json.load(f)
+        
+        # 确保跳过第一个公告项，并只包含有效的商品数据
+        formatted_products = []
+        for topic in topics[1:]:  # 跳过第一个公告
+            if topic.get('id'):  # 确保有 id
+                formatted_products.append({
+                    'id': topic.get('id'),
+                    'name': topic.get('title'),
+                    'price': topic.get('price', 0),
+                    'category': topic.get('category', '未分类'),
+                    'supplier': topic.get('supplier', '未知供应商'),
+                    'description': topic.get('content', '')
+                })
+        
+        return jsonify(formatted_products)
     except Exception as e:
         logging.error(f'获取商品数据时出错: {str(e)}')
         return jsonify({'error': str(e)}), 500
