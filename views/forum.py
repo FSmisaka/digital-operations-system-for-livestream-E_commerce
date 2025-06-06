@@ -6,7 +6,10 @@ import time
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash, session
 from views.auth import login_required, supplier_required
 from views.data_utils import reset_data_file_path, load_data, save_data
+from flask import Blueprint, render_template, request, redirect, url_for
 
+
+bp = Blueprint('forum', __name__)
 # 设置日志记录
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -19,6 +22,7 @@ FORUM_DATA_PATH = '../data/forum'
 TOPICS_FILE = f'{FORUM_DATA_PATH}/topics.json'
 REPLIES_FILE = f'{FORUM_DATA_PATH}/replies.json'
 USERS_FILE = f'{FORUM_DATA_PATH}/users.json'
+MESSAGES_FILE=f'{FORUM_DATA_PATH}/messages.json'
 
 # 论坛版块
 # 修改后的论坛类别数据
@@ -27,235 +31,7 @@ FORUM_CATEGORIES = [
     {"id": "food", "name": "食品饮料", "icon": "bi-cup-hot", "color": "warning", "topics": 98, "replies": 876},
     {"id": "daily_necessities", "name": "生活用品", "icon": "bi-house", "color": "success", "topics": 76, "replies": 654},
     {"id": "cosmetics", "name": "美妆产品", "icon": "bi-palette", "color": "info", "topics": 145, "replies": 1876},
-    {"id": "purchase_order", "name": "采购订单", "icon": "bi-cart-check", "color": "purple", "topics": 60, "replies": 180}
 ]
-
-# 修改后的样本主题数据
-SAMPLE_TOPICS = [
-    {
-        "id": 1,
-        "title": "电子产品市场动态",
-        "content": "近期电子产品市场价格波动较大，特别是智能手机领域。大家有何看法？",
-        "category": "electronics",
-        "category_name": "电子产品",
-        "user_id": 1,
-        "username": "管理员",
-        "avatar": "https://via.placeholder.com/40",
-        "created_at": "2023-04-20",
-        "updated_at": "2023-04-20",
-        "views": 1256,
-        "replies": 24,
-        "last_reply_at": "2023-05-01",
-        "last_reply_user": "交易达人",
-        "is_sticky": True,
-        "is_announcement": False,
-        "is_hot": False,
-        "tags": ["智能手机", "价格波动"]
-    },
-    {
-        "id": 2,
-        "title": "食品饮料行业分析",
-        "content": "最近食品行业受到原料价格上涨的影响，大家对未来几个月的趋势有什么看法？",
-        "category": "food",
-        "category_name": "食品饮料",
-        "user_id": 2,
-        "username": "交易达人",
-        "avatar": "https://via.placeholder.com/40",
-        "created_at": "2023-05-02",
-        "updated_at": "2023-05-02",
-        "views": 876,
-        "replies": 32,
-        "last_reply_at": "2023-05-03 14:30",
-        "last_reply_user": "市场分析师",
-        "is_sticky": False,
-        "is_announcement": False,
-        "is_hot": True,
-        "tags": ["食品价格", "原料"]
-    },
-    {
-        "id": 3,
-        "title": "生活用品市场价格变化",
-        "content": "生活用品中的洗衣液、纸巾等产品价格也有明显波动，大家如何看待这个趋势？",
-        "category": "daily_necessities",
-        "category_name": "生活用品",
-        "user_id": 3,
-        "username": "AI研究者",
-        "avatar": "https://via.placeholder.com/40",
-        "created_at": "2023-05-01",
-        "updated_at": "2023-05-01",
-        "views": 654,
-        "replies": 18,
-        "last_reply_at": "2023-05-03 11:45",
-        "last_reply_user": "技术派",
-        "is_sticky": False,
-        "is_announcement": False,
-        "is_hot": True,
-        "tags": ["洗衣液", "生活用品", "价格波动"]
-    },
-    {
-        "id": 4,
-        "title": "美妆行业新兴品牌推荐",
-        "content": "近期美妆行业的某些新兴品牌发展势头强劲，大家对这些品牌的前景怎么看？",
-        "category": "cosmetics",
-        "category_name": "美妆产品",
-        "user_id": 4,
-        "username": "期货老手",
-        "avatar": "https://via.placeholder.com/40",
-        "created_at": "2023-05-03",
-        "updated_at": "2023-05-03",
-        "views": 432,
-        "replies": 45,
-        "last_reply_at": "2023-05-03 15:20",
-        "last_reply_user": "交易达人",
-        "is_sticky": False,
-        "is_announcement": False,
-        "is_hot": False,
-        "tags": ["美妆品牌", "行业发展"]
-    },
-    {
-        "id": 5,
-        "title": "采购订单处理与优化",
-        "content": "采购订单管理在供应链中的重要性不言而喻，如何提高采购订单的处理效率，降低成本呢？",
-        "category": "purchase_order",
-        "category_name": "采购订单",
-        "user_id": 5,
-        "username": "市场分析师",
-        "avatar": "https://via.placeholder.com/40",
-        "created_at": "2023-05-03",
-        "updated_at": "2023-05-03",
-        "views": 345,
-        "replies": 12,
-        "last_reply_at": "2023-05-03 13:15",
-        "last_reply_user": "基本面研究",
-        "is_sticky": False,
-        "is_announcement": False,
-        "is_hot": False,
-        "tags": ["采购管理", "订单优化"]
-    }
-]
-
-# 修改后的样本回复数据
-SAMPLE_REPLIES = [
-    {
-        "id": 1,
-        "topic_id": 2,
-        "user_id": 5,
-        "username": "市场分析师",
-        "avatar": "https://via.placeholder.com/40",
-        "content": "从基本面看，这波上涨主要受以下因素驱动：\n\n1. 国内饲料需求恢复，特别是生猪养殖规模扩大\n2. 豆粕库存处于近五年同期较低水平\n3. 美豆种植进度低于预期，市场担忧供应\n\n短期来看，价格可能继续震荡上行，但需关注美豆种植进度和南美大豆产量情况。",
-        "created_at": "2023-05-02 10:30",
-        "updated_at": "2023-05-02 10:30",
-        "likes": 15
-    },
-    {
-        "id": 2,
-        "topic_id": 2,
-        "user_id": 7,
-        "username": "技术派",
-        "avatar": "https://via.placeholder.com/40",
-        "content": "从技术面看，豆粕期货突破了前期高点，MACD指标金叉，KDJ指标向上发散，短期有望继续上行。但RSI指标已接近超买区域，后市可能面临回调压力。建议逢低做多，关注3480元/吨压力位。",
-        "created_at": "2023-05-02 11:45",
-        "updated_at": "2023-05-02 11:45",
-        "likes": 8
-    },
-    {
-        "id": 3,
-        "topic_id": 2,
-        "user_id": 4,
-        "username": "期货老手",
-        "avatar": "https://via.placeholder.com/40",
-        "content": "我认为这波上涨主要是资金推动，机构大幅增仓做多。从持仓数据看，主力多头持仓增加明显。但需要注意的是，价格上涨过快，短期可能面临回调风险。建议设置合理止损，控制仓位。",
-        "created_at": "2023-05-02 14:20",
-        "updated_at": "2023-05-02 14:20",
-        "likes": 12
-    }
-]
-
-
-# 模拟用户数据
-SAMPLE_USERS = [
-    {
-        "id": 1,
-        "username": "管理员",
-        "avatar": "https://via.placeholder.com/40",
-        "role": "admin",
-        "posts": 56,
-        "replies": 234,
-        "join_date": "2023-01-01",
-        "last_active": "2023-05-03"
-    },
-    {
-        "id": 2,
-        "username": "交易达人",
-        "avatar": "https://via.placeholder.com/40",
-        "role": "user",
-        "posts": 87,
-        "replies": 342,
-        "join_date": "2023-01-15",
-        "last_active": "2023-05-03"
-    },
-    {
-        "id": 3,
-        "username": "AI研究者",
-        "avatar": "https://via.placeholder.com/40",
-        "role": "user",
-        "posts": 45,
-        "replies": 156,
-        "join_date": "2023-02-05",
-        "last_active": "2023-05-02"
-    },
-    {
-        "id": 4,
-        "username": "期货老手",
-        "avatar": "https://via.placeholder.com/40",
-        "role": "user",
-        "posts": 123,
-        "replies": 567,
-        "join_date": "2023-01-10",
-        "last_active": "2023-05-03"
-    },
-    {
-        "id": 5,
-        "username": "市场分析师",
-        "avatar": "https://via.placeholder.com/40",
-        "role": "user",
-        "posts": 67,
-        "replies": 289,
-        "join_date": "2023-02-20",
-        "last_active": "2023-05-03"
-    },
-    {
-        "id": 6,
-        "username": "期货新手",
-        "avatar": "https://via.placeholder.com/40",
-        "role": "user",
-        "posts": 12,
-        "replies": 45,
-        "join_date": "2023-04-10",
-        "last_active": "2023-05-02"
-    },
-    {
-        "id": 7,
-        "username": "技术派",
-        "avatar": "https://via.placeholder.com/40",
-        "role": "user",
-        "posts": 34,
-        "replies": 123,
-        "join_date": "2023-03-15",
-        "last_active": "2023-05-02"
-    },
-    {
-        "id": 8,
-        "username": "基本面研究",
-        "avatar": "https://via.placeholder.com/40",
-        "role": "user",
-        "posts": 56,
-        "replies": 234,
-        "join_date": "2023-02-28",
-        "last_active": "2023-05-01"
-    }
-]
-
 
 
 def get_created_at(x):
@@ -270,7 +46,7 @@ def index():
     reset_data_file_path()
 
     category = request.args.get('category', 'all')
-    topics = load_data(TOPICS_FILE, SAMPLE_TOPICS)
+    topics = load_data(TOPICS_FILE)
 
     if category != 'all':
         filtered_topics = [topic for topic in topics if topic['category'] == category]
@@ -285,7 +61,7 @@ def index():
     ]
     latest_topics.sort(key=get_created_at, reverse=True)
 
-    users = load_data(USERS_FILE, SAMPLE_USERS)
+    users = load_data(USERS_FILE)
     active_users = sorted(users, key=get_replies, reverse=True)[:6]
 
     forum_stats = {
@@ -309,7 +85,7 @@ def index():
 @bp.route('/topic/<int:topic_id>')
 @login_required
 def topic(topic_id):
-    topics = load_data(TOPICS_FILE, SAMPLE_TOPICS)
+    topics = load_data(TOPICS_FILE)
     topic = next((t for t in topics if t['id'] == topic_id), None)
 
     if not topic:
@@ -318,7 +94,7 @@ def topic(topic_id):
     topic['views'] = topic.get('views', 0) + 1
     save_data(TOPICS_FILE, topics)
 
-    replies = load_data(REPLIES_FILE, SAMPLE_REPLIES)
+    replies = load_data(REPLIES_FILE)
     topic_replies = [reply for reply in replies if reply['topic_id'] == topic_id]
     topic_replies.sort(key=get_created_at)
 
@@ -327,7 +103,7 @@ def topic(topic_id):
         if t['category'] == topic['category'] and t['id'] != topic_id
     ][:3]
 
-    users = load_data(USERS_FILE, SAMPLE_USERS)
+    users = load_data(USERS_FILE)
     user = next((u for u in users if u['id'] == topic['user_id']), {
         'posts': 0,
         'replies': 0,
@@ -361,7 +137,7 @@ def create_topic():
         return jsonify({'success': False, 'message': '请填写完整信息'}), 400
 
     # 加载主题数据
-    topics = load_data(TOPICS_FILE, SAMPLE_TOPICS)
+    topics = load_data(TOPICS_FILE)
 
     # 生成新主题ID
     new_id = max([topic['id'] for topic in topics], default=0) + 1
@@ -383,14 +159,14 @@ def create_topic():
         'category': category,
         'category_name': category_name,
         'user_id': 2,  
-        'username': '交易达人',  
+        'username': session.get('username'),  
         'avatar': 'https://via.placeholder.com/40',
         'created_at': datetime.now().strftime('%Y-%m-%d'),
         'updated_at': datetime.now().strftime('%Y-%m-%d'),
         'views': 0,
         'replies': 0,
         'last_reply_at': datetime.now().strftime('%Y-%m-%d'),
-        'last_reply_user': '交易达人',
+        'last_reply_user': session.get('username'),
         'is_sticky': False,
         'is_announcement': False,
         'is_hot': False,
@@ -404,7 +180,7 @@ def create_topic():
     save_data(TOPICS_FILE, topics)
 
     # 更新用户发帖数
-    users = load_data(USERS_FILE, SAMPLE_USERS)
+    users = load_data(USERS_FILE)
     for user in users:
         if user['id'] == 2:  
             user['posts'] = user.get('posts', 0) + 1
@@ -426,7 +202,7 @@ def reply(topic_id):
         return jsonify({'success': False, 'message': '回复内容不能为空'}), 400
 
     # 加载主题数据
-    topics = load_data(TOPICS_FILE, SAMPLE_TOPICS)
+    topics = load_data(TOPICS_FILE)
 
     # 查找指定ID的主题
     topic = next((t for t in topics if t['id'] == topic_id), None)
@@ -435,23 +211,25 @@ def reply(topic_id):
         return jsonify({'success': False, 'message': '主题不存在'}), 404
 
     # 加载回复数据
-    replies = load_data(REPLIES_FILE, SAMPLE_REPLIES)
+    replies = load_data(REPLIES_FILE)
 
     # 生成新回复ID
     new_id = max([reply['id'] for reply in replies], default=0) + 1
 
     # 创建新回复
     new_reply = {
-        'id': new_id,
-        'topic_id': topic_id,
-        'user_id': 2,  
-        'username': '交易达人',  
-        'avatar': 'https://via.placeholder.com/40',
-        'content': content,
-        'created_at': datetime.now().strftime('%Y-%m-%d %H:%M'),
-        'updated_at': datetime.now().strftime('%Y-%m-%d %H:%M'),
-        'likes': 0
+    'id': new_id,
+    'topic_id': topic_id,
+    'user_id': 2,  
+    'role_id': 0 if session.get('user_role') == 'admin' else (1 if session.get('user_role') == 'supplier' else 2),
+    'username': session.get('username'),  
+    'avatar': 'https://via.placeholder.com/40',
+    'content': content,
+    'created_at': datetime.now().strftime('%Y-%m-%d %H:%M'),
+    'updated_at': datetime.now().strftime('%Y-%m-%d %H:%M'),
+    'likes': 0
     }
+
 
     # 添加新回复
     replies.append(new_reply)
@@ -462,11 +240,11 @@ def reply(topic_id):
     # 更新主题回复数和最后回复信息
     topic['replies'] = topic.get('replies', 0) + 1
     topic['last_reply_at'] = datetime.now().strftime('%Y-%m-%d %H:%M')
-    topic['last_reply_user'] = '交易达人'
+    topic['last_reply_user'] = session.get('username')
     save_data(TOPICS_FILE, topics)
 
     # 更新用户回复数
-    users = load_data(USERS_FILE, SAMPLE_USERS)
+    users = load_data(USERS_FILE)
     for user in users:
         if user['id'] == 2:  
             user['replies'] = user.get('replies', 0) + 1
@@ -485,7 +263,7 @@ def search():
     if not keyword:
         return jsonify({'error': '请输入搜索关键词'}), 400
 
-    topics = load_data(TOPICS_FILE, SAMPLE_TOPICS)
+    topics = load_data(TOPICS_FILE)
     search_results = [
         topic for topic in topics
         if keyword.lower() in topic['title'].lower() or keyword.lower() in topic['content'].lower()
@@ -497,3 +275,138 @@ def search():
         topics=search_results,
         keyword=keyword
     )
+
+#实现用户之间的私聊
+def load_users():
+    return load_data(USERS_FILE)
+
+# 读取聊天记录
+def load_messages():
+    return load_data(MESSAGES_FILE)
+
+# 保存聊天记录
+def save_messages(messages):
+    with open('/Users/tanyuxin/Documents/GitHub/digital-operations-system-for-livestream-E_commerce/data/forum/messages.json', 'w', encoding='utf-8') as file:
+        json.dump(messages, file, ensure_ascii=False, indent=4)
+
+# 在会话中获取user的名字
+def get_username(user_id):
+    users = load_users()  # 假设这是加载所有用户的函数
+    for user in users:
+        if user['id'] == user_id:
+            return user['username']
+    return "未知用户"  # 如果找不到用户，则返回默认值
+
+# 获取私聊记录
+@bp.route('/private_message/<int:receiver_id>')
+def private_message(receiver_id):
+    user_id = session.get('user_id')  # 获取当前登录用户的ID
+    user_name = session.get('username')  # 获取当前登录用户的用户名
+    
+    # 使用 receiver_id 查找接收者的名字
+    receiver_name = request.args.get('receiver_name')  # 获取查询参数中的 receiver_name
+    messages = load_messages()
+
+    # 构造聊天记录的key
+    key = f"{min(user_id, receiver_id)}_{max(user_id, receiver_id)}"
+    
+    # 获取用户间的聊天记录
+    chat_history = messages.get(key, [])
+
+    # 将每条消息的 sender_id 和 receiver_id 替换为用户名
+    for message in chat_history:
+        # 根据 sender_id 获取发送者的名字，而不是统一设置为当前登录用户的名字
+        message['sender_name'] = get_username(message['sender_id'])
+        
+        # receiver_name 通过查询参数传递过来，已经是接收者的用户名
+        message['receiver_name'] = receiver_name
+
+    return render_template('forum/private_message.html', chat_history=chat_history, receiver_id=receiver_id, receiver_name=receiver_name,user_id=user_id)
+
+
+#发送消息
+@bp.route('/send_message', methods=['POST'])
+def send_message():
+    user_id = session.get('user_id')  # 获取当前登录用户的ID
+    receiver_id = int(request.form['receiver_id'])  # 获取接收者的ID
+    user_name = session.get('username')  # 获取当前登录用户的用户名
+    
+    # 使用 receiver_id 查找接收者的用户名
+    receiver_name = get_username(receiver_id)  # 通过 receiver_id 获取接收者的用户名
+    
+    message_content = request.form['message']  # 获取消息内容
+    
+    # 获取聊天记录
+    messages = load_messages()
+    
+    # 构造聊天记录的key
+    key = f"{min(user_id, receiver_id)}_{max(user_id, receiver_id)}"
+    chat_history = messages.get(key, [])
+    
+    # 新消息
+    new_message = {
+        "sender_id": user_id,
+        "receiver_id": receiver_id,
+        "message": message_content,
+        "timestamp": datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+    }
+    
+    # 将新消息添加到记录中
+    chat_history.append(new_message)
+    
+    # 保存回json
+    messages[key] = chat_history
+    save_messages(messages)
+    
+    # 返回发送者和接收者的用户名
+    return jsonify({
+        "success": True, 
+        "message": "消息已发送", 
+        "sender_name": user_name,  # 发送者的用户名
+        "receiver_name": receiver_name  # 接收者的用户名
+    })
+
+# 获取与所有用户的聊天列表
+@bp.route('/messages_center')
+def messages_center():
+    user_id = session.get('user_id')  # 获取当前登录用户的ID
+    messages = load_messages()  # 加载所有的聊天记录
+
+    chat_list = []  # 存储所有与当前用户的聊天记录
+    for key, chat_history in messages.items():
+        sender_id, receiver_id = map(int, key.split('_'))
+        
+        # 如果聊天记录涉及到当前用户，则添加到聊天列表中
+        if sender_id == user_id or receiver_id == user_id:
+            last_message = chat_history[-1]  # 获取最后一条消息
+            last_msg = last_message['message']
+            timestamp = last_message['timestamp']
+            
+            other_user_id = receiver_id if sender_id == user_id else sender_id
+            other_user_name = get_username(other_user_id)  # 获取对方用户名
+            
+            chat_list.append({
+                'receiver_id': other_user_id,
+                'receiver_name': other_user_name,
+                'last_message': last_msg,
+                'timestamp': timestamp,
+            })
+
+    return render_template('forum/messages_center.html', chat_list=chat_list)
+
+
+# 查看与某个用户的聊天记录
+@bp.route('/chat/<int:receiver_id>')
+def chat(receiver_id):
+    user_id = session.get('user_id')  # 获取当前登录用户的ID
+    messages = load_messages()  # 加载所有的聊天记录
+    receiver_name = get_username(receiver_id)
+
+    key = f"{min(user_id, receiver_id)}_{max(user_id, receiver_id)}"  # 构造聊天记录的key
+    chat_history = messages.get(key, [])  # 获取该聊天记录的历史消息
+
+    return render_template('forum/private_message.html', chat_history=chat_history, receiver_id=receiver_id,receiver_name=receiver_name,user_id=user_id)
+
+
+
+

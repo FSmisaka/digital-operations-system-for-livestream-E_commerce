@@ -1,101 +1,91 @@
 [
     {
         "id": 1,
-        "username": "admin",
-        "password": "admin",
+        "username": "我是供应商",
+        "password": "123456",
         "avatar": "https://via.placeholder.com/40",
-        "role": "user",
-        "posts": 5,
-        "replies": 15,
-        "join_date": "2023-01-01",
-        "last_active": "2025-05-11"
+        "role": "supplier",
+        "posts": 2,
+        "replies": 0,
+        "join_date": "2025-06-05",
+        "last_active": "2025-06-05"
     },
     {
         "id": 2,
-        "username": "user1",
-        "password": "admin",
+        "username": "爱直播的小xx",
+        "password": "123456",
         "avatar": "https://via.placeholder.com/40",
         "role": "user",
-        "posts": 5,
-        "replies": 10,
-        "join_date": "2023-01-15",
-        "last_active": "2025-06-02"
+        "posts": 2,
+        "replies": 3,
+        "join_date": "2025-06-05",
+        "last_active": "2025-06-05"
     },
     {
         "id": 3,
-        "username": "user2",
-        "password": "admin",
+        "username": "管理员",
+        "password": "123456",
         "avatar": "https://via.placeholder.com/40",
-        "role": "user",
-        "posts": 1,
-        "replies": 2,
-        "join_date": "2023-02-05",
-        "last_active": "2023-05-01"
+        "role": "admin",
+        "posts": 5,
+        "replies": 10,
+        "join_date": "2025-06-01",
+        "last_active": "2025-06-05"
     },
     {
         "id": 4,
-        "username": "admin1",
-        "password": "admin",
+        "username": "直播电商1",
+        "password": "123456",
         "avatar": "https://via.placeholder.com/40",
-        "role": "admin",
-        "posts": 0,
-        "replies": 0,
-        "join_date": "2025-05-11",
-        "last_active": "2025-05-11"
+        "role": "user",
+        "posts": 3,
+        "replies": 1,
+        "join_date": "2025-06-02",
+        "last_active": "2025-06-05"
     },
     {
         "id": 5,
-        "username": "22377218",
-        "password": "eT}mR66kyGM6S",
+        "username": "供应商1",
+        "password": "123456",
         "avatar": "https://via.placeholder.com/40",
-        "role": "user",
-        "posts": 0,
-        "replies": 0,
-        "join_date": "2025-05-22",
-        "last_active": "2025-05-22"
+        "role": "supplier",
+        "posts": 8,
+        "replies": 5,
+        "join_date": "2025-06-03",
+        "last_active": "2025-06-05"
     },
     {
         "id": 6,
-        "username": "22377316",
-        "password": "admin",
+        "username": "管理员1",
+        "password": "123456",
         "avatar": "https://via.placeholder.com/40",
-        "role": "user",
-        "posts": 0,
-        "replies": 0,
-        "join_date": "2025-05-25",
-        "last_active": "2025-05-25"
+        "role": "admin",
+        "posts": 10,
+        "replies": 20,
+        "join_date": "2025-06-04",
+        "last_active": "2025-06-05"
     },
     {
         "id": 7,
-        "username": "22377318",
-        "password": "123",
+        "username": "直播电商2",
+        "password": "123456",
         "avatar": "https://via.placeholder.com/40",
-        "role": "admin",
-        "posts": 0,
-        "replies": 0,
-        "join_date": "2025-05-25",
-        "last_active": "2025-05-25"
+        "role": "user",
+        "posts": 4,
+        "replies": 3,
+        "join_date": "2025-06-05",
+        "last_active": "2025-06-05"
     },
     {
         "id": 8,
-        "username": "22377001",
-        "password": "xinxi123456",
+        "username": "供应商2",
+        "password": "123456",
         "avatar": "https://via.placeholder.com/40",
         "role": "user",
         "posts": 0,
         "replies": 0,
         "join_date": "2025-05-31",
         "last_active": "2025-05-31"
-    },
-    {
-        "id": 9,
-        "username": "dianshang_1",
-        "password": "123",
-        "avatar": "https://via.placeholder.com/40",
-        "role": "user",
-        "posts": 0,
-        "replies": 0,
-        "join_date": "2025-06-03",
-        "last_active": "2025-06-03"
     }
+    
 ]

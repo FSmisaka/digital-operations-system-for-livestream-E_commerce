@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}论坛讨论 - 豆粕期货价格预测系统{% endblock %}
+{% block title %}论坛讨论 -采购中心{% endblock %}
 
 {% block head %}
 <style>
@@ -58,18 +58,27 @@
       <h2><i class="bi bi-cart-check"></i> 采购中心</h2>
       {% if session.user_role == 'supplier' %}
       <p class="lead">发布新产品，与直播电商交流、合作</p>
-      {% else %}
+      {% elif session.user_role == 'user' %}
       <p class="lead">发表产品评价，与供应商交流、合作</p>
+      {% else%}
+      <p class="lead">发表系统管理信息与公告</p>
       {% endif %}
     </div>
-    {% if session.user_role == 'supplier' %}
+
     <div class="col-md-4 text-end">
+      {% if session.user_role == 'supplier' %}
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newTopicModal">
         <i class="bi bi-plus-circle"></i> 发布新产品
       </button>
+      {% endif %}
+      
+      <!-- 添加消息中心按钮 -->
+      <a href="{{ url_for('forum.messages_center') }}" class="btn btn-success ms-3">
+        <i class="bi bi-chat-dots"></i> 消息中心
+      </a>      
     </div>
-    {% endif %}
   </div>
+</div>
 
   <!-- 论坛导航和搜索 -->
   <div class="row mb-4">
@@ -344,7 +353,6 @@
               <option value="food">食品饮料</option>
               <option value="daily_necessities">生活用品</option>
               <option value="cosmetic">美妆产品</option>
-              <option value="purchase_order">采购订单</option>
             </select>
           </div>
           <div class="mb-3">

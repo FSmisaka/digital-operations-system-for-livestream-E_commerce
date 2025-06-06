@@ -1,0 +1,42 @@
+{
+    "1_2": [
+        {
+            "sender_id": 1,
+            "receiver_id": 2,
+            "message": "你好！",
+            "timestamp": "2025-06-05T12:00:00"
+        },
+        {
+            "sender_id": 2,
+            "receiver_id": 1,
+            "message": "你好！",
+            "timestamp": "2025-06-05T12:05:00"
+        },
+        {
+            "sender_id": 1,
+            "receiver_id": 2,
+            "message": "你好",
+            "timestamp": "2025-06-05T14:42:55"
+        },
+        {
+            "sender_id": 1,
+            "receiver_id": 2,
+            "message": "可以和你交流一下吗",
+            "timestamp": "2025-06-05T14:54:33"
+        },
+        {
+            "sender_id": 2,
+            "receiver_id": 1,
+            "message": "非常乐意！",
+            "timestamp": "2025-06-05T21:22:42"
+        }
+    ],
+    "2_5": [
+        {
+            "sender_id": 2,
+            "receiver_id": 5,
+            "message": "你好，我想看看你推荐的商品详细信息",
+            "timestamp": "2025-06-05T21:43:29"
+        }
+    ]
+}
