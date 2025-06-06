@@ -4,7 +4,6 @@ import logging
 from datetime import datetime
 import time
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash, session
-from flask_login import current_user, login_required
 from views.auth import login_required, supplier_required
 from views.data_utils import reset_data_file_path, load_data, save_data
 from flask import Blueprint, render_template, request, redirect, url_for

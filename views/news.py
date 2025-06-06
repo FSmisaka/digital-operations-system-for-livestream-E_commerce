@@ -4,7 +4,7 @@ import os
 import json
 import logging
 from datetime import datetime
-from views.data_utils import reset_data_file_path
+from views.data_utils import save_data, load_data
 
 # 获取日志记录器
 logger = logging.getLogger(__name__)
@@ -96,7 +96,6 @@ def index():
         hot_products=hot_products
     )
 
-# 修改路由参数名从 <int:news_id> 改为 <int:product_id>
 @bp.route('/detail/<int:product_id>')  # 修改这里
 @login_required
 def detail(product_id):  # 函数参数名也修改
@@ -130,19 +129,59 @@ def detail(product_id):  # 函数参数名也修改
 @user_required
 def search():
     """商品搜索功能（需修改模板）"""
-    keyword = request.args.get('keyword', '')
-    if not keyword:
+    keywords = request.args.get('keyword', '')
+    if not keywords:
         return jsonify({'error': '请输入搜索关键词'}), 400
     
     products = load_news_data()
-    search_results = [
-        p for p in products
-        if keyword.lower() in p['name'].lower() or keyword.lower() in p['description'].lower()
-    ]
+    search_results = []
+    keyword_ = []
+
+    for product in products:
+        flag = False
+        keyword_.append('')
+        for keyword in keywords.split():
+            if keyword.lower() in product['title'].lower() + product['description'].lower():
+                flag = True
+                keyword_[-1] = keyword.lower()
+        if flag: search_results.append(product)
+    
+    print(len(search_results))
     
     return render_template(
         'news/search.html',
         products=search_results,
-        keyword=keyword,
+        keywords=keyword_,
+        keyword=keywords,
         count=len(search_results)
     )
+
+@bp.route('/batch_select', methods=['POST'])
+@login_required
+def batch_select():
+    data = request.get_json()
+    product_ids = data.get('product_ids', [])
+    
+    try:
+        # 加载topics.json
+        products = load_data(PRODUCTS_FILE)
+        print(products)
+        
+        # 更新选品次数
+        for topic in products:
+            if topic['id'] in product_ids:
+                print(topic['id'])
+                topic['total_selected'] = topic.get('total_selected', 0) + 1
+        
+        # 保存更新后的数据
+        save_data(PRODUCTS_FILE, products)
+        
+        return jsonify({
+            'success': True,
+            'message': '选品成功'
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': str(e)
+        })
