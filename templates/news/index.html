@@ -357,7 +357,11 @@ h4 {
 
 {% block scripts %}
 <script>
-let cartItems = [];
+let cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+
+document.addEventListener('DOMContentLoaded', function() {
+  updateCartUI();
+});
 
 // 添加商品到选品车
 function addToCart(product) {
@@ -371,6 +375,7 @@ function addToCart(product) {
 
   if (!cartItems.some(item => item.id === product.id)) {
     cartItems.push(product);
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
     updateCartUI();
     showToast('已添加到选品车');
 
@@ -425,6 +430,7 @@ function updateCartUI() {
 // 从选品车移除商品
 function removeFromCart(productId) {
   cartItems = cartItems.filter(item => item.id !== productId);
+  localStorage.setItem('cartItems', JSON.stringify(cartItems));
   updateCartUI();
   showToast('已从选品车移除');
 }
@@ -433,6 +439,7 @@ function removeFromCart(productId) {
 function clearCart() {
   if (confirm('确定要清空选品车吗？')) {
     cartItems = [];
+    localStorage.removeItem('cartItems');
     updateCartUI();
     showToast('选品车已清空');
   }
@@ -462,9 +469,18 @@ function batchSelect() {
       showToast('选品成功！');
       // 清除已选商品
       cartItems = cartItems.filter(item => !selectedIds.includes(item.id));
+
+      // 如果选品车为空，直接移除 localStorage 项
+      if (cartItems.length === 0) {
+        localStorage.removeItem('cartItems');
+      } else {
+        // 否则更新 localStorage 中的数据
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+      }
+
       updateCartUI();
       // 刷新页面以更新选品次数
-      setTimeout(() => location.reload(), 1500);
+      setTimeout(() => location.reload(), 10);
     } else {
       showToast('选品失败：' + data.message);
     }
