@@ -85,6 +85,19 @@ h4 {
     bottom: 100px;
     right: 100px;
 }
+
+@keyframes cartShake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.cart-float .shake {
+  animation: cartShake 0.5s ease-in-out;
+}
+
 </style>
 {% endblock %}
 
@@ -358,9 +371,17 @@ function addToCart(product) {
 
   if (!cartItems.some(item => item.id === product.id)) {
     cartItems.push(product);
-    console.log('Updated cart items:', cartItems); // 添加调试日志
     updateCartUI();
     showToast('已添加到选品车');
+
+    // 晃动
+    const cartButton = document.querySelector('.cart-float .btn');
+    cartButton.classList.add('shake');
+
+    cartButton.addEventListener('animationend', function() {
+      cartButton.classList.remove('shake');
+    }, { once: true });
+
   } else {
     showToast('该商品已在选品车中');
   }
