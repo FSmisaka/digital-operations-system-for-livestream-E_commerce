@@ -14,6 +14,7 @@ bp = Blueprint('news', __name__)
 
 # 商品数据文件路径
 PRODUCTS_FILE = '../data/forum/topics.json'
+SELECTED = '../data/selected.json'
 
 def load_news_data():
     try:
@@ -32,45 +33,29 @@ def load_news_data():
         return []
 
 def calculate_recommendations(user_id):
-    products = load_news_data()
+    products = load_data(PRODUCTS_FILE)
     
-    # 模拟用户数据（实际应从数据库获取）
-    user_selections = {
-        "22377002": [1001, 1003, 1005],  # 老用户
-        "22377005": [1002, 1004],       # 老用户
-        "0": []                          # 新用户
-    }
-    
-    # 判断是否为新用户
-    is_new_user = str(user_id) not in user_selections
-    user_product_ids = user_selections.get(str(user_id), [])
-    
-    # 计算推荐分数
-    for product in products:
+    user_selections = load_data(SELECTED)
+    l = len(user_selections)
+
+    for s in user_selections:
+        if s['user_id'] == user_id:
+            user_product_ids = s['selected']
+
+    for product in products[1:]:
         # 用户历史选品次数
-        user_count = user_product_ids.count(product['id'])
+        user_count = user_product_ids.get(str(product['id']), 0)
         
         # 全体用户选品次数
         total_selected = product['total_selected']
         
-        # 滞销情况（滞销次数越多，分数越低）
-        unsold_penalty = product['unsold_count']
-        
-        # 计算最终推荐分数
-        if is_new_user:
-            # 新用户: 全体选品次数 - 滞销惩罚
-            product['recommend_score'] = total_selected - unsold_penalty
-        else:
-            # 老用户: 用户选品次数 + 全体选品次数 - 滞销惩罚
-            # 可以调整权重，例如 user_count * 0.5 降低历史选品的影响
-            product['recommend_score'] = user_count + total_selected - unsold_penalty
-        
-        # 记录用户是否已选过此商品
-        product['user_selected'] = user_count > 0
+        # 计算最终推荐分数: 用户选品次数 + 全体选品次数 - 滞销惩罚
+        # 可以调整权重，例如 user_count * 0.5 降低历史选品的影响
+        product['recommend_score'] = user_count + total_selected//l
     
     # 按推荐分数排序，分数相同则按总选品次数排序
     sorted_products = sorted(
-        products, 
+        products[1:], 
         key=lambda x: (x['recommend_score'], x['total_selected']), 
         reverse=True
     )
@@ -81,24 +66,24 @@ def calculate_recommendations(user_id):
 @user_required
 def index():
     # 获取用户ID
-    user_id = session.get('user_id', '0')
+    user_id = session.get('user_id')
     
     # 获取推荐商品
     recommended_products = calculate_recommendations(user_id)
     
     # 获取热门商品（按全体选择次数排序）
-    hot_products = sorted(load_news_data(), key=lambda x: x['total_selected'], reverse=True)[:5]
+    hot_products = sorted(load_data(PRODUCTS_FILE)[1:], key=lambda x: x['total_selected'], reverse=True)[:5]
     
     return render_template(
         'news/index.html',
         featured_product=recommended_products[0] if recommended_products else None,
-        recommended_products=recommended_products[1:6],
+        recommended_products=recommended_products[1:4],
         hot_products=hot_products
     )
 
-@bp.route('/detail/<int:product_id>')  # 修改这里
+@bp.route('/detail/<int:product_id>') 
 @login_required
-def detail(product_id):  # 函数参数名也修改
+def detail(product_id): 
     products = load_news_data()
     product = next((p for p in products if p['id'] == product_id), None)
     
@@ -128,12 +113,11 @@ def detail(product_id):  # 函数参数名也修改
 @bp.route('/search')
 @user_required
 def search():
-    """商品搜索功能（需修改模板）"""
     keywords = request.args.get('keyword', '')
     if not keywords:
         return jsonify({'error': '请输入搜索关键词'}), 400
     
-    products = load_news_data()
+    products = load_data(PRODUCTS_FILE)
     search_results = []
     keyword_ = []
 
