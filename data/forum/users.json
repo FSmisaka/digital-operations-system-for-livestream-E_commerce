@@ -81,10 +81,11 @@
         "username": "供应商2",
         "password": "123456",
         "avatar": "https://via.placeholder.com/40",
-        "role": "supplier",
-        "posts": 2,
-        "replies": 1,
-        "join_date": "2025-06-05",
-        "last_active": "2025-06-05"
+        "role": "user",
+        "posts": 0,
+        "replies": 0,
+        "join_date": "2025-05-31",
+        "last_active": "2025-05-31"
     }
+    
 ]

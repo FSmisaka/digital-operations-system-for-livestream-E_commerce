@@ -28,6 +28,19 @@
     border-radius: 5px;
     background-color: #f8d7da;
   }
+  .product-info {
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+  }
+  .product-info h6 {
+    margin-bottom: 5px;
+    color: #495057;
+  }
+  .product-info p {
+    margin-bottom: 10px;
+  }
 </style>
 {% endblock %}
 
@@ -48,10 +61,40 @@
           <h5 class="mb-0"><i class="bi bi-file-text"></i> 逐字稿生成</h5>
         </div>
         <div class="card-body">
-          <div class="mb-3">
-            <label for="productDescription" class="form-label">输入商品描述</label>
-            <textarea class="form-control" id="productDescription" rows="4" placeholder="请输入商品描述，包括面料、工艺、特点等信息..."></textarea>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="productSelect" class="form-label">选择商品</label>
+              <select class="form-select" id="productSelect">
+                <option value="">请选择商品...</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="streamerStyle" class="form-label">选择主播风格</label>
+              <select class="form-select" id="streamerStyle">
+                <option value="">请选择主播风格...</option>
+              </select>
+            </div>
           </div>
+          
+          <div id="selectedProductInfo" class="product-info" style="display: none;">
+            <div class="row">
+              <div class="col-md-6">
+                <h6>商品名称</h6>
+                <p id="productName"></p>
+                <h6>商品类别</h6>
+                <p id="productCategory"></p>
+                <h6>价格</h6>
+                <p id="productPrice"></p>
+              </div>
+              <div class="col-md-6">
+                <h6>供应商</h6>
+                <p id="productSupplier"></p>
+                <h6>商品描述</h6>
+                <p id="productDescription"></p>
+              </div>
+            </div>
+          </div>
+
           <button class="btn btn-primary" id="generateTranscriptBtn">
             <i class="bi bi-magic"></i> 生成逐字稿
           </button>
@@ -103,6 +146,7 @@
                   <th>平均观看人数</th>
                   <th>点赞数</th>
                   <th>收入(元)</th>
+                  <th>直播详情</th>
                 </tr>
               </thead>
               <tbody>
@@ -117,123 +161,207 @@
 </div>
 
 <script>
+  // 加载商品列表
+  async function loadProducts() {
+    try {
+      const response = await fetch('/viz/api/products');
+      const products = await response.json();
+      
+      const productSelect = document.getElementById('productSelect');
+      products.forEach(product => {
+        const option = document.createElement('option');
+        option.value = product.id;
+        option.textContent = `${product.name} (¥${product.price})`;
+        productSelect.appendChild(option);
+      });
+    } catch (error) {
+      showError('加载商品列表失败: ' + error, 'errorMessage');
+    }
+  }
+
+  // 加载主播风格
+  async function loadStreamerStyles() {
+    try {
+      const response = await fetch('/viz/api/streamer-styles');
+      const styles = await response.json();
+      
+      const styleSelect = document.getElementById('streamerStyle');
+      styles.forEach(style => {
+        const option = document.createElement('option');
+        option.value = style;
+        option.textContent = style;
+        styleSelect.appendChild(option);
+      });
+    } catch (error) {
+      showError('加载主播风格失败: ' + error, 'errorMessage');
+    }
+  }
+
+  // 显示选中商品信息
+  function showProductInfo(product) {
+    const infoDiv = document.getElementById('selectedProductInfo');
+    document.getElementById('productName').textContent = product.name;
+    document.getElementById('productCategory').textContent = product.category;
+    document.getElementById('productPrice').textContent = `¥${product.price}`;
+    document.getElementById('productSupplier').textContent = product.supplier;
+    document.getElementById('productDescription').textContent = product.description;
+    infoDiv.style.display = 'block';
+  }
+
+  // 商品选择事件处理
+  document.getElementById('productSelect').addEventListener('change', async function() {
+    const productId = this.value;
+    if (!productId) {
+      document.getElementById('selectedProductInfo').style.display = 'none';
+      return;
+    }
+
+    try {
+      const response = await fetch('/viz/api/products');
+      const products = await response.json();
+      const selectedProduct = products.find(p => p.id === parseInt(productId));
+      if (selectedProduct) {
+        showProductInfo(selectedProduct);
+      }
+    } catch (error) {
+      showError('获取商品详情失败: ' + error, 'errorMessage');
+    }
+  });
+
   // 逐字稿生成功能
   document.getElementById('generateTranscriptBtn').addEventListener('click', function() {
-      const productDescription = document.getElementById('productDescription').value;
-      if (!productDescription) {
-          showError('请先输入商品描述', 'errorMessage');
-          return;
+    const productId = document.getElementById('productSelect').value;
+    const streamerStyle = document.getElementById('streamerStyle').value;
+    
+    if (!productId) {
+      showError('请选择商品', 'errorMessage');
+      return;
+    }
+    if (!streamerStyle) {
+      showError('请选择主播风格', 'errorMessage');
+      return;
+    }
+    
+    document.getElementById('transcriptLoading').style.display = 'block';
+    document.getElementById('transcriptResult').style.display = 'none';
+    document.getElementById('errorMessage').style.display = 'none';
+    
+    fetch('/viz/api/generate-transcript', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        product_id: parseInt(productId),
+        streamer_style: streamerStyle
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('transcriptLoading').style.display = 'none';
+      if (data.error) {
+        showError('生成逐字稿失败: ' + data.error, 'errorMessage');
+      } else {
+        document.getElementById('transcriptResult').innerHTML = data.transcript;
+        document.getElementById('transcriptResult').style.display = 'block';
       }
-      
-      document.getElementById('transcriptLoading').style.display = 'block';
-      document.getElementById('transcriptResult').style.display = 'none';
-      document.getElementById('errorMessage').style.display = 'none';
-      
-      fetch('/viz/api/generate-transcript', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ product_description: productDescription })
-      })
-      .then(response => response.json())
-      .then(data => {
-          document.getElementById('transcriptLoading').style.display = 'none';
-          if (data.error) {
-              showError('生成逐字稿失败: ' + data.error, 'errorMessage');
-          } else {
-              document.getElementById('transcriptResult').innerHTML = data.transcript;
-              document.getElementById('transcriptResult').style.display = 'block';
-          }
-      })
-      .catch(error => {
-          document.getElementById('transcriptLoading').style.display = 'none';
-          showError('生成逐字稿时出错: ' + error, 'errorMessage');
-      });
+    })
+    .catch(error => {
+      document.getElementById('transcriptLoading').style.display = 'none';
+      showError('生成逐字稿时出错: ' + error, 'errorMessage');
+    });
   });
 
   // 显示错误信息
   function showError(message, elementId) {
-      const element = document.getElementById(elementId);
-      element.textContent = message;
-      element.style.display = 'block';
+    const element = document.getElementById(elementId);
+    element.textContent = message;
+    element.style.display = 'block';
   }
 
   // 加载主播数据
   async function loadStreamerData() {
-      try {
-          const [statsResponse, dataResponse] = await Promise.all([
-              fetch('/viz/api/streamer-stats'),
-              fetch('/viz/api/streamer-data')
-          ]);
+    try {
+      const [statsResponse, dataResponse] = await Promise.all([
+        fetch('/viz/api/streamer-stats'),
+        fetch('/viz/api/streamer-data')
+      ]);
 
-          const stats = await statsResponse.json();
-          
-          if (!statsResponse.ok) {
-              showError('加载统计数据失败: ' + (stats.error || '未知错误'), 'statsError');
-              return;
-          }
-
-          // 更新统计卡片
-          const statsCards = document.getElementById('streamerStatsCards');
-          statsCards.innerHTML = `
-              <div class="col-md-3">
-                  <div class="card streamer-stats-card bg-light">
-                      <div class="card-body text-center">
-                          <h5 class="card-title">总直播场次</h5>
-                          <h3 class="display-6">${stats.total_streams}</h3>
-                      </div>
-                  </div>
-              </div>
-              <div class="col-md-3">
-                  <div class="card streamer-stats-card bg-light">
-                      <div class="card-body text-center">
-                          <h5 class="card-title">总直播时长</h5>
-                          <h3 class="display-6">${Math.round(stats.total_duration / 60)}小时</h3>
-                      </div>
-                  </div>
-              </div>
-              <div class="col-md-3">
-                  <div class="card streamer-stats-card bg-light">
-                      <div class="card-body text-center">
-                          <h5 class="card-title">平均观看人数</h5>
-                          <h3 class="display-6">${Math.round(stats.avg_viewers)}</h3>
-                      </div>
-                  </div>
-              </div>
-              <div class="col-md-3">
-                  <div class="card streamer-stats-card bg-light">
-                      <div class="card-body text-center">
-                          <h5 class="card-title">总收入</h5>
-                          <h3 class="display-6">¥${Math.round(stats.total_revenue)}</h3>
-                      </div>
-                  </div>
-              </div>
-          `;
-
-          // 更新直播场次表格
-          const tableBody = document.querySelector('#streamsTable tbody');
-          if (stats.streams_by_date && stats.streams_by_date.length > 0) {
-              tableBody.innerHTML = stats.streams_by_date.map(stream => `
-                  <tr>
-                      <td>${stream.date || 'N/A'}</td>
-                      <td>${Math.round(stream.duration / 60) || 0}</td>
-                      <td>${Math.round(stream.viewers) || 0}</td>
-                      <td>${Math.round(stream.likes) || 0}</td>
-                      <td>¥${Math.round(stream.revenue) || 0}</td>
-                  </tr>
-              `).join('');
-          } else {
-              document.getElementById('tableError').textContent = '没有可用的直播场次数据';
-              document.getElementById('tableError').style.display = 'block';
-          }
-      } catch (error) {
-          console.error('加载主播数据时出错：', error);
-          showError('加载数据时出错: ' + error, 'statsError');
+      const stats = await statsResponse.json();
+      
+      if (!statsResponse.ok) {
+        showError('加载统计数据失败: ' + (stats.error || '未知错误'), 'statsError');
+        return;
       }
+
+      // 更新统计卡片
+      const statsCards = document.getElementById('streamerStatsCards');
+      statsCards.innerHTML = `
+        <div class="col-md-3">
+          <div class="card streamer-stats-card bg-light">
+            <div class="card-body text-center">
+              <h5 class="card-title">总直播场次</h5>
+              <h3 class="display-6">${stats.total_streams}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card streamer-stats-card bg-light">
+            <div class="card-body text-center">
+              <h5 class="card-title">总直播时长</h5>
+              <h3 class="display-6">${Math.round(stats.total_duration / 60)}小时</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card streamer-stats-card bg-light">
+            <div class="card-body text-center">
+              <h5 class="card-title">平均观看人数</h5>
+              <h3 class="display-6">${Math.round(stats.avg_viewers)}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card streamer-stats-card bg-light">
+            <div class="card-body text-center">
+              <h5 class="card-title">总收入</h5>
+              <h3 class="display-6">¥${Math.round(stats.total_revenue)}</h3>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // 更新直播场次表格
+      const tableBody = document.querySelector('#streamsTable tbody');
+      if (stats.streams_by_date && stats.streams_by_date.length > 0) {
+        tableBody.innerHTML = stats.streams_by_date.map(stream => `
+          <tr>
+            <td>${stream.date || 'N/A'}</td>
+            <td>${Math.round(stream.duration / 60) || 0}</td>
+            <td>${Math.round(stream.viewers) || 0}</td>
+            <td>${Math.round(stream.likes) || 0}</td>
+            <td>¥${Math.round(stream.revenue) || 0}</td>              <td>
+                <a href="/viz/live-detail/${stream.id || stream.date}" class="btn btn-primary btn-sm">
+                  <i class="bi bi-graph-up"></i> 查看详情
+                </a>
+              </td>
+          </tr>
+        `).join('');
+      } else {
+        document.getElementById('tableError').textContent = '没有可用的直播场次数据';
+        document.getElementById('tableError').style.display = 'block';
+      }
+    } catch (error) {
+      console.error('加载主播数据时出错：', error);
+      showError('加载数据时出错: ' + error, 'statsError');
+    }
   }
 
-  // 页面加载时获取主播数据
-  document.addEventListener('DOMContentLoaded', loadStreamerData);
+  // 页面加载时初始化
+  document.addEventListener('DOMContentLoaded', function() {
+    loadProducts();
+    loadStreamerStyles();
+    loadStreamerData();
+  });
 </script>
 {% endblock %}

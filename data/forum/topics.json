@@ -35,7 +35,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2023-04-20",
         "updated_at": "2023-04-20",
-        "views": 1264,
+        "views": 1265,
         "replies": 24,
         "last_reply_at": "2023-05-01",
         "last_reply_user": "交易达人",
@@ -84,7 +84,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2023-04-20",
         "updated_at": "2023-04-20",
-        "views": 1269,
+        "views": 1273,
         "replies": 24,
         "last_reply_at": "2023-05-01",
         "last_reply_user": "直播电商1",
@@ -230,7 +230,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2023-05-03",
         "updated_at": "2023-05-03",
-        "views": 353,
+        "views": 354,
         "replies": 12,
         "last_reply_at": "2023-05-03 13:15",
         "last_reply_user": "爱直播的小xx",
@@ -242,7 +242,7 @@
             "米家",
             "智能家居"
         ],
-        "total_selected": 302,
+        "total_selected": 305,
         "unsold_count": 3,
         "price": 259.0,
         "supplier": "SKG",
@@ -279,7 +279,11 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2025-05-27",
         "updated_at": "2025-05-27",
+<<<<<<< HEAD
         "views": 8,
+=======
+        "views": 15,
+>>>>>>> b0da42c9d7373119c6add95286857ff4cb758737
         "replies": 0,
         "last_reply_at": "2025-05-27",
         "last_reply_user": "交易达人",
@@ -335,7 +339,7 @@
         "tags": [
             "生活用品安利"
         ],
-        "total_selected": 345,
+        "total_selected": 346,
         "unsold_count": 9,
         "price": 399.0,
         "supplier": "苏泊尔",
@@ -371,7 +375,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2025-05-27",
         "updated_at": "2025-05-27",
-        "views": 4,
+        "views": 5,
         "replies": 0,
         "last_reply_at": "2025-05-27",
         "last_reply_user": "交易达人",
@@ -381,7 +385,7 @@
         "tags": [
             "生活用品安利"
         ],
-        "total_selected": 278,
+        "total_selected": 279,
         "unsold_count": 4,
         "price": 599.0,
         "supplier": "唱吧",
@@ -417,7 +421,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2025-05-27",
         "updated_at": "2025-05-27",
-        "views": 6,
+        "views": 10,
         "replies": 0,
         "last_reply_at": "2025-05-27",
         "last_reply_user": "交易达人",
@@ -427,7 +431,7 @@
         "tags": [
             "生活用品安利"
         ],
-        "total_selected": 413,
+        "total_selected": 414,
         "unsold_count": 2,
         "price": 299.0,
         "supplier": "神牛",
