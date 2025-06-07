@@ -42,14 +42,13 @@ STREAMER_STYLES = {
 def view_data():
     return render_template('visualization/view_data.html')
 
+PRODUCTS = '../data/forum/topics.json'
+
 @bp.route('/api/products')
 @user_required
 def get_products():
     try:
-        topics_file = 'C:/Users/16390/Documents/GitHub/digital-operations-system-for-livestream-E_commerce/data/forum/topics.json'
-        
-        with open(topics_file, 'r', encoding='utf-8') as f:
-            topics = json.load(f)
+        topics = load_data(PRODUCTS)
         
         # 确保跳过第一个公告项，并只包含有效的商品数据
         formatted_products = []
@@ -86,10 +85,7 @@ def generate_transcript():
             return jsonify({'error': '请提供商品ID'}), 400
             
         # 获取商品信息
-        data_file = 'C:/Users/16390/Documents/GitHub/digital-operations-system-for-livestream-E_commerce/data/forum/topics.json'
-        logging.info(f'尝试读取文件: {data_file}')
-        with open(data_file, 'r', encoding='utf-8') as f:
-            products = json.load(f)
+        products = load_data(PRODUCTS)
             
         product = next((p for p in products if p['id'] == product_id), None)
         if not product:
