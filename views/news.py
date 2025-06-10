@@ -23,8 +23,8 @@ def load_news_data():
         if os.path.exists(products_path):
             with open(products_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-                # 只保留 id>=2 的商品
-                return [item for item in data if isinstance(item.get('id'), int) and item['id'] >= 2]
+                # 只保留 category 不为 "announcement" 的商品
+                return [item for item in data if item.get('category') != 'announcement']
         else:
             logger.warning(f"商品数据文件不存在: {products_path}")
             return []
@@ -34,7 +34,13 @@ def load_news_data():
 
 def calculate_recommendations(user_id):
     products = load_data(PRODUCTS_FILE)
-    
+
+    # 补充缺失的 total_selected 字段（仅对 id>=2 的商品）
+    for product in products:
+        if isinstance(product.get('id'), int) and product['id'] >= 2:
+            if 'total_selected' not in product:
+                product['total_selected'] = 0
+
     user_selections = load_data(SELECTED)
     l = len(user_selections)
 
@@ -45,21 +51,18 @@ def calculate_recommendations(user_id):
     for product in products[1:]:
         # 用户历史选品次数
         user_count = user_product_ids.get(str(product['id']), 0)
-        
         # 全体用户选品次数
         total_selected = product['total_selected']
-        
-        # 计算最终推荐分数: 用户选品次数 + 全体选品次数/用户总数
-        # 可以调整权重，例如 user_count * 0.5 降低历史选品的影响
-        product['recommend_score'] = user_count + total_selected//l
-    
-    # 按推荐分数排序，分数相同则按总选品次数排序
+        # 计算最终推荐分数
+        product['recommend_score'] = user_count + total_selected // l
+
+    # 按推荐分数排序
     sorted_products = sorted(
-        products[1:], 
-        key=lambda x: (x['recommend_score'], x['total_selected']), 
+        products[1:],
+        key=lambda x: (x['recommend_score'], x['total_selected']),
         reverse=True
     )
-    
+
     return sorted_products
 
 @bp.route('/')
