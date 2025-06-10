@@ -8,7 +8,6 @@ from views.auth import login_required, supplier_required
 from views.data_utils import reset_data_file_path, load_data, save_data
 from flask import Blueprint, render_template, request, redirect, url_for
 
-
 bp = Blueprint('forum', __name__)
 # 设置日志记录
 logging.basicConfig(level=logging.INFO)
@@ -22,17 +21,11 @@ FORUM_DATA_PATH = '../data/forum'
 TOPICS_FILE = f'{FORUM_DATA_PATH}/topics.json'
 REPLIES_FILE = f'{FORUM_DATA_PATH}/replies.json'
 USERS_FILE = f'{FORUM_DATA_PATH}/users.json'
-MESSAGES_FILE=f'{FORUM_DATA_PATH}/messages.json'
+MESSAGES_FILE = f'{FORUM_DATA_PATH}/messages.json'
 
 # 论坛版块
 # 修改后的论坛类别数据
-FORUM_CATEGORIES = [
-    {"id": "electronics", "name": "电子产品", "icon": "bi-phone", "color": "primary", "topics": 125, "replies": 1234},
-    {"id": "food", "name": "食品饮料", "icon": "bi-cup-hot", "color": "warning", "topics": 98, "replies": 876},
-    {"id": "daily_necessities", "name": "生活用品", "icon": "bi-house", "color": "success", "topics": 76, "replies": 654},
-    {"id": "cosmetics", "name": "美妆产品", "icon": "bi-palette", "color": "info", "topics": 145, "replies": 1876},
-]
-
+FORUM_CATEGORIES = load_data('../data/forum/categories.json')
 
 def get_created_at(x):
     return x.get('created_at', '')
@@ -286,8 +279,7 @@ def load_messages():
 
 # 保存聊天记录
 def save_messages(messages):
-    with open('/Users/tanyuxin/Documents/GitHub/digital-operations-system-for-livestream-E_commerce/data/forum/messages.json', 'w', encoding='utf-8') as file:
-        json.dump(messages, file, ensure_ascii=False, indent=4)
+    save_data(MESSAGES_FILE, messages)
 
 # 在会话中获取user的名字
 def get_username(user_id):
@@ -299,6 +291,7 @@ def get_username(user_id):
 
 # 获取私聊记录
 @bp.route('/private_message/<int:receiver_id>')
+@login_required
 def private_message(receiver_id):
     user_id = session.get('user_id')  # 获取当前登录用户的ID
     user_name = session.get('username')  # 获取当前登录用户的用户名
@@ -323,9 +316,9 @@ def private_message(receiver_id):
 
     return render_template('forum/private_message.html', chat_history=chat_history, receiver_id=receiver_id, receiver_name=receiver_name,user_id=user_id)
 
-
 #发送消息
 @bp.route('/send_message', methods=['POST'])
+@login_required
 def send_message():
     user_id = session.get('user_id')  # 获取当前登录用户的ID
     receiver_id = int(request.form['receiver_id'])  # 获取接收者的ID
@@ -368,6 +361,7 @@ def send_message():
 
 # 获取与所有用户的聊天列表
 @bp.route('/messages_center')
+@login_required
 def messages_center():
     user_id = session.get('user_id')  # 获取当前登录用户的ID
     messages = load_messages()  # 加载所有的聊天记录
@@ -393,7 +387,6 @@ def messages_center():
             })
 
     return render_template('forum/messages_center.html', chat_list=chat_list)
-
 
 # 查看与某个用户的聊天记录
 @bp.route('/chat/<int:receiver_id>')

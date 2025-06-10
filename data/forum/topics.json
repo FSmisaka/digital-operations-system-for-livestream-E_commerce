@@ -11,7 +11,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2023-04-20",
         "updated_at": "2023-04-20",
-        "views": 1261,
+        "views": 1262,
         "replies": 24,
         "last_reply_at": "2023-05-01",
         "last_reply_user": "交易达人",
@@ -35,7 +35,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2023-04-20",
         "updated_at": "2023-04-20",
-        "views": 1265,
+        "views": 1266,
         "replies": 24,
         "last_reply_at": "2023-05-01",
         "last_reply_user": "交易达人",
@@ -126,10 +126,10 @@
         "id": 4,
         "title": "瑜伽健身套装",
         "content": "环保材质，全套装备",
-        "category": "sports",
+        "category": "daily_necessities",
         "category_name": "运动健身",
         "user_id": 2,
-        "username": "交易达人",
+        "username": "爱直播的小刘",
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2023-05-02",
         "updated_at": "2023-05-02",
@@ -174,7 +174,7 @@
         "id": 5,
         "title": "便携榨汁杯",
         "content": "无线便携，快速榨汁",
-        "category": "kitchen_appliances",
+        "category": "food",
         "category_name": "厨房电器",
         "user_id": 3,
         "username": "AI研究者",
@@ -222,7 +222,7 @@
         "id": 6,
         "title": "颈部按摩仪",
         "content": "3D揉捏，恒温热敷",
-        "category": "health_care",
+        "category": "electronics",
         "category_name": "健康护理",
         "user_id": 4,
         "role_id": 2,
@@ -271,7 +271,7 @@
         "id": 7,
         "title": "电动牙刷",
         "content": "声波震动，多模式选择",
-        "category": "personal_care",
+        "category": "daily_necessities",
         "category_name": "个护健康",
         "user_id": 2,
         "role_id": 2,
@@ -318,7 +318,7 @@
         "id": 8,
         "title": "空气炸锅",
         "content": "智能触控，无油健康",
-        "category": "kitchen_appliances",
+        "category": "food",
         "category_name": "厨房电器",
         "user_id": 2,
         "username": "交易达人",
@@ -364,7 +364,7 @@
         "id": 9,
         "title": "无线麦克风",
         "content": "专业级收音，双人合唱",
-        "category": "live_equipment",
+        "category": "electronics",
         "category_name": "生活设备",
         "user_id": 2,
         "username": "交易达人",
@@ -410,14 +410,14 @@
         "id": 10,
         "title": "补光灯套装",
         "content": "三色温调节，便携支架",
-        "category": "live_equipment",
+        "category": "electronics",
         "category_name": "直播设备",
         "user_id": 2,
         "username": "交易达人",
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2025-05-27",
         "updated_at": "2025-05-27",
-        "views": 10,
+        "views": 11,
         "replies": 0,
         "last_reply_at": "2025-05-27",
         "last_reply_user": "交易达人",
@@ -449,6 +449,487 @@
                 "加1元换购手机支架",
                 "直播间专享价立减40元",
                 "3年保修服务"
+            ]
+        }
+    },
+    {
+        "id": 11,
+        "title": "智能手表",
+        "content": "24小时健康监测，多运动模式",
+        "category": "electronics",
+        "category_name": "电子产品",
+        "user_id": 5,
+        "role_id": 2,
+        "username": "供应商1",
+        "avatar": "https://via.placeholder.com/40",
+        "created_at": "2025-06-08",
+        "updated_at": "2025-06-08",
+        "views": 46,
+        "replies": 3,
+        "last_reply_at": "2025-06-09",
+        "last_reply_user": "直播电商1",
+        "is_sticky": false,
+        "is_announcement": false,
+        "is_hot": true,
+        "tags": [
+            "智能穿戴",
+            "运动健康",
+            "小米"
+        ],
+        "total_selected": 167,
+        "unsold_count": 15,
+        "price": 499.0,
+        "supplier": "小米科技",
+        "description": "24小时健康监测，多运动模式",
+        "details": {
+            "specs": [
+                "1.43英寸AMOLED屏幕",
+                "14天续航",
+                "5ATM防水",
+                "血氧监测"
+            ],
+            "features": [
+                "24小时心率监测",
+                "专业运动模式117种",
+                "智能语音助手",
+                "NFC支付"
+            ],
+            "sale_points": [
+                "限时优惠立减100元",
+                "赠送专属表带",
+                "正品保修2年"
+            ]
+        }
+    },
+    {
+        "id": 12,
+        "title": "即食燕窝",
+        "content": "马来西亚进口，冰糖炖煮",
+        "category": "food",
+        "category_name": "饮食商品",
+        "user_id": 1,
+        "role_id": 2,
+        "username": "我是供应商",
+        "avatar": "https://via.placeholder.com/40",
+        "created_at": "2025-06-08",
+        "updated_at": "2025-06-08",
+        "views": 128,
+        "replies": 12,
+        "last_reply_at": "2025-06-09",
+        "last_reply_user": "爱直播的小刘",
+        "is_sticky": false,
+        "is_announcement": false,
+        "is_hot": false,
+        "tags": [
+            "滋补养生",
+            "进口食品"
+        ],
+        "total_selected": 89,
+        "unsold_count": 20,
+        "price": 299.0,
+        "supplier": "燕窝之家",
+        "description": "马来西亚进口，冰糖炖煮",
+        "details": {
+            "specs": [
+                "70ml*6瓶",
+                "原产地马来西亚",
+                "含量≥95%",
+                "冰糖炖制"
+            ],
+            "features": [
+                "进口金丝燕原料",
+                "专利提纯技术",
+                "0防腐剂添加",
+                "即开即食"
+            ],
+            "sale_points": [
+                "买6送2活动",
+                "满499减100",
+                "48小时内发货"
+            ]
+        }
+    },
+    {
+        "id": 13,
+        "title": "防蓝光眼镜",
+        "content": "德国蔡司镜片，轻奢复古框",
+        "category": "daily_necessities",
+        "category_name": "生活用品",
+        "user_id": 5,
+        "role_id": 2,
+        "username": "供应商1",
+        "avatar": "https://via.placeholder.com/40",
+        "created_at": "2025-06-09",
+        "updated_at": "2025-06-09",
+        "views": 76,
+        "replies": 5,
+        "last_reply_at": "2025-06-09",
+        "last_reply_user": "直播电商2",
+        "is_sticky": false,
+        "is_announcement": false,
+        "is_hot": false,
+        "tags": [
+            "护眼",
+            "时尚配饰"
+        ],
+        "total_selected": 145,
+        "unsold_count": 8,
+        "price": 199.0,
+        "supplier": "镜界人生",
+        "description": "德国蔡司镜片，轻奢复古框",
+        "details": {
+            "specs": [
+                "蔡司镜片",
+                "钛合金镜框",
+                "防蓝光率90%",
+                "复古圆框设计"
+            ],
+            "features": [
+                "有效阻隔蓝光",
+                "超轻材质佩戴舒适",
+                "复古时尚设计",
+                "标配专业眼镜盒"
+            ],
+            "sale_points": [
+                "专柜验货证书",
+                "30天无理由退换",
+                "终身维修保养"
+            ]
+        }
+    },
+    {
+        "id": 14,
+        "title": "玫瑰精华液",
+        "content": "法国进口玫瑰精萃，深层补水",
+        "category": "cosmetics",
+        "category_name": "美妆产品",
+        "user_id": 1,
+        "role_id": 2,
+        "username": "我是供应商",
+        "avatar": "https://via.placeholder.com/40",
+        "created_at": "2025-06-09",
+        "updated_at": "2025-06-09",
+        "views": 234,
+        "replies": 18,
+        "last_reply_at": "2025-06-09",
+        "last_reply_user": "爱直播的小刘",
+        "is_sticky": false,
+        "is_announcement": false,
+        "is_hot": true,
+        "tags": [
+            "护肤精华",
+            "补水保湿"
+        ],
+        "total_selected": 298,
+        "unsold_count": 5,
+        "price": 368.0,
+        "supplier": "巴黎香榭",
+        "description": "法国进口玫瑰精萃，深层补水",
+        "details": {
+            "specs": [
+                "30ml",
+                "法国进口",
+                "玫瑰精萃",
+                "质地清爽"
+            ],
+            "features": [
+                "深层补水锁水",
+                "改善肤质暗沉",
+                "收缩毛孔",
+                "提亮肤色"
+            ],
+            "sale_points": [
+                "正品保证",
+                "明星同款",
+                "直播间专属礼盒"
+            ]
+        }
+    },
+    {
+        "id": 15,
+        "title": "无线投影仪",
+        "content": "1080P高清，无线同屏",
+        "category": "electronics",
+        "category_name": "电子产品",
+        "user_id": 5,
+        "role_id": 2,
+        "username": "供应商1",
+        "avatar": "https://via.placeholder.com/40",
+        "created_at": "2025-06-09",
+        "updated_at": "2025-06-09",
+        "views": 156,
+        "replies": 9,
+        "last_reply_at": "2025-06-09",
+        "last_reply_user": "直播电商1",
+        "is_sticky": false,
+        "is_announcement": false,
+        "is_hot": false,
+        "tags": [
+            "家用投影",
+            "无线智能"
+        ],
+        "total_selected": 178,
+        "unsold_count": 12,
+        "price": 1999.0,
+        "supplier": "极米科技",
+        "description": "1080P高清，无线同屏",
+        "details": {
+            "specs": [
+                "1920*1080分辨率",
+                "200ANSI流明",
+                "自动对焦",
+                "双频WiFi"
+            ],
+            "features": [
+                "手机无线投屏",
+                "AI语音控制",
+                "自动梯形校正",
+                "HDR画质增强"
+            ],
+            "sale_points": [
+                "赠送100寸幕布",
+                "送腾讯视频会员",
+                "3年售后保修"
+            ]
+        }
+    },
+    {
+        "id": 16,
+        "title": "手工阿胶糕",
+        "content": "纯手工制作，即食阿胶糕",
+        "category": "food",
+        "category_name": "饮食商品",
+        "user_id": 1,
+        "role_id": 2,
+        "username": "我是供应商",
+        "avatar": "https://via.placeholder.com/40",
+        "created_at": "2025-06-10",
+        "updated_at": "2025-06-10",
+        "views": 98,
+        "replies": 7,
+        "last_reply_at": "2025-06-10",
+        "last_reply_user": "直播电商2",
+        "is_sticky": false,
+        "is_announcement": false,
+        "is_hot": false,
+        "tags": [
+            "滋补养生",
+            "传统美食"
+        ],
+        "total_selected": 145,
+        "unsold_count": 25,
+        "price": 268.0,
+        "supplier": "东阿阿胶",
+        "description": "纯手工制作，即食阿胶糕",
+        "details": {
+            "specs": [
+                "500g/盒",
+                "12个月保质期",
+                "传统手工",
+                "即食零添加"
+            ],
+            "features": [
+                "原产地东阿",
+                "传统工艺",
+                "零添加剂",
+                "即食补铁"
+            ],
+            "sale_points": [
+                "买2送1",
+                "满399减50",
+                "冷链配送"
+            ]
+        }
+    },
+    {
+        "id": 17,
+        "title": "智能体脂秤",
+        "content": "13项身体数据监测",
+        "category": "daily_necessities",
+        "category_name": "生活用品",
+        "user_id": 5,
+        "role_id": 2,
+        "username": "供应商1",
+        "avatar": "https://via.placeholder.com/40",
+        "created_at": "2025-06-10",
+        "updated_at": "2025-06-10",
+        "views": 167,
+        "replies": 13,
+        "last_reply_at": "2025-06-10",
+        "last_reply_user": "爱直播的小刘",
+        "is_sticky": false,
+        "is_announcement": false,
+        "is_hot": true,
+        "tags": [
+            "智能家居",
+            "健康管理"
+        ],
+        "total_selected": 245,
+        "unsold_count": 18,
+        "price": 159.0,
+        "supplier": "云麦科技",
+        "description": "13项身体数据监测",
+        "details": {
+            "specs": [
+                "LED高清显示",
+                "钢化玻璃材质",
+                "蓝牙4.0",
+                "4节7号电池供电"
+            ],
+            "features": [
+                "13项身体数据监测",
+                "APP数据同步",
+                "精准四角传感器",
+                "全家人数据管理"
+            ],
+            "sale_points": [
+                "送价值99元运动指导",
+                "两年质保",
+                "APP终身使用"
+            ]
+        }
+    },
+    {
+        "id": 18,
+        "title": "补水面膜套装",
+        "content": "韩国进口，深层补水",
+        "category": "cosmetics",
+        "category_name": "美妆产品",
+        "user_id": 1,
+        "role_id": 2,
+        "username": "我是供应商",
+        "avatar": "https://via.placeholder.com/40",
+        "created_at": "2025-06-10",
+        "updated_at": "2025-06-10",
+        "views": 289,
+        "replies": 21,
+        "last_reply_at": "2025-06-10",
+        "last_reply_user": "直播电商1",
+        "is_sticky": false,
+        "is_announcement": false,
+        "is_hot": true,
+        "tags": [
+            "面部护理",
+            "补水保湿"
+        ],
+        "total_selected": 378,
+        "unsold_count": 30,
+        "price": 99.0,
+        "supplier": "韩秘星",
+        "description": "韩国进口，深层补水",
+        "details": {
+            "specs": [
+                "25ml*10片",
+                "韩国制造",
+                "玻尿酸配方",
+                "温和无刺激"
+            ],
+            "features": [
+                "深层补水",
+                "改善干燥",
+                "提亮肤色",
+                "收缩毛孔"
+            ],
+            "sale_points": [
+                "买3送1",
+                "直播间赠礼包",
+                "敏感肌可用"
+            ]
+        }
+    },
+    {
+        "id": 19,
+        "title": "便携蓝牙音箱",
+        "content": "防水防尘，户外便携",
+        "category": "electronics",
+        "category_name": "电子产品",
+        "user_id": 5,
+        "role_id": 2,
+        "username": "供应商1",
+        "avatar": "https://via.placeholder.com/40",
+        "created_at": "2025-06-10",
+        "updated_at": "2025-06-10",
+        "views": 145,
+        "replies": 11,
+        "last_reply_at": "2025-06-10",
+        "last_reply_user": "直播电商2",
+        "is_sticky": false,
+        "is_announcement": false,
+        "is_hot": false,
+        "tags": [
+            "户外音响",
+            "便携设备"
+        ],
+        "total_selected": 167,
+        "unsold_count": 22,
+        "price": 229.0,
+        "supplier": "JBL",
+        "description": "防水防尘，户外便携",
+        "details": {
+            "specs": [
+                "IPX7防水",
+                "12小时续航",
+                "双被动低音振膜",
+                "蓝牙5.0"
+            ],
+            "features": [
+                "360度环绕音效",
+                "户外防水防尘",
+                "无线串联",
+                "便携挂绳设计"
+            ],
+            "sale_points": [
+                "送便携收纳包",
+                "蓝色现货优惠",
+                "一年质保"
+            ]
+        }
+    },
+    {
+        "id": 20,
+        "title": "双人火锅套装",
+        "content": "分体式电火锅，一锅两吃",
+        "category": "food",
+        "category_name": "饮食商品",
+        "user_id": 1,
+        "role_id": 2,
+        "username": "我是供应商",
+        "avatar": "https://via.placeholder.com/40",
+        "created_at": "2025-06-10",
+        "updated_at": "2025-06-10",
+        "views": 178,
+        "replies": 15,
+        "last_reply_at": "2025-06-10",
+        "last_reply_user": "爱直播的小刘",
+        "is_sticky": false,
+        "is_announcement": false,
+        "is_hot": false,
+        "tags": [
+            "厨房电器",
+            "居家必备"
+        ],
+        "total_selected": 198,
+        "unsold_count": 15,
+        "price": 159.0,
+        "supplier": "美的",
+        "description": "分体式电火锅，一锅两吃",
+        "details": {
+            "specs": [
+                "5L大容量",
+                "分体式设计",
+                "双温控",
+                "食品级内胆"
+            ],
+            "features": [
+                "一锅两吃设计",
+                "独立温度控制",
+                "分体可拆洗",
+                "过热保护"
+            ],
+            "sale_points": [
+                "送精美筷子4双",
+                "厂家直发",
+                "全国联保"
             ]
         }
     }

@@ -1,0 +1,6 @@
+[
+    {"id": "electronics", "name": "电子产品", "icon": "bi-phone", "color": "primary", "topics": 7, "replies": 1234},
+    {"id": "food", "name": "饮食商品", "icon": "bi-cup-hot", "color": "warning", "topics": 98, "replies": 876},
+    {"id": "daily_necessities", "name": "生活用品", "icon": "bi-house", "color": "success", "topics": 76, "replies": 654},
+    {"id": "cosmetics", "name": "美妆产品", "icon": "bi-palette", "color": "info", "topics": 145, "replies": 1876}
+]

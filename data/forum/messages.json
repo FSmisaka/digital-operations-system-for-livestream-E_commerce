@@ -38,5 +38,19 @@
             "message": "你好，我想看看你推荐的商品详细信息",
             "timestamp": "2025-06-05T21:43:29"
         }
+    ],
+    "3_5": [
+        {
+            "sender_id": 3,
+            "receiver_id": 5,
+            "message": "你好，我想看看你推荐的商品详细信息",
+            "timestamp": "2025-06-05T21:43:29"
+        },
+        {
+            "sender_id": 5,
+            "receiver_id": 3,
+            "message": "不好",
+            "timestamp": "2025-06-10T19:09:49"
+        }
     ]
 }

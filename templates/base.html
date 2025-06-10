@@ -87,6 +87,14 @@
             </li>
             {% endif %}
 
+            {% if session.user_role == 'supplier' %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('forum.messages_center') }}">
+                <i class="bi bi-chat"></i> 消息中心
+              </a>
+            </li>
+            {% endif %}
+
             {% if session.user_role == 'admin' %}
             <li class="nav-item">
               <a
