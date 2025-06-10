@@ -8,10 +8,12 @@ from plotly import graph_objects as go
 from datetime import timedelta
 import matplotlib.font_manager as fm
 import plotly.express as px
+import numpy as np
 import os
 import base64
 from io import BytesIO
 from flask import current_app
+from views.data_utils import load_data as load_data_
 
 plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
@@ -29,7 +31,7 @@ def preprocess_data(raw_data, products):
     raw_data["product_name"] = raw_data["product_id"].map(product_map)
     return raw_data
 
-def analyze_and_visualize(raw_data, products):
+def analyze_and_visualize(raw_data):
     fig = plt.figure(figsize=(20, 20))
 
     # 图1：直播间实时活动趋势（进入、离开、实时人数、弹幕）
@@ -130,7 +132,7 @@ def get_live_analysis(live_number):
 
         # 为每个图表创建单独的figure
         for plot_type in ['activity_trend', 'product_sales', 'sales_pie', 'retention_curve', 'conversion_funnel']:
-            plt.figure(figsize=(10, 6))
+            plt.figure(figsize=(10, 9))
             
             if plot_type == 'activity_trend':
                 # 活动趋势图
@@ -159,8 +161,25 @@ def get_live_analysis(live_number):
             
             elif plot_type == 'sales_pie':
                 # 销售额饼图
+                products = load_data_('../data/forum/topics.json')
+                product_names = {str(topic['id']): topic['title'] for topic in products if 'id' in topic}
+
                 sales_amount = raw_data[raw_data["event_type"] == "purchase"].groupby("product_id")["amount"].sum()
-                plt.pie(sales_amount, labels=sales_amount.index, autopct='%1.1f%%', startangle=90)
+                labels = [product_names.get(str(idx), f'商品{idx}') for idx in sales_amount.index]
+                sizes = sales_amount.values
+                colors = plt.cm.Pastel1(np.linspace(0, 1, len(sizes)))
+
+                if len(sizes) > 8:
+                    labels = labels[:7] + ['其他']
+                    sizes = np.concatenate([sizes[:7], [sizes[7:].sum()]])
+                    colors = colors[:8]
+                
+                plt.pie(sizes, 
+                        labels=labels, 
+                        autopct='%1.1f%%',
+                        startangle=90,
+                        colors=colors)
+                
                 plt.title("商品销售额占比")
             
             elif plot_type == 'retention_curve':

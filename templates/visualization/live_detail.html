@@ -38,6 +38,13 @@
 {% block content %}
 <div class="container">
     <div class="row mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">首页</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('visualization.view_data') }}">直播辅助</a></li>
+                <li class="breadcrumb-item active">第{{ live_number }}场直播</li>
+            </ol>
+        </nav>
         <div class="col-md-12">
             <h2><i class="bi bi-graph-up"></i> 第{{ live_number }}场直播详情分析</h2>
             <p class="lead">展示直播过程中的各项数据指标和趋势</p>
@@ -96,7 +103,7 @@
                 </div>
             </div>
         </div>
-    </div>    </div>
+    </div>    
 </div>
 
 <script>
