@@ -315,19 +315,15 @@
           <ul class="list-unstyled mb-0">
             <li class="mb-2">
               <i class="bi bi-check-circle text-success me-2"></i>
-              <a href="#">使用指南</a>
+              <a href="{{ url_for('forum.topic', topic_id=21) }}">使用指南</a>
             </li>
             <li class="mb-2">
               <i class="bi bi-check-circle text-success me-2"></i>
-              <a href="#">发帖规则</a>
-            </li>
-            <li class="mb-2">
-              <i class="bi bi-check-circle text-success me-2"></i>
-              <a href="#">如何获得积分</a>
+              <a href="{{ url_for('forum.topic', topic_id=1) }}">发帖规则</a>
             </li>
             <li>
               <i class="bi bi-check-circle text-success me-2"></i>
-              <a href="#">常见问题解答</a>
+              <a href="{{ url_for('forum.topic', topic_id=22) }}">常见问题解答</a>
             </li>
           </ul>
         </div>
