@@ -13,18 +13,12 @@ bp = Blueprint('forum', __name__)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# 创建一个名为 'forum' 的 Blueprint
-bp = Blueprint('forum', __name__)
-
-# 论坛数据文件路径 (相对于当前文件)
+# 论坛数据文件路径
 FORUM_DATA_PATH = '../data/forum'
 TOPICS_FILE = f'{FORUM_DATA_PATH}/topics.json'
 REPLIES_FILE = f'{FORUM_DATA_PATH}/replies.json'
 USERS_FILE = f'{FORUM_DATA_PATH}/users.json'
 MESSAGES_FILE = f'{FORUM_DATA_PATH}/messages.json'
-
-# 论坛版块
-# 修改后的论坛类别数据
 FORUM_CATEGORIES = load_data('../data/forum/categories.json')
 
 def get_created_at(x):
@@ -57,8 +51,12 @@ def index():
     users = load_data(USERS_FILE)
     active_users = sorted(users, key=get_replies, reverse=True)[:6]
 
+    #筛选出纯净的产品
+    filtered_topics = [topic for topic in topics if topic['category'] != "announcement"]
+    
     forum_stats = {
         "topics": len(topics),
+        "filtered_topics":len(filtered_topics),
         "replies": sum(topic.get('replies', 0) for topic in topics),
         "users": len(users),
         "latest_user": users[-1]['username'] if users else ""
@@ -399,6 +397,9 @@ def chat(receiver_id):
     chat_history = messages.get(key, [])  # 获取该聊天记录的历史消息
 
     return render_template('forum/private_message.html', chat_history=chat_history, receiver_id=receiver_id,receiver_name=receiver_name,user_id=user_id)
+
+
+
 
 
 
