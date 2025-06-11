@@ -37,7 +37,7 @@ def calculate_recommendations(user_id):
 
     # 补充缺失的 total_selected 字段（仅对 id>=2 的商品）
     for product in products:
-        if isinstance(product.get('id'), int) and product['id'] >= 2:
+        if isinstance(product.get('id'), int) and product['category'] != 'announcement':
             if 'total_selected' not in product:
                 product['total_selected'] = 0
 
@@ -48,7 +48,8 @@ def calculate_recommendations(user_id):
         if s['user_id'] == user_id:
             user_product_ids = s['selected']
 
-    for product in products[1:]:
+    for product in products:
+        if product['category'] == 'announcement': continue
         # 用户历史选品次数
         user_count = user_product_ids.get(str(product['id']), 0)
         # 全体用户选品次数
@@ -58,7 +59,7 @@ def calculate_recommendations(user_id):
 
     # 按推荐分数排序
     sorted_products = sorted(
-        products[1:],
+        [p for p in products if p['category'] != 'announcement'],
         key=lambda x: (x['recommend_score'], x['total_selected']),
         reverse=True
     )
@@ -75,7 +76,7 @@ def index():
     recommended_products = calculate_recommendations(user_id)
     
     # 获取热门商品（按全体选择次数排序）
-    hot_products = sorted(load_data(PRODUCTS_FILE)[1:], key=lambda x: x['total_selected'], reverse=True)[:6]
+    hot_products = sorted([p for p in load_data(PRODUCTS_FILE) if p['category'] != 'announcement'], key=lambda x: x['total_selected'], reverse=True)[:6]
     
     return render_template(
         'news/index.html',
@@ -125,6 +126,7 @@ def search():
     keyword_ = []
 
     for product in products:
+        if product['category'] == 'announcement': continue
         flag = False
         keyword_.append('')
         for keyword in keywords.split():

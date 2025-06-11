@@ -782,14 +782,14 @@
                 "name": "汽车产品",
                 "category": "electronics",
                 "capacity": 10000,
-                "quantity": 2100,
+                "quantity": 1900,
                 "expiration_date": null,
                 "location": "A区-01货架",
                 "manager": "张三",
                 "history": [
                     {
                         "date": "2025-06-11",
-                        "quantity": 2100
+                        "quantity": 1900
                     },
                     {
                         "date": "2025-05-25",
@@ -801,6 +801,13 @@
                     }
                 ],
                 "operations": [
+                    {
+                        "timestamp": "2025-06-11 08:26",
+                        "type": "out",
+                        "amount": -200,
+                        "operator": "直播电商1",
+                        "remark": "卖出200辆"
+                    },
                     {
                         "timestamp": "2025-06-11 07:52",
                         "type": "in",
@@ -1005,14 +1012,14 @@
                 "name": "薯片仓库3",
                 "category": "food",
                 "capacity": 1000,
-                "quantity": 250,
+                "quantity": 190,
                 "expiration_date": null,
                 "location": "A区-01货架",
                 "manager": "张三",
                 "history": [
                     {
                         "date": "2025-06-11",
-                        "quantity": 250
+                        "quantity": 190
                     },
                     {
                         "date": "2025-05-25",
@@ -1024,6 +1031,13 @@
                     }
                 ],
                 "operations": [
+                    {
+                        "timestamp": "2025-06-11 08:27",
+                        "type": "out",
+                        "amount": -60,
+                        "operator": "直播电商1",
+                        "remark": ""
+                    },
                     {
                         "timestamp": "2025-06-11 07:52",
                         "type": "in",

@@ -52,8 +52,8 @@ def get_products():
         
         # 确保跳过第一个公告项，并只包含有效的商品数据
         formatted_products = []
-        for topic in topics[1:]:  # 跳过第一个公告
-            if topic.get('id'):  # 确保有 id
+        for topic in topics:  # 跳过第一个公告
+            if topic.get('id') and topic.get('category') != 'announcement':  # 确保有 id
                 formatted_products.append({
                     'id': topic.get('id'),
                     'name': topic.get('title'),
