@@ -5,8 +5,8 @@
         "password": "123456",
         "avatar": "https://via.placeholder.com/40",
         "role": "supplier",
-        "posts": 2,
-        "replies": 0,
+        "posts": 7,
+        "replies": 13,
         "join_date": "2025-06-05",
         "last_active": "2025-06-11"
     },
@@ -16,8 +16,8 @@
         "password": "123456",
         "avatar": "https://via.placeholder.com/40",
         "role": "user",
-        "posts": 2,
-        "replies": 7,
+        "posts": 0,
+        "replies": 30,
         "join_date": "2025-06-05",
         "last_active": "2025-06-11"
     },
@@ -27,8 +27,8 @@
         "password": "123456",
         "avatar": "https://via.placeholder.com/40",
         "role": "admin",
-        "posts": 5,
-        "replies": 10,
+        "posts": 3,
+        "replies": 9,
         "join_date": "2025-06-01",
         "last_active": "2025-06-05"
     },
@@ -38,8 +38,8 @@
         "password": "123456",
         "avatar": "https://via.placeholder.com/40",
         "role": "user",
-        "posts": 3,
-        "replies": 1,
+        "posts":0,
+        "replies": 13,
         "join_date": "2025-06-02",
         "last_active": "2025-06-05"
     },
@@ -49,8 +49,8 @@
         "password": "123456",
         "avatar": "https://via.placeholder.com/40",
         "role": "supplier",
-        "posts": 8,
-        "replies": 5,
+        "posts": 10,
+        "replies": 26,
         "join_date": "2025-06-03",
         "last_active": "2025-06-05"
     },
@@ -60,8 +60,8 @@
         "password": "123456",
         "avatar": "https://via.placeholder.com/40",
         "role": "admin",
-        "posts": 10,
-        "replies": 20,
+        "posts": 0,
+        "replies": 6,
         "join_date": "2025-06-04",
         "last_active": "2025-06-05"
     },
@@ -71,8 +71,8 @@
         "password": "123456",
         "avatar": "https://via.placeholder.com/40",
         "role": "user",
-        "posts": 4,
-        "replies": 3,
+        "posts": 0,
+        "replies": 23,
         "join_date": "2025-06-05",
         "last_active": "2025-06-05"
     },
@@ -82,8 +82,8 @@
         "password": "123456",
         "avatar": "https://via.placeholder.com/40",
         "role": "user",
-        "posts": 0,
-        "replies": 0,
+        "posts": 2,
+        "replies": 9,
         "join_date": "2025-05-31",
         "last_active": "2025-05-31"
     }
