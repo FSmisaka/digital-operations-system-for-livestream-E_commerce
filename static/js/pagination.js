@@ -117,6 +117,10 @@ function initForumPagination() {
   const pagination = document.querySelector(".forum-pagination");
   if (!pagination) return;
 
+  topicCards.forEach(card => {
+    card.style.display = "none";
+  });
+
   updatePagination(pagination, currentPage, totalPages, "forum");
   showPage(topicCards, currentPage, itemsPerPage);
 
@@ -156,11 +160,16 @@ function showPage(items, page, itemsPerPage) {
   const endIndex = Math.min(startIndex + itemsPerPage, items.length);
 
   items.forEach((item) => {
-    item.style.display = "none";
+    item.classList.add('d-none'); 
+    item.style.display = "none";  
   });
 
+  // 显示当前页的项目
   for (let i = startIndex; i < endIndex; i++) {
-    items[i].style.display = "";
+    if (items[i]) {
+      items[i].classList.remove('d-none'); 
+      items[i].style.display = "flex";     
+    }
   }
 }
 
