@@ -142,6 +142,9 @@ def create_topic():
     except:
         tag_list = []
 
+    # 获取当前登录用户的ID
+    user_id = session.get('user_id')
+
     # 创建新主题
     new_topic = {
         'id': new_id,
@@ -149,8 +152,8 @@ def create_topic():
         'content': content,
         'category': category,
         'category_name': category_name,
-        'user_id': 2,  
-        'username': session.get('username'),  
+        'user_id': user_id,  # 使用当前登录用户的ID
+        'username': session.get('username'),
         'avatar': 'https://via.placeholder.com/40',
         'created_at': datetime.now().strftime('%Y-%m-%d'),
         'updated_at': datetime.now().strftime('%Y-%m-%d'),
@@ -173,7 +176,7 @@ def create_topic():
     # 更新用户发帖数
     users = load_data(USERS_FILE)
     for user in users:
-        if user['id'] == 2:  
+        if user['id'] == user_id:  # 使用当前登录用户的ID
             user['posts'] = user.get('posts', 0) + 1
             user['last_active'] = datetime.now().strftime('%Y-%m-%d')
             break
@@ -294,8 +297,8 @@ def private_message(receiver_id):
     user_id = session.get('user_id')  # 获取当前登录用户的ID
     user_name = session.get('username')  # 获取当前登录用户的用户名
     
-    # 使用 receiver_id 查找接收者的名字
-    receiver_name = request.args.get('receiver_name')  # 获取查询参数中的 receiver_name
+    # 使用 get_username 函数获取接收者的名字
+    receiver_name = get_username(receiver_id)
     messages = load_messages()
 
     # 构造聊天记录的key
@@ -306,13 +309,12 @@ def private_message(receiver_id):
 
     # 将每条消息的 sender_id 和 receiver_id 替换为用户名
     for message in chat_history:
-        # 根据 sender_id 获取发送者的名字，而不是统一设置为当前登录用户的名字
+        # 根据 sender_id 获取发送者的名字
         message['sender_name'] = get_username(message['sender_id'])
-        
-        # receiver_name 通过查询参数传递过来，已经是接收者的用户名
-        message['receiver_name'] = receiver_name
+        # 根据 receiver_id 获取接收者的名字
+        message['receiver_name'] = get_username(message['receiver_id'])
 
-    return render_template('forum/private_message.html', chat_history=chat_history, receiver_id=receiver_id, receiver_name=receiver_name,user_id=user_id)
+    return render_template('forum/private_message.html', chat_history=chat_history, receiver_id=receiver_id, receiver_name=receiver_name, user_id=user_id)
 
 #发送消息
 @bp.route('/send_message', methods=['POST'])

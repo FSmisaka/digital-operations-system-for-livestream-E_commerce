@@ -81,6 +81,12 @@
             "receiver_id": 2,
             "message": "请问你新发布的火鸡面价格如何",
             "timestamp": "2025-06-11T16:02:40"
+        },
+        {
+            "sender_id": 9,
+            "receiver_id": 2,
+            "message": "你好\r\n",
+            "timestamp": "2025-06-11T16:42:23"
         }
     ],
     "2_11": [
@@ -89,6 +95,34 @@
             "receiver_id": 2,
             "message": "这个好吃吗",
             "timestamp": "2025-06-11T16:29:02"
+        }
+    ],
+    "5_9": [
+        {
+            "sender_id": 9,
+            "receiver_id": 5,
+            "message": "你好",
+            "timestamp": "2025-06-11T16:45:13"
+        },
+        {
+            "sender_id": 9,
+            "receiver_id": 5,
+            "message": "你好",
+            "timestamp": "2025-06-11T16:50:55"
+        }
+    ],
+    "5_12": [
+        {
+            "sender_id": 12,
+            "receiver_id": 5,
+            "message": "这个辣条好吃吗",
+            "timestamp": "2025-06-11T17:40:16"
+        },
+        {
+            "sender_id": 5,
+            "receiver_id": 12,
+            "message": "非常好吃！！！",
+            "timestamp": "2025-06-11T17:41:30"
         }
     ]
 }

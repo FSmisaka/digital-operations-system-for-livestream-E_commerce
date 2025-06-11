@@ -49,10 +49,10 @@
         "password": "123456",
         "avatar": "https://via.placeholder.com/40",
         "role": "supplier",
-        "posts": 10,
+        "posts": 11,
         "replies": 26,
         "join_date": "2025-06-03",
-        "last_active": "2025-06-05"
+        "last_active": "2025-06-11"
     },
     {
         "id": 6,
@@ -113,6 +113,17 @@
         "id": 11,
         "username": "0012",
         "password": "123",
+        "avatar": "https://via.placeholder.com/40",
+        "role": "user",
+        "posts": 0,
+        "replies": 0,
+        "join_date": "2025-06-11",
+        "last_active": "2025-06-11"
+    },
+    {
+        "id": 12,
+        "username": "直播电商3",
+        "password": "123456",
         "avatar": "https://via.placeholder.com/40",
         "role": "user",
         "posts": 0,
