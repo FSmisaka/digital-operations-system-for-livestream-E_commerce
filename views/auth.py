@@ -250,10 +250,14 @@ def add_user():
     if request.method == 'POST':
         username = request.form.get('username')
         role = request.form.get('role', 'user')
+        passwd = request.form.get('passwd')
         
         # 验证输入
         if not username:
             flash('用户名不能为空', 'danger')
+            return redirect(url_for('auth.add_user'))
+        if not passwd:
+            flash('密码不能为空', 'danger')
             return redirect(url_for('auth.add_user'))
             
         # 检查用户名是否已存在
@@ -266,6 +270,7 @@ def add_user():
         new_user = {
             "id": max([u['id'] for u in users], default=0) + 1,
             "username": username,
+            "password": passwd,
             "avatar": "https://via.placeholder.com/40",
             "role": role,
             "posts": 0,
@@ -297,10 +302,15 @@ def edit_user(user_id):
     if request.method == 'POST':
         username = request.form.get('username')
         role = request.form.get('role')
+        passwd = request.form.get('passwd')
         
         # 验证输入
         if not username:
             flash('用户名不能为空', 'danger')
+            return render_template('auth/edit_user.html', user=user)
+
+        if not passwd:
+            flash('密码不能为空', 'danger')
             return render_template('auth/edit_user.html', user=user)
             
         # 检查用户名是否已被其他用户使用
@@ -311,6 +321,7 @@ def edit_user(user_id):
         # 更新用户信息
         user['username'] = username
         user['role'] = role
+        user['password'] = passwd
         user['last_active'] = datetime.now().strftime('%Y-%m-%d')
         
         if save_users(users):
