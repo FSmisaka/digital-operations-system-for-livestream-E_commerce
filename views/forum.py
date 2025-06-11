@@ -389,7 +389,8 @@ def messages_center():
     return render_template('forum/messages_center.html', chat_list=chat_list)
 
 # 查看与某个用户的聊天记录
-@bp.route('/chat/<int:receiver_id>')
+@bp.route('/chat/<int:receiver_id>', methods=['GET', 'POST'])
+@login_required
 def chat(receiver_id):
     user_id = session.get('user_id')  # 获取当前登录用户的ID
     messages = load_messages()  # 加载所有的聊天记录
@@ -398,7 +399,18 @@ def chat(receiver_id):
     key = f"{min(user_id, receiver_id)}_{max(user_id, receiver_id)}"  # 构造聊天记录的key
     chat_history = messages.get(key, [])  # 获取该聊天记录的历史消息
 
-    return render_template('forum/private_message.html', chat_history=chat_history, receiver_id=receiver_id,receiver_name=receiver_name,user_id=user_id)
+    # 格式化每条消息的时间戳
+    for message in chat_history:
+        message['formatted_timestamp'] = datetime.strptime(message['timestamp'], '%Y-%m-%dT%H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+
+    return render_template(
+        'forum/private_message.html', 
+        chat_history=chat_history, 
+        receiver_id=receiver_id, 
+        receiver_name=receiver_name, 
+        user_id=user_id
+    )
+
 
 
 
