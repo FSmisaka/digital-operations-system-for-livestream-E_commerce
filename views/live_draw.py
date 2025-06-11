@@ -162,8 +162,10 @@ def get_live_analysis(live_number):
             elif plot_type == 'sales_pie':
                 # 销售额饼图
                 products = load_data_('../data/forum/topics.json')
-                product_names = {str(topic['id']): topic['title'] for topic in products if 'id' in topic}
+                products = [p for p in products if p['category'] != 'announcement']
+                product_names = {str(topic['id']): topic['title'] for topic in products if 'id' in topic.keys()}
 
+                raw_data["product_id"] = raw_data["product_id"]+2
                 sales_amount = raw_data[raw_data["event_type"] == "purchase"].groupby("product_id")["amount"].sum()
                 labels = [product_names.get(str(idx), f'商品{idx}') for idx in sales_amount.index]
                 sizes = sales_amount.values
