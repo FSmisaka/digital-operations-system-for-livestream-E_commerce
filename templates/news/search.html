@@ -48,10 +48,18 @@
                   <span class="text-muted">{{ products[i].supplier }}</span>
                 </div>
               </div>
-              <div class="col-md-3 text-end">
-                <div class="h5 text-primary">¥{{ "%.2f"|format(products[i].price) }}</div>
+              <div class="col-md-3 text-end d-flex flex-row justify-content-end align-items-center gap-2">
+                <button class="btn btn-sm btn-outline-success"
+                        style="min-width: 100px;"
+                        onclick='addToCart({{ products[i]|tojson|safe }})'
+                        data-product='{{ products[i]|tojson|safe }}'>
+                  <i class="bi bi-cart-plus me-1"></i>选择商品
+                </button>
                 <a href="{{ url_for('forum.topic', topic_id=products[i].id) }}" 
-                   class="btn btn-sm btn-outline-primary">查看详情</a>
+                   class="btn btn-sm btn-outline-primary"
+                   style="min-width: 100px;">
+                  查看详情
+                </a>
               </div>
             </div>
           </div>
@@ -97,4 +105,37 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+
+document.addEventListener('DOMContentLoaded', function() {
+  updateCartUI();
+});
+
+// 添加商品到选品车
+function addToCart(product) {
+  if (!cartItems.some(item => item.id === product.id)) {
+    cartItems.push(product);
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    updateCartUI();
+    showToast('已添加到选品车');
+  } else {
+    showToast('该商品已在选品车中');
+  }
+}
+
+// 更新选品车UI（如有浮动选品车面板可补充实现）
+function updateCartUI() {
+  // 可根据你的页面实际情况实现UI同步
+}
+
+// 显示提示信息
+function showToast(message) {
+  // 简单弹窗提示
+  alert(message);
+}
+</script>
 {% endblock %}
