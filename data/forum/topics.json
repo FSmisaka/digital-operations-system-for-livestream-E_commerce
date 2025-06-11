@@ -11,7 +11,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2023-04-20",
         "updated_at": "2023-04-20",
-        "views": 1265,
+        "views": 1267,
         "replies": 4,
         "last_reply_at": "2023-05-01",
         "last_reply_user": "管理员1",
@@ -43,10 +43,8 @@
         "is_announcement": false,
         "is_hot": false,
         "tags": [
-            "智能手机",
-            "iPhone 14 Pro",
-            "苹果",
-            "A16 Bionic"
+            "电子设备",
+            "蓝牙"
         ],
         "total_selected": 156,
         "unsold_count": 12,
@@ -84,7 +82,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2023-04-20",
         "updated_at": "2023-04-20",
-        "views": 1274,
+        "views": 1276,
         "replies": 8,
         "last_reply_at": "2023-05-02",
         "last_reply_user": "供应商1",
@@ -92,10 +90,9 @@
         "is_announcement": false,
         "is_hot": false,
         "tags": [
-            "安卓手机",
-            "Galaxy S23",
-            "三星",
-            "Snapdragon 8 Gen 2"
+            "居家必备",
+            "健康生活",
+            "生活用品安利"
         ],
         "total_selected": 234,
         "unsold_count": 5,
@@ -133,7 +130,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2023-05-02",
         "updated_at": "2023-05-02",
-        "views": 933,
+        "views": 940,
         "replies": 13,
         "last_reply_at": "2025-06-10",
         "last_reply_user": "爱直播的小刘",
@@ -141,9 +138,8 @@
         "is_announcement": false,
         "is_hot": true,
         "tags": [
-            "空气净化器",
-            "HEPA滤芯",
-            "海尔"
+            "运动健康",
+            "健身套装"
         ],
         "total_selected": 89,
         "unsold_count": 15,
@@ -174,7 +170,7 @@
         "id": 5,
         "title": "便携榨汁杯",
         "content": "无线便携，快速榨汁",
-        "category": "food",
+        "category": "daily_necessities",
         "category_name": "厨房电器",
         "user_id": 8,
         "username": "供应商2",
@@ -189,9 +185,8 @@
         "is_announcement": false,
         "is_hot": false,
         "tags": [
-            "美妆品牌",
-            "创新产品",
-            "用户体验"
+            "便携产品",
+            "健康生活"
         ],
         "total_selected": 187,
         "unsold_count": 8,
@@ -238,9 +233,8 @@
         "is_announcement": false,
         "is_hot": false,
         "tags": [
-            "扫地机器人",
-            "米家",
-            "智能家居"
+            "按摩设备",
+            "健康家居"
         ],
         "total_selected": 305,
         "unsold_count": 3,
@@ -279,7 +273,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2025-05-27",
         "updated_at": "2025-05-27",
-        "views": 11,
+        "views": 13,
         "replies": 7,
         "last_reply_at": "2025-06-04",
         "last_reply_user": "供应商2",
@@ -318,14 +312,14 @@
         "id": 8,
         "title": "空气炸锅",
         "content": "智能触控，无油健康",
-        "category": "food",
+        "category": "daily_necessities",
         "category_name": "厨房电器",
         "user_id": 5,
         "username": "供应商1",
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2025-05-27",
         "updated_at": "2025-05-27",
-        "views": 11,
+        "views": 12,
         "replies": 7,
         "last_reply_at": "2025-06-04",
         "last_reply_user": "供应商1",
@@ -379,7 +373,8 @@
         "is_announcement": false,
         "is_hot": false,
         "tags": [
-            "生活用品安利"
+            "音乐产品",
+            "无线"
         ],
         "total_selected": 279,
         "unsold_count": 4,
@@ -425,7 +420,7 @@
         "is_announcement": false,
         "is_hot": false,
         "tags": [
-            "生活用品安利"
+            "直播用品"
         ],
         "total_selected": 414,
         "unsold_count": 2,
@@ -464,7 +459,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2025-06-08",
         "updated_at": "2025-06-08",
-        "views": 50,
+        "views": 54,
         "replies": 11,
         "last_reply_at": "2025-06-21",
         "last_reply_user": "爱直播的小刘",
@@ -513,7 +508,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2025-06-08",
         "updated_at": "2025-06-08",
-        "views": 129,
+        "views": 130,
         "replies": 6,
         "last_reply_at": "2025-06-21",
         "last_reply_user": "直播电商1",
@@ -561,7 +556,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2025-06-09",
         "updated_at": "2025-06-09",
-        "views": 77,
+        "views": 78,
         "replies": 6,
         "last_reply_at": "2025-06-21",
         "last_reply_user": "直播电商2",
@@ -609,7 +604,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2025-06-09",
         "updated_at": "2025-06-09",
-        "views": 235,
+        "views": 238,
         "replies": 11,
         "last_reply_at": "2025-06-21",
         "last_reply_user": "供应商1",
@@ -753,7 +748,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2025-06-10",
         "updated_at": "2025-06-10",
-        "views": 169,
+        "views": 171,
         "replies": 11,
         "last_reply_at": "2025-06-22",
         "last_reply_user": "直播电商1",
@@ -801,7 +796,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2025-06-10",
         "updated_at": "2025-06-10",
-        "views": 291,
+        "views": 292,
         "replies": 10,
         "last_reply_at": "2025-06-20",
         "last_reply_user": "供应商1",
@@ -897,7 +892,7 @@
         "avatar": "https://via.placeholder.com/40",
         "created_at": "2025-06-10",
         "updated_at": "2025-06-10",
-        "views": 181,
+        "views": 182,
         "replies": 5,
         "last_reply_at": "2025-06-20",
         "last_reply_user": "我是供应商",
