@@ -2,9 +2,9 @@ from flask import Blueprint, render_template, redirect, url_for, session, jsonif
 import os
 import pandas as pd
 import logging
-from views.auth import user_required
-from views.data_utils import reset_data_file_path, get_full_data_path
-from views.news import load_news_data
+from views.auth import user_required, login_required
+from views.data_utils import reset_data_file_path, get_full_data_path, load_data
+import random
 
 # 设置日志记录
 logging.basicConfig(level=logging.INFO)
@@ -13,20 +13,19 @@ logger = logging.getLogger(__name__)
 bp = Blueprint('main', __name__)
 
 @bp.route('/')
+@login_required
 def index():
     if 'user_id' not in session:
         return redirect(url_for('auth.login'))
 
     # 加载产品数据
-    product_data = load_news_data()
+    product_data = [p for p in load_data('../data/forum/topics.json') if p['category'] != 'announcement']
 
-    # 获取最新的3条产品（按日期排序）
-    def get_views(x):
-        return x.get('views', 0)
-
-    product_data = sorted(product_data, key=get_views, reverse=True)[:5]
-
-    return render_template('index.html', latest_news=product_data)
+    return render_template(
+        'index.html', 
+        latest_news_1=random.choices(product_data, k=3), 
+        latest_news_2=random.choices(product_data, k=3)
+    )
 
 @bp.route('/api/latest-market-data')
 def get_latest_market_data():

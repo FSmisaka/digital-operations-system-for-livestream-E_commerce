@@ -1,52 +1,39 @@
 {% extends 'base.html' %} {% block title %}首页 - 电商数据分析平台{%
-endblock %} {% block content %}
+endblock %} 
+{% block head %}
+<style>
+.product-item {
+  padding: 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.product-item:hover {
+  background-color: rgba(0,0,0,0.02);
+}
+
+.card-header {
+  font-weight: 600;
+}
+
+.badge {
+  font-weight: 500;
+}
+</style>
+{% endblock %} {% block content %}
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-md-12">
     <div class="card mb-4 shadow-sm home-card">
-      <div class="card-body">
+      <div class="card-body text-center">
+        <i class="bi bi-graph-up-arrow fs-1 text-primary mb-3"></i>
         <h1 class="display-5">电商数据分析平台</h1>
         <p class="lead">基于机器学习算法，为您提供 选品 采购 直播辅助 库存记录 售后 一站式服务</p>
         <hr class="my-4" />
-        <p>
-          接入DeepSeek v3，结合商品信息与直播数据，为您提供定制化直播逐字稿和数据分析。
-        </p>
+        <p>接入DeepSeek v3，结合商品信息与直播数据，为您提供定制化直播逐字稿和数据分析。</p>
         <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-          <a
-            href="{{ url_for('visualization.view_data') }}"
-            class="btn btn-primary btn-lg px-4"
-          >
+          <a href="{{ url_for('visualization.view_data') }}" class="btn btn-primary btn-lg px-4">
             <i class="bi bi-bar-chart"></i> 进入直播辅助
           </a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card mb-4 shadow-sm home-card">
-      <div class="card-header bg-primary text-white">
-        <i class="bi bi-lightning"></i> 直播表现
-      </div>
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <h5 class="mb-0">直播综合评分</h5>
-          <span id="change-percent-badge" class="badge bg-success">+0.0%</span>
-        </div>
-        <h2 id="price-display" class="price-display">加载中...</h2>
-        <div id="update-time" class="text-muted small">更新时间: 加载中...</div>
-        <hr />
-        <div class="d-flex justify-content-between">
-          <div>
-            <div class="small text-muted">最新直播</div>
-            <div id="open-price">--</div>
-          </div>
-          <div>
-            <div class="small text-muted">近期最高</div>
-            <div id="high-price">--</div>
-          </div>
-          <div>
-            <div class="small text-muted">近期最低</div>
-            <div id="low-price">--</div>
-          </div>
         </div>
       </div>
     </div>
@@ -60,53 +47,89 @@ endblock %} {% block content %}
         <i class="bi bi-basket-fill"></i> 选品动态
       </div>
       <div class="card-body">
-        <ul class="list-unstyled">
-          {% for news in latest_news %}
-          <li class="mb-2">
-            <a
-              href="{{ url_for('forum.topic', topic_id=news.id) }}"
-              class="text-decoration-none"
-              >{{ news.title }}</a
-            >
-            <div class="small text-muted">{{ news.date }}</div>
-          </li>
-          {% endfor %}
-        </ul>
-        <div class="d-flex justify-content-between">
-          <a
-            href="{{ url_for('news.index') }}"
-            class="btn btn-sm btn-outline-primary"
-            >查看更多</a
-          >
+        <div class="mt-2">
+          <ul class="list-unstyled">
+            {% for news in latest_news_1 %}
+            <li class="mb-4 product-item">
+              <div class="d-flex align-items-start">
+                <i class="bi bi-arrow-right-circle text-primary me-2 mt-1"></i>
+                <div class="w-100">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <a href="{{ url_for('forum.topic', topic_id=news.id) }}" class="h6 mb-1 text-decoration-none">{{ news.title }}</a>
+                    <span class="badge bg-{{ 'danger' if news.is_hot else 'secondary' }} ms-2">
+                      {{ '热门' if news.is_hot else news.category_name }}
+                    </span>
+                  </div>
+                  <p class="small text-muted mb-2">{{ news.description[:80] }}...</p>
+                  <div class="d-flex justify-content-between align-items-center small">
+                    <div>
+                      <i class="bi bi-tag"></i> 
+                      {% for tag in news.tags[:2] %}
+                      <span class="badge bg-light text-dark me-1">{{ tag }}</span>
+                      {% endfor %}
+                    </div>
+                    <span class="text-muted">
+                      <i class="bi bi-eye"></i> {{ news.views }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="text-center mt-3">
+          <a href="{{ url_for('news.index') }}" class="btn btn-outline-primary">
+            <i class="bi bi-eye"></i> 查看更多选品
+          </a>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- 去采购卡片 -->
   <div class="col-md-6">
     <div class="card mb-4 shadow-sm home-card">
       <div class="card-header bg-primary text-white">
         <i class="bi bi-cart-check-fill"></i> 去采购
       </div>
       <div class="card-body">
-        <ul class="list-unstyled">
-          {% for news in latest_news[:3] %}
-          <li class="mb-2">
-            <a
-              href="{{ url_for('forum.topic', topic_id=news.id) }}"
-              class="text-decoration-none"
-              >{{ news.title }}</a
-            >
-            <div class="small text-muted">{{ news.replies }} 评价 · {{ news.updated_at }}</div>
-          </li>
-          {% endfor %}
-        </ul>
-        <div class="d-flex justify-content-between">
-          <a
-            href="{{ url_for('forum.index') }}"
-            class="btn btn-sm btn-outline-primary"
-            >进入采购中心</a
-          >
+        <div class="mt-2">
+          <ul class="list-unstyled">
+            {% for news in latest_news_2 %}
+            <li class="mb-4 product-item">
+              <div class="d-flex align-items-start">
+                <i class="bi bi-bag-check text-primary me-2 mt-1"></i>
+                <div class="w-100">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                      <a href="{{ url_for('forum.topic', topic_id=news.id) }}" class="h6 mb-1 text-decoration-none">{{ news.title }}</a>
+                      <div class="small text-danger fw-bold">¥{{ "%.2f"|format(news.price) }}</div>
+                    </div>
+                    <div class="text-end">
+                      <div class="small text-success">库存: {{ news.unsold_count }}件</div>
+                      <div class="small text-muted">已选: {{ news.total_selected }}次</div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center small">
+                    <div class="text-muted">
+                      <i class="bi bi-shop"></i> {{ news.supplier }}
+                    </div>
+                    <div>
+                      <i class="bi bi-chat-dots"></i> {{ news.replies }}条评价
+                      <i class="bi bi-clock ms-2"></i> {{ news.updated_at }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="text-center mt-3">
+          <a href="{{ url_for('forum.index') }}" class="btn btn-outline-primary">
+            <i class="bi bi-shop"></i> 进入采购中心
+          </a>
         </div>
       </div>
     </div>
