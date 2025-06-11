@@ -302,15 +302,34 @@ endblock %} {% block head %}
             <label for="inventoryCategory" class="form-label">
               仓库类别 <span class="text-danger">*</span>
             </label>
-            <input
-              type="text"
-              class="form-control"
-              id="inventoryCategory"
-              name="category"
-              placeholder="食品、化妆品、电子产品、..."
-              maxlength="10"
-              required
-            />
+            <select class="form-select" 
+                    id="inventoryCategory" 
+                    name="category" 
+                    required>
+              <option value="" selected disabled>请选择仓库类别...</option>
+              
+              <option value="electronics" 
+                      data-icon="bi-phone" 
+                      data-color="primary">
+                电子产品
+              </option>
+              <option value="food" 
+                      data-icon="bi-cup-hot" 
+                      data-color="warning">
+                饮食商品
+              </option>
+              <option value="daily_necessities" 
+                      data-icon="bi-house" 
+                      data-color="success">
+                生活用品
+              </option>
+              <option value="cosmetics" 
+                      data-icon="bi-palette" 
+                      data-color="info">
+                美妆产品
+              </option>
+
+            </select>
           </div>
           <div class="mb-3">
             <label for="inventoryTitle" class="form-label">
@@ -423,14 +442,34 @@ endblock %} {% block head %}
           </div>
           <div class="mb-3">
             <label for="editCategory" class="form-label">仓库类别</label>
-            <input 
-              type="text" 
-              class="form-control" 
-              id="editCategory" 
-              name="category"
-              placeholder="食品、化妆品、电子产品、..."
-              maxlength="10"
-            >
+            <select class="form-select" 
+                    id="editCategory" 
+                    name="category" 
+                    required>
+              <option value="" selected disabled>请选择仓库类别...</option>
+              
+              <option value="electronics" 
+                      data-icon="bi-phone" 
+                      data-color="primary">
+                电子产品
+              </option>
+              <option value="food" 
+                      data-icon="bi-cup-hot" 
+                      data-color="warning">
+                饮食商品
+              </option>
+              <option value="daily_necessities" 
+                      data-icon="bi-house" 
+                      data-color="success">
+                生活用品
+              </option>
+              <option value="cosmetics" 
+                      data-icon="bi-palette" 
+                      data-color="info">
+                美妆产品
+              </option>
+
+            </select>
           </div>
           <div class="mb-3">
             <label for="editCapacity" class="form-label">数量上限</label>

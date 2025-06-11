@@ -4,6 +4,7 @@ from views.auth import login_required, user_required
 from views.data_utils import load_data, save_data
 from flask import Blueprint, render_template, jsonify, request, session
 from datetime import date, datetime
+import random
 
 # 设置日志记录
 logging.basicConfig(level=logging.INFO)
@@ -13,6 +14,7 @@ bp = Blueprint('inv', __name__)
 
 INV_FILE = f'../data/inv.json'
 PRODUCT_FILE = f'../data/forum/topics.json'
+CATEGORIES_FILE = '../data/forum/categories.json'
 
 @bp.route('/')
 @user_required
@@ -21,7 +23,7 @@ def index():
     products = load_data(PRODUCT_FILE)
     category_products_map = {}
     for product in products:
-        category = product['category_name']
+        category = product['category']
         if category not in category_products_map:
             category_products_map[category] = []
         category_products_map[category].append(product)
@@ -33,21 +35,27 @@ def index():
             inv_list = inv['inventory']
             # 为每个仓库设置一个推荐产品
             for item in inv_list:
+                item['recommended_product_id'] = 2
                 category = item['category']
-                if category in category_products_map:
+                if category in category_products_map.keys():
                     matching_products = category_products_map[category]
                     if matching_products:
-                        item['recommended_product_id'] = matching_products[0]['id']
-                item['recommended_product_id'] = 2
-            
+                        item['recommended_product_id'] = random.choice(matching_products)['id']
             break
     
+    categories = load_data(CATEGORIES_FILE)
+
     for i in inv_list:
         exp_str = i.get('expiration_date', None)
         if exp_str:
             i['expiration_date'] = datetime.strptime(exp_str, '%Y-%m-%d').date()
         else:
             i['expiration_date'] = None
+        
+        for c in categories:
+            if i.get('category', None) == c['id']:
+                i['category'] = c['name']
+                break
 
     inv_list.sort(key=lambda x: (
         x['expiration_date'] if x['expiration_date'] else date.today(),
@@ -92,6 +100,7 @@ def delete_inventory(inv_id):
 @user_required
 def detail(inv_id):
     user_id = session.get('user_id')
+    categories = load_data(CATEGORIES_FILE)
     inv_data = None
     
     for inv in load_data(INV_FILE):
@@ -99,6 +108,10 @@ def detail(inv_id):
             for item in inv['inventory']:
                 if item['id'] == inv_id:
                     inv_data = item
+                    for c in categories:
+                        if inv_data.get('category', None) == c['id']:
+                            inv_data['category'] = c['name']
+                            break
 
                     # 历史
                     history_data = inv_data.get('history', [])

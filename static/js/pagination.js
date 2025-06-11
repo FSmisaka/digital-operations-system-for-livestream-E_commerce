@@ -104,10 +104,10 @@ function initInvPagination() {
 }
 
 function initForumPagination() {
-  const topicContainer = document.querySelector(".topic-list-container");
+  const topicContainer = document.querySelector(".card:not(.mb-4) .topic-list-container");
   if (!topicContainer) return;
 
-  const topicCards = topicContainer.querySelectorAll(".topic-card");
+  const topicCards = topicContainer.querySelectorAll(".list-group-item.topic-card");
   if (topicCards.length === 0) return;
 
   const itemsPerPage = 10;
@@ -221,12 +221,13 @@ function updatePagination(pagination, currentPage, totalPages, type) {
       infoElement.textContent = `显示 ${startItem}-${endItem} 条，共 ${totalItems} 条`;
     }
     else {
+      const latestContainer = document.querySelector(".card:not(.mb-4) .topic-list-container");
+      const totalItems = latestContainer.querySelectorAll(".list-group-item.topic-card").length;
       const startItem = (currentPage - 1) * (10) + 1;
       const endItem = Math.min(
         currentPage * (10), 
-        document.querySelectorAll(".topic-card").length
+        totalItems
       );
-      const totalItems = document.querySelectorAll(".topic-card").length;
       infoElement.textContent = `显示 ${startItem}-${endItem} 条，共 ${totalItems} 条`;
     }
   }
