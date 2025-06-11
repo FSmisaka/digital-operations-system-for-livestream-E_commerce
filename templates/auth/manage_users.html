@@ -73,33 +73,14 @@
                       <a href="{{ url_for('auth.edit_user', user_id=user.id) }}" class="btn btn-outline-primary">
                         <i class="bi bi-pencil"></i> 编辑
                       </a>
-                      <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ user.id }}">
+                      <button type="button" class="btn btn-outline-danger" onclick="confirmDelete({{ user.id }}, '{{ user.username }}')">
                         <i class="bi bi-trash"></i> 删除
                       </button>
                     </div>
                   </td>
                 </tr>
 
-                <!-- 删除确认模态框 -->
-                <div class="modal fade" id="deleteModal{{ user.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ user.id }}" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel{{ user.id }}">确认删除</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
-                      </div>
-                      <div class="modal-body">
-                        <p>您确定要删除用户 <strong>{{ user.username }}</strong> 吗？此操作不可逆。</p>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                        <form action="{{ url_for('auth.delete_user', user_id=user.id) }}" method="post">
-                          <button type="submit" class="btn btn-danger">确认删除</button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                
                 {% endfor %}
               </tbody>
             </table>
@@ -127,8 +108,33 @@
         if (closeButton) {
           closeButton.click();
         }
-      }, 5000); // 5秒后自动关闭
+      }, 50); // 5秒后自动关闭
     });
   });
+</script>
+<script>
+function confirmDelete(userId, username) {
+  if (confirm(`确定要删除用户 "${username}" 吗？此操作不可逆。`)) {
+    // 创建一个表单并提交
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = "{{ url_for('auth.delete_user', user_id=0) }}".replace('0', userId);
+    document.body.appendChild(form);
+    form.submit();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // 处理闪现消息的自动消失
+  const alerts = document.querySelectorAll('.alert');
+  alerts.forEach(function(alert) {
+    setTimeout(function() {
+      const closeButton = alert.querySelector('.btn-close');
+      if (closeButton) {
+        closeButton.click();
+      }
+    }, 5000); // 5秒后自动关闭
+  });
+});
 </script>
 {% endblock %} 
