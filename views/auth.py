@@ -202,7 +202,12 @@ def login():
             reset_data_file_path()
 
             flash(f'欢迎回来，{username}！', 'success')
-            return redirect(url_for('main.index')) if not role == 'supplier' else redirect(url_for('forum.index'))
+            if role == 'supplier':
+                return redirect(url_for('forum.index'))
+            elif role == 'user':
+                return redirect(url_for('main.index')) 
+            else:
+                return redirect(url_for('auth.manage_users'))
         else:
             if role:
                 flash(f'未找到{role}角色的用户"{username}"或密码错误', 'danger')

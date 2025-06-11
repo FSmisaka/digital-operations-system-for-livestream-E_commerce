@@ -23,13 +23,17 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container-fluid">
-        {% if session.user_role != 'supplier' %}
+        {% if session.user_role == 'user' %}
         <a class="navbar-brand" href="{{ url_for('main.index') }}">
           <i class="bi bi-graph-up"></i> 电商数据分析平台
         </a>
-        {% else %}
+        {% elif session.user_role == 'supplier' %}
         <a class="navbar-brand" href="{{ url_for('forum.index') }}">
           <i class="bi bi-graph-up"></i> 供应商供应平台
+        </a>
+        {% else %}
+        <a class="navbar-brand" href="{{ url_for('auth.manage_users') }}">
+          <i class="bi bi-graph-up"></i> 管理员管理平台
         </a>
         {% endif %}
         <button
