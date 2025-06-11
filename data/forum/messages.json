@@ -60,5 +60,27 @@
             "message": "你好",
             "timestamp": "2025-06-10T22:48:14"
         }
+    ],
+    "5_10": [
+        {
+            "sender_id": 10,
+            "receiver_id": 5,
+            "message": "你好",
+            "timestamp": "2025-06-11T15:42:08"
+        },
+        {
+            "sender_id": 10,
+            "receiver_id": 5,
+            "message": "hello",
+            "timestamp": "2025-06-11T16:14:20"
+        }
+    ],
+    "2_9": [
+        {
+            "sender_id": 9,
+            "receiver_id": 2,
+            "message": "请问你新发布的火鸡面价格如何",
+            "timestamp": "2025-06-11T16:02:40"
+        }
     ]
 }

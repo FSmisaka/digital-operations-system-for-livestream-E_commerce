@@ -112,6 +112,13 @@ def return_processing():
     search = request.args.get('search', '')
     return_records = read_csv('data/ass/return_records.csv')
     
+    # 清理数据
+    if not return_records.empty:
+        # 确保status列没有多余的空格
+        return_records['status'] = return_records['status'].str.strip()
+        # 确保return_id是整数
+        return_records['return_id'] = return_records['return_id'].astype(int)
+    
     if search:
         # 将order_id转换为字符串后再进行搜索
         return_records['order_id'] = return_records['order_id'].astype(str)
@@ -119,9 +126,15 @@ def return_processing():
         mask = return_records['order_id'].str.contains(search, na=False)
         return_records = return_records[mask]
     
-    if return_records.empty:
+    if not return_records.empty:
+        # 首先按状态排序（待处理优先），然后按return_id排序
+        return_records['sort_key'] = return_records['status'].apply(lambda x: 0 if x == '待处理' else 1)
+        return_records = return_records.sort_values(['sort_key', 'return_id'])
+        return_records = return_records.drop('sort_key', axis=1)
+    else:
         logger.warning("退货记录为空")
         flash('暂无退货记录', 'warning')
+    
     return render_template('ass/return_processing.html', return_records=return_records)
 
 # 处理退货申请
@@ -139,14 +152,25 @@ def process_return():
         # 读取退货记录
         return_records = read_csv('data/ass/return_records.csv')
         
-        # 确保return_id是整数
-        return_id = int(return_id)
+        # 清理数据
+        return_records['status'] = return_records['status'].str.strip()
         return_records['return_id'] = return_records['return_id'].astype(int)
+        
+        # 确保return_id是整数
+        try:
+            return_id = int(return_id)
+        except ValueError:
+            return jsonify({'status': 'error', 'message': '无效的退货ID'})
         
         # 查找对应的记录
         mask = return_records['return_id'] == return_id
         if not any(mask):
             return jsonify({'status': 'error', 'message': '退货申请不存在'})
+        
+        # 检查当前状态是否为待处理
+        current_status = return_records.loc[mask, 'status'].iloc[0]
+        if current_status != '待处理':
+            return jsonify({'status': 'error', 'message': f'该退货申请已被处理，当前状态：{current_status}'})
         
         # 更新状态
         return_records.loc[mask, 'status'] = f'已{action}'

@@ -43,10 +43,15 @@ def calculate_recommendations(user_id):
 
     user_selections = load_data(SELECTED)
     l = len(user_selections)
-
+    
+    # 初始化user_product_ids为空字典
+    user_product_ids = {}
+    
+    # 查找用户的选品记录
     for s in user_selections:
         if s['user_id'] == user_id:
             user_product_ids = s['selected']
+            break
 
     for product in products:
         if product['category'] == 'announcement': continue
@@ -76,7 +81,17 @@ def index():
     recommended_products = calculate_recommendations(user_id)
     
     # 获取热门商品（按全体选择次数排序）
-    hot_products = sorted([p for p in load_data(PRODUCTS_FILE) if p['category'] != 'announcement'], key=lambda x: x['total_selected'], reverse=True)[:6]
+    products = load_data(PRODUCTS_FILE)
+    # 确保所有商品都有total_selected字段
+    for product in products:
+        if product['category'] != 'announcement' and 'total_selected' not in product:
+            product['total_selected'] = 0
+    
+    hot_products = sorted(
+        [p for p in products if p['category'] != 'announcement'],
+        key=lambda x: x.get('total_selected', 0),
+        reverse=True
+    )[:6]
     
     return render_template(
         'news/index.html',
